@@ -1,6 +1,7 @@
 {
-  "name": "w3crm",
+  "name": "monitoring-tool-frontend",
   "version": "0.0.0",
+  "description": "Frontend para el sistema de monitoreo.",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
