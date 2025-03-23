@@ -16,6 +16,19 @@ import { NavHeaderComponent } from './layout/nav-header/nav-header.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LightgalleryModule } from 'lightgallery/angular';
+import { AdminIndexComponent } from './components/index/admin-index/admin-index.component';
+import { AppAddRoleComponent } from './pages/users-manager/app-add-role/app-add-role.component';
+import { AppEditProfileComponent } from './pages/users-manager/app-edit-profile/app-edit-profile.component';
+import { AppProfile1Component } from './pages/users-manager/app-profile-1/app-profile-1.component';
+import { AppProfile2Component } from './pages/users-manager/app-profile-2/app-profile-2.component';
+import { AppUserComponent } from './pages/users-manager/app-user/app-user.component';
+import { AppUserRolesComponent } from './pages/users-manager/app-user-roles/app-user-roles.component';
+import { PostDetailsComponent } from './pages/users-manager/post-details/post-details.component';
+import { ProfileHeadComponent } from './components/user-manager/profile-head/profile-head.component';
+import { ProfileSidMenuComponent } from './components/user-manager/profile-sid-menu/profile-sid-menu.component';
+
+import { MatSortModule, Sort } from '@angular/material/sort';
+import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
 
 
 @NgModule({
@@ -26,7 +39,18 @@ import { LightgalleryModule } from 'lightgallery/angular';
     SidebarComponent,
     ChatboxComponent,
     NavHeaderComponent,
-
+    AdminIndexComponent,
+    AppAddRoleComponent,
+    AppEditProfileComponent,
+    AppProfile1Component,
+    AppProfile2Component,
+    AppUserComponent,
+    AppUserComponent,
+    AppUserRolesComponent,
+    PostDetailsComponent,
+    ProfileHeadComponent,
+    ProfileSidMenuComponent,
+    ProfileTabComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +64,10 @@ import { LightgalleryModule } from 'lightgallery/angular';
     RouterLink,
 
     TitleCasePipe,
-    SafeHtmlSvgPipe
+    SafeHtmlSvgPipe,
+
+    MatSortModule,
+    LightgalleryModule,
   ]
 })
 export class AdminModule { }

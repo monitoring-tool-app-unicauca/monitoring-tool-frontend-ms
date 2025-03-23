@@ -14,18 +14,21 @@ import { Error404Component } from './pages/error/error404/error404.component';
 import { Error403Component } from './pages/error/error403/error403.component';
 import { Error400Component } from './pages/error/error400/error400.component';
 import { EmptyComponent } from './pages/error/empty/empty.component';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
     DropdownComponent,
     PaginationComponent,
+    BreadcrumbComponent,
     Select2Component,
     Error503Component,
     Error500Component,
     Error404Component,
     Error403Component,
     Error400Component,
-    EmptyComponent
+    EmptyComponent,
+
 
   ],
   imports: [
@@ -37,6 +40,7 @@ import { EmptyComponent } from './pages/error/empty/empty.component';
   exports: [
     DropdownComponent,
     PaginationComponent,
+    BreadcrumbComponent,
     Select2Component,
     Error503Component,
     Error500Component,
