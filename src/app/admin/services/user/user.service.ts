@@ -33,5 +33,11 @@ export class UserService {
     );
   }
 
+  getUsers(): Observable<UserDto[]> {
+    return this.http.get<{ data: UserDto[]; status: number; message: string }>(`${this.apiUrl}/user`).pipe(
+      map(response => response.data)
+    );
+  }
+
 
 }

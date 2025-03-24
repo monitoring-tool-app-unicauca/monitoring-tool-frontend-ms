@@ -29,8 +29,8 @@ import { ProfileSidMenuComponent } from './components/user-manager/profile-sid-m
 
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
-import { EmployeesComponent } from './components/employees/employees.component';
-import { EmployeesListComponent } from './components/employees/employees-list/employees-list.component';
+import { UsersComponent } from './components/users/users.component';
+import { UsersListComponent } from './components/users/users-list/users-list.component';
 
 
 @NgModule({
@@ -53,8 +53,8 @@ import { EmployeesListComponent } from './components/employees/employees-list/em
     ProfileHeadComponent,
     ProfileSidMenuComponent,
     ProfileTabComponent,
-    EmployeesComponent,
-    EmployeesListComponent,
+    UsersComponent,
+    UsersListComponent,
 
   ],
   imports: [
