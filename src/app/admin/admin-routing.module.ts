@@ -4,6 +4,9 @@ import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.compone
 import { AdminGuard } from './guards/admin.guard';
 import { AdminIndexComponent } from './components/index/admin-index/admin-index.component';
 import { AppEditProfileComponent } from './pages/users-manager/app-edit-profile/app-edit-profile.component';
+import { EmployeesComponent } from './components/employees/employees.component';
+import { AppAddRoleComponent } from './pages/users-manager/app-add-role/app-add-role.component';
+import { AppUserRolesComponent } from './pages/users-manager/app-user-roles/app-user-roles.component';
 
 
 const routes: Routes = [
@@ -12,9 +15,11 @@ const routes: Routes = [
     component: AdminLayoutComponent,
     /* canActivate: [AdminGuard], */
     children: [
-      {path:'index', component:AdminIndexComponent},
+      { path:'index', component:AdminIndexComponent},
       { path: 'add-user', component: AppEditProfileComponent },
-
+      { path: 'employee', component: EmployeesComponent },
+      { path: 'user-roles', component: AppUserRolesComponent },
+      { path: 'add-role', component: AppAddRoleComponent },
     ]
   }
 ];

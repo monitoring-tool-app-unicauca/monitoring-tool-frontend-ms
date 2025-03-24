@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { BreadcrumbComponent } from '../../../../elements/breadcrumb/breadcrumb.component';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { PaginationComponent } from '../../../../elements/pagination/pagination.component';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RoleService } from '../../../services/role/role.service';
 
 export interface Dessert {
   image: string,
@@ -28,20 +30,45 @@ export class AppUserRolesComponent {
     this.offcanvasExample = !this.offcanvasExample;
   }
 
+  roleForm!: FormGroup;
   active = 1;
   page: any = 1;
   totalRows: number = 5;
   totalPage: any = 0;
   allData: any = [];
 
-  constructor() {
+  constructor(
+    private fb: FormBuilder,
+    private roleService: RoleService
+  ) {
     this.orderData = this.desserts.slice();
   }
   ngOnInit(): void {
     this.allData = this.paginator(this.orderData, this.page, this.totalRows);
     this.totalPage = this.allData.total_pages;
+    this.initForm();
   }
 
+  initForm(){
+    this.roleForm = this.fb.group({
+      name: ['', Validators.required],
+      description: ['', Validators.required],
+
+    });
+  }
+  submitForm() {
+    if (this.roleForm.valid) {
+      this.roleService.createRole(this.roleForm.value).subscribe({
+        next: (response) => {
+          alert('Role created successfully');
+        },
+        error: (error) => {
+          console.error(error);
+          alert('Error creating Role');
+        }
+      });
+    }
+  }
   desserts: Dessert[] = [
     {
       image: 'assets/images/contacts/pic1.jpg',
