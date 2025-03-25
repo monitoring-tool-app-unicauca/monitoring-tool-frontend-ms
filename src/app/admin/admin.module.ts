@@ -28,10 +28,16 @@ import { ProfileHeadComponent } from './components/user-manager/profile-head/pro
 import { ProfileSidMenuComponent } from './components/user-manager/profile-sid-menu/profile-sid-menu.component';
 
 import { MatSortModule, Sort } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+
+
 import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
 import { UsersComponent } from './components/users/users.component';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
-
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
@@ -66,12 +72,19 @@ import { UsersListComponent } from './components/users/users-list/users-list.com
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+
     RouterLink,
 
     TitleCasePipe,
     SafeHtmlSvgPipe,
 
     MatSortModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatTableModule,
+    MatIconModule,
+
     LightgalleryModule,
   ]
 })

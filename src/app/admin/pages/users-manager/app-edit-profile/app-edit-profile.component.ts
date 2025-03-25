@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Select2Component } from '../../../../plugins/select2/select2.component';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
-import { Observable, catchError, map, of, switchMap } from 'rxjs';
+import { Observable, catchError, map, of, startWith, switchMap } from 'rxjs';
+import { RoleDto } from '../../../interfaces/roleDTO';
+import { RoleService } from '../../../services/role/role.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-app-edit-profile',
@@ -15,9 +18,23 @@ export class AppEditProfileComponent implements OnInit {
   profileForm!: FormGroup;
   passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
   emailExists:boolean | any = false;
+  roleSearchCtrl = new FormControl('');
+  filteredRoles!: Observable<RoleDto[]>;
+
+  allRoles: RoleDto[] = [
+    // { id: 1, name: 'Admin', description: 'Administrador' },
+    // { id: 2, name: 'User', description: 'Usuario estándar' },
+    // { id: 3, name: 'Manager', description: 'Gerente' }
+    // Aquí deberías obtener los roles desde tu servicio en lugar de hardcodearlos.
+  ];
+
+  selectedRoles= new MatTableDataSource<RoleDto>([]);
+  displayedColumns: string[] = ['name', 'description','actions'];
   constructor(
     private fb: FormBuilder,
-    private service:UserService
+    private service:UserService,
+    private roleService: RoleService,
+    private cdRef: ChangeDetectorRef // 👈 Importa esto
     ) {}
 
     initForm(){
@@ -32,7 +49,50 @@ export class AppEditProfileComponent implements OnInit {
     }
   ngOnInit() {
     this.initForm();
+    this.roleService.getAllRoles().subscribe((data)=>{
+      this.allRoles = data.data
+      console.log("Allroles ",this.allRoles)
+      setTimeout(() => {
+        this.filteredRoles = of(this.allRoles);
+      });
+      this.cdRef.detectChanges();
+    })
+    /* this.filteredRoles = this.roleSearchCtrl.valueChanges.pipe(
+      startWith(''),
+      // map(value => (value && typeof value === 'string' ? value : value?.name ?? '')),
+      map(name => (name ? this._filterRoles(name) : this.allRoles.slice()))
+    ); */
 
+    this.filteredRoles = this.roleSearchCtrl.valueChanges.pipe(
+      startWith(''),
+      map(name => (name ? this._filterRoles(name) : this.allRoles.slice()))
+    );
+
+
+
+  }
+
+  private _filterRoles(name: string): RoleDto[] {
+    console.log("Texto ingresado para filtrar:", name);
+    console.log("Lista de roles antes de filtrar:", this.allRoles);
+
+    const filterValue = (name ?? '').toLowerCase();
+    const filtered = this.allRoles.filter(role => role.name.toLowerCase().includes(filterValue));
+
+    console.log("Lista de roles después de filtrar:", filtered);
+    return filtered;
+  }
+
+
+  addRole(role: RoleDto) {
+    if (!this.selectedRoles.data.some(r => r.roleId === role.roleId)) {
+      this.selectedRoles.data = [...this.selectedRoles.data, role];
+    }
+    this.roleSearchCtrl.setValue('');
+  }
+
+  removeRole(role: RoleDto) {
+    this.selectedRoles.data = this.selectedRoles.data.filter(r => r.roleId !== role.roleId);
   }
 
 
@@ -55,7 +115,16 @@ export class AppEditProfileComponent implements OnInit {
 
   submitForm() {
     if (this.profileForm.valid) {
-      this.service.createUser(this.profileForm.value).subscribe({
+
+      const roleIds = this.selectedRoles.data.map(role => role.roleId);
+
+    // Crear un objeto con los datos del formulario y agregar roleIds
+    const requestData = {
+      ...this.profileForm.value, // Incluye todos los datos del formulario
+      roleIds: roleIds // Agrega el array de IDs de roles
+    };
+
+      this.service.createUser(requestData).subscribe({
         next: (response) => {
           alert('User created successfully');
         },
@@ -72,54 +141,7 @@ export class AppEditProfileComponent implements OnInit {
   get password() {
     return this.profileForm.get('password');
   }
-  selectGender = [
-    {
-      name: 'Please select',
-    },
-    {
-      name: 'Male',
-    },
-    {
-      name: 'Female',
-    },
-    {
-      name: 'Other',
-    }
-  ];
-  selectCountry = [
-    {
-      name: 'Please select',
-    },
-    {
-      name: 'Russia',
-    },
-    {
-      name: 'Canada',
-    },
-    {
-      name: 'China',
-    },
-    {
-      name: 'India',
-    }
-  ];
-  selectCity = [
-    {
-      name: 'Please select',
-    },
-    {
-      name: 'Krasnodar',
-    },
-    {
-      name: 'Tyumen',
-    },
-    {
-      name: 'Chelyabinsk',
-    },
-    {
-      name: 'Moscow',
-    }
-  ];
+
 }
 
 

@@ -17,4 +17,9 @@ export class RoleService {
 
     return this.http.post<RoleDto>(`${this.apiUrl}/role`, dto );
   }
+
+  getAllRoles():Observable<any>{
+
+    return this.http.get<RoleDto>(`${this.apiUrl}/role` );
+  }
 }
