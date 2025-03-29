@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Select2Component } from '../../../../plugins/select2/select2.component';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../services/user/user.service';
@@ -7,6 +7,7 @@ import { Observable, catchError, map, of, startWith, switchMap } from 'rxjs';
 import { RoleDto } from '../../../interfaces/roleDTO';
 import { RoleService } from '../../../services/role/role.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.service';
 
 @Component({
   selector: 'app-app-edit-profile',
@@ -18,27 +19,27 @@ export class AppEditProfileComponent implements OnInit {
   profileForm!: FormGroup;
   passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
   emailExists:boolean | any = false;
+
+  allRoles: RoleDto[] = [];
   roleSearchCtrl = new FormControl('');
   filteredRoles!: Observable<RoleDto[]>;
-
-  allRoles: RoleDto[] = [
-    // { id: 1, name: 'Admin', description: 'Administrador' },
-    // { id: 2, name: 'User', description: 'Usuario estándar' },
-    // { id: 3, name: 'Manager', description: 'Gerente' }
-    // Aquí deberías obtener los roles desde tu servicio en lugar de hardcodearlos.
-  ];
-
   selectedRoles= new MatTableDataSource<RoleDto>([]);
+
   displayedColumns: string[] = ['name', 'description','actions'];
+
+  userId: string | null= null;
   constructor(
     private fb: FormBuilder,
     private service:UserService,
     private roleService: RoleService,
-    private cdRef: ChangeDetectorRef // 👈 Importa esto
+    private cdRef: ChangeDetectorRef,
+    private alertService: NgxToastrService,
+    private route: ActivatedRoute
     ) {}
 
     initForm(){
       this.profileForm = this.fb.group({
+        userId:[''],
         name: ['', Validators.required],
         lastName: ['', Validators.required],
         documentNumber: ['', Validators.required],
@@ -47,28 +48,56 @@ export class AppEditProfileComponent implements OnInit {
         password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
       });
     }
+    cleanForm(){
+      this.profileForm.reset()
+    }
   ngOnInit() {
     this.initForm();
     this.roleService.getAllRoles().subscribe((data)=>{
       this.allRoles = data.data
-      console.log("Allroles ",this.allRoles)
+
       setTimeout(() => {
         this.filteredRoles = of(this.allRoles);
       });
       this.cdRef.detectChanges();
     })
-    /* this.filteredRoles = this.roleSearchCtrl.valueChanges.pipe(
-      startWith(''),
-      // map(value => (value && typeof value === 'string' ? value : value?.name ?? '')),
-      map(name => (name ? this._filterRoles(name) : this.allRoles.slice()))
-    ); */
+
 
     this.filteredRoles = this.roleSearchCtrl.valueChanges.pipe(
       startWith(''),
       map(name => (name ? this._filterRoles(name) : this.allRoles.slice()))
     );
 
+    this.userId = this.route.snapshot.paramMap.get('id');
+    if (this.userId) {
+      // Aquí puedes llamar al servicio para obtener los datos del usuario
+      console.log('Editando usuario con ID:', this.userId);
+      this.service.getUserById(+this.userId).subscribe(response => {
+        if (response?.data) {
+          const userData = response.data;
 
+          // Patching the form with user data
+          this.profileForm.patchValue({
+            userId: userData.userId,
+            documentNumber: userData.documentNumber,
+            name: userData.name,
+            lastName: userData.lastName,
+            phoneNumber: userData.phoneNumber,
+            email: userData.email,
+
+          });
+
+          if (userData.roles ) {
+            this.selectedRoles.data = [...userData.roles]; // Asigna los roles directamente
+
+          }
+          // Agregar la validación del email después de asignar los datos
+          this.profileForm.get('email')?.setAsyncValidators(this.emailExistsValidator());
+
+
+         }
+      });
+    }
 
   }
 
@@ -99,7 +128,7 @@ export class AppEditProfileComponent implements OnInit {
 
   emailExistsValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<any | null> => {
-      if (!control.value) {
+      if (!control.value || control.value === this.profileForm?.get('email')?.value) {
         return of(null); // Si el campo está vacío, no validamos nada
       }
 
@@ -124,15 +153,35 @@ export class AppEditProfileComponent implements OnInit {
       roleIds: roleIds // Agrega el array de IDs de roles
     };
 
-      this.service.createUser(requestData).subscribe({
+    if (this.userId) {
+      this.service.updateUser(+this.userId, requestData).subscribe({
         next: (response) => {
-          alert('User created successfully');
+          this.alertService.success('User updated successfully', 'toast-top-left');
+          this.cleanForm();
+          this.selectedRoles.data = [];
         },
         error: (error) => {
           console.error(error);
-          alert('Error creating user');
+          this.alertService.error('Error updating user', 'toast-top-left');
         }
       });
+    }else {
+      this.service.createUser(requestData).subscribe({
+        next: (response) => {
+          // alert('User created successfully');
+
+          this.alertService.success('User created successfully', 'toast-top-left');
+          this.cleanForm()
+          this.selectedRoles.data = []
+        },
+        error: (error) => {
+          console.error(error);
+          // alert('Error creating user');
+          this.alertService.error('Error creating user', 'toast-top-left');
+        }
+      });
+    }
+
     }
   }
   get email() {
