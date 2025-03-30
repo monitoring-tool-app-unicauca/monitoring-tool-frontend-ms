@@ -28,6 +28,11 @@ export class AppEditProfileComponent implements OnInit {
   displayedColumns: string[] = ['name', 'description','actions'];
 
   userId: string | null= null;
+  imageFile: File | null = null;
+  imagePreview: string | null = null;
+  userProfileImage:string |null=null;
+  defaultImage: string = "assets/images/user/default_tab.jpg";
+
   constructor(
     private fb: FormBuilder,
     private service:UserService,
@@ -94,7 +99,8 @@ export class AppEditProfileComponent implements OnInit {
           // Agregar la validación del email después de asignar los datos
           this.profileForm.get('email')?.setAsyncValidators(this.emailExistsValidator());
 
-
+          if(this.userId)
+          this.loadProfileImage(+this.userId);
          }
       });
     }
@@ -159,6 +165,8 @@ export class AppEditProfileComponent implements OnInit {
           this.alertService.success('User updated successfully', 'toast-top-left');
           this.cleanForm();
           this.selectedRoles.data = [];
+          if(this.userId && this.imageFile)
+          this.uploadImage(+this.userId);
         },
         error: (error) => {
           console.error(error);
@@ -173,6 +181,10 @@ export class AppEditProfileComponent implements OnInit {
           this.alertService.success('User created successfully', 'toast-top-left');
           this.cleanForm()
           this.selectedRoles.data = []
+          const newUserId = response.data?.id;  // ID del nuevo usuario
+          if (newUserId && this.imageFile) {
+            this.uploadImage(newUserId);  // Subir imagen después de crear
+          }
         },
         error: (error) => {
           console.error(error);
@@ -184,6 +196,50 @@ export class AppEditProfileComponent implements OnInit {
 
     }
   }
+
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.imagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      this.imageFile = file;
+    }
+  }
+
+  uploadImage(userId: number) {
+    if (!this.imageFile) return; // Si no hay imagen, no hacemos nada
+
+    const formData = new FormData();
+    formData.append('file', this.imageFile);
+
+    this.service.uploadUserImage(userId, formData).subscribe({
+      next: () => {
+        this.alertService.success('Profile image uploaded successfully', 'toast-top-left');
+      },
+      error: (error) => {
+        console.error(error);
+        this.alertService.error('Error uploading profile image', 'toast-top-left');
+      }
+    });
+  }
+  loadProfileImage(userId: number) {
+    this.service.getUserImage(userId).subscribe({
+      next: (imageBlob) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.userProfileImage = reader.result as string; // Convertir Blob a URL base64
+        };
+        reader.readAsDataURL(imageBlob);
+      },
+      error: () => {
+        this.userProfileImage = this.defaultImage; // Usar imagen por defecto si hay error
+      }
+    });
+  }
+
   get email() {
     return this.profileForm.get('email');
   }

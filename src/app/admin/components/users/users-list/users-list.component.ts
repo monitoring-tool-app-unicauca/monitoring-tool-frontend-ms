@@ -58,6 +58,11 @@ export class UsersListComponent {
   }
   fetchUsers() {
     this.userService.getUsers().subscribe((response) => {
+      this.users = response.map(user => ({
+        ...user,
+        userImage: user.userImage ? user.userImage : 'assets/images/default-profile.png'
+      }));
+
       this.users = response;
       this.orderData = [...this.users];
       this.totalRows = this.users.length;
@@ -66,6 +71,9 @@ export class UsersListComponent {
     });
   }
 
+  getUserImage(userId: number) {
+
+  }
 
 
   sortData(sort: Sort) {

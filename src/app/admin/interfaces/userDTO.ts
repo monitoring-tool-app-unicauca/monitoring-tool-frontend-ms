@@ -10,6 +10,8 @@ export interface UserDto {
   password?: string;
   roleIds?: number[];
   roles?: RoleDto[];
+
+  userImage:any;
 }
 
 
