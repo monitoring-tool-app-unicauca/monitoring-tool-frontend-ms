@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environment/environment';
+import { environment } from '../../../../environment/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,4 +30,26 @@ export class AuthService {
   recoverPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/recover-password`, { email });
   }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/by-email?email=${email}`);
+  }
+
+  isAdmin(email: string): Observable<boolean> {
+    return of(true)
+    /* return new Observable<boolean>((observer) => {
+      this.getUserByEmail(email).subscribe(response => {
+        const userRoles = response.data.roles || [];
+        const isAdmin = userRoles.some((role: { name: string; }) => role.name === 'ADMIN');
+        observer.next(isAdmin);
+        observer.complete();
+      }, error => {
+        observer.next(false);
+        observer.complete();
+      });
+    }); */
+  }
+  /* getUser(): Observable<any> {
+    return of(null)
+  } */
 }
