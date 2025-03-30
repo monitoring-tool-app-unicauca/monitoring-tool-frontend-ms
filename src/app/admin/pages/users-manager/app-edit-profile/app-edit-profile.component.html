@@ -10,9 +10,9 @@
                             <div class="p-5">
                                 <div class="author-profile">
                                     <div class="author-media">
-                                        <img src="assets/images/tab/1.jpg" alt="">
-                                        <div class="upload-link" title="" data-toggle="tooltip" data-placement="right" data-original-title="update">
-                                            <input type="file" class="update-flie">
+                                        <img [src]="imagePreview || userProfileImage || defaultImage"alt="Profile Image">
+                                        <div class="upload-link" title="update" data-toggle="tooltip" data-placement="right" data-original-title="update">
+                                            <input type="file" class="update-flie" (change)="onFileSelected($event)">
                                             <i class="fa fa-camera"></i>
                                         </div>
                                     </div>
@@ -133,7 +133,7 @@
                                       <th mat-header-cell *matHeaderCellDef> Actions </th>
                                       <td mat-cell *matCellDef="let role">
                                         <button mat-icon-button class="custom-delete-button"  (click)="removeRole(role)">
-                                          <mat-icon>delete</mat-icon>x
+                                          <mat-icon>delete</mat-icon>
                                         </button>
                                       </td>
                                     </ng-container>

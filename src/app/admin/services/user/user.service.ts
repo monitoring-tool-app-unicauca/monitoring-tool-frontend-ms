@@ -47,5 +47,13 @@ export class UserService {
   getUserById(id:number): Observable<ResponseDto<UserDto>> {
     return this.http.get<ResponseDto<UserDto>>(`${this.apiUrl}/user/${id}`)
   }
+  uploadUserImage(userId: number, formData: FormData): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/user/${userId}/profile-image`, formData);
+  }
+
+  getUserImage(userId: number): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/user/${userId}/profile-image`, { responseType: 'blob' });
+  }
+
 
 }
