@@ -23,7 +23,9 @@
                 <th mat-sort-header="email">Email Address</th>
                 <th mat-sort-header="documentNumber">Document</th>
                 <th mat-sort-header="phoneNumber">Phone Number</th>
-                <th mat-sort-header="roles">Roles</th>
+                <!-- <th mat-sort-header="roles">Roles</th> -->
+                <th mat-sort-header="">Actions</th>
+
             </tr>
         </thead>
         <tbody>
@@ -54,14 +56,14 @@
                 <td>
                     <span>{{ item.phoneNumber }}</span>
                 </td>
-
                 <td>
-                    @if(item.status == 'Pending'){
-                    <span class="badge badge-danger light border-0">{{item.status}}</span>
-                    } @else {
-                    <span class="badge badge-success light border-0">{{item.status}}</span>
-                    }
-                </td>
+
+                  <button type="button" class="btn btn-warning btn-sm" [routerLink]="['/edit-user', item.userId]">
+                     <span class="btn-icon">
+                      <i class="fas fa-pencil"></i>
+                    </span>
+                  </button>
+              </td>
             </tr>
             }
         </tbody>

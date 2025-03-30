@@ -17,6 +17,7 @@ const routes: Routes = [
     children: [
       { path:'index', component:AdminIndexComponent},
       { path: 'add-user', component: AppEditProfileComponent },
+      { path: 'edit-user/:id', component: AppEditProfileComponent },
       { path: 'employee', component: UsersComponent },
       { path: 'user-roles', component: AppUserRolesComponent },
       { path: 'add-role', component: AppAddRoleComponent },

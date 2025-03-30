@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, importProvidersFrom } from '@angular/core';
 import { CommonModule ,Location, NgClass, PlatformLocation,TitleCasePipe} from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
@@ -38,6 +38,8 @@ import { UsersListComponent } from './components/users/users-list/users-list.com
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
+
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -86,6 +88,12 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
 
     LightgalleryModule,
+  ],
+  providers:[
+    importProvidersFrom(
+      ToastrModule.forRoot(),
+    )
+
   ]
 })
 export class AdminModule { }
