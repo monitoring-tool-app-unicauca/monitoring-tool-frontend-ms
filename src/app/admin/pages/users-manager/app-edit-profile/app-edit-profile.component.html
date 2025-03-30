@@ -103,27 +103,51 @@
                                     <label class="form-label">Specialty</label>
                                     <input type="text" class="form-control" value="Developer">
                                 </div>
-                                <div class="col-sm-6 m-b30">
-                                    <label class="form-label">Skills</label>
-                                    <input type="text" class="form-control" value="HTML,  JavaScript,  PHP">
-                                </div>
-                                <div class="col-sm-6 m-b30">
-                                    <label class="form-label">Gender</label>
-                                    <app-select2 [items]="selectGender"></app-select2>
-                                </div>
-                                <div class="col-sm-6 m-b30">
-                                    <label class="form-label">Birth</label>
-                                    <input type="date" class="form-control">
-                                </div>
 
                                 <div class="col-sm-6 m-b30">
-                                    <label class="form-label">Country</label>
-                                    <app-select2 [items]="selectCountry"></app-select2>
+                                  <label class="form-label">Roles</label>
+                                  <mat-form-field class="full-width">
+                                    <mat-label>Search and add roles</mat-label>
+                                    <input
+                                      type="text"
+                                      matInput
+                                      [formControl]="roleSearchCtrl"
+                                      [matAutocomplete]="auto"
+                                    >
+                                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addRole($event.option.value)">
+                                      <mat-option *ngFor="let role of filteredRoles | async" [value]="role">
+                                        {{ role.name }}
+                                      </mat-option>
+                                    </mat-autocomplete>
+                                  </mat-form-field>
                                 </div>
-                                <div class="col-sm-6 m-b30">
-                                    <label class="form-label">City</label>
-                                    <app-select2 [items]="selectCity"></app-select2>
+
+
+                                <div class="col-12 m-b30">
+                                  <table mat-table [dataSource]="selectedRoles" class="mat-elevation-z8 full-width">
+                                    <ng-container matColumnDef="name">
+                                      <th mat-header-cell *matHeaderCellDef> Rol </th>
+                                      <td mat-cell *matCellDef="let role"> {{ role.name }} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="description">
+                                      <th mat-header-cell *matHeaderCellDef> Description </th>
+                                      <td mat-cell *matCellDef="let role"> {{ role.description }} </td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="actions">
+                                      <th mat-header-cell *matHeaderCellDef> Actions </th>
+                                      <td mat-cell *matCellDef="let role">
+                                        <button mat-icon-button class="custom-delete-button"  (click)="removeRole(role)">
+                                          <mat-icon>delete</mat-icon>
+                                          <!-- <mat-icon svgIcon="thumbs-up" aria-hidden="false" aria-label="Example thumbs up SVG icon"></mat-icon> -->
+                                        </button>
+                                      </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                  </table>
                                 </div>
+
                             </div>
                         </div>
                         <div class="card-footer">

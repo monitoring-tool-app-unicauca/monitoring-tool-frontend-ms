@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,7 +10,7 @@ export class AdminLayoutComponent {
   toggleVal: boolean = false;
   mouseOvered: boolean = false;
   currentUrl: string = '';
-  constructor(private router: Router) {
+  constructor(private router: Router,private cdRef: ChangeDetectorRef) {
     router.events.subscribe(() => {
       setTimeout(() => {
         this.handleMinHeight();
@@ -20,6 +20,7 @@ export class AdminLayoutComponent {
 
   ngOnInit(): void {
     this.currentUrl = this.router.url;
+    this.cdRef.detectChanges();
   }
 
   sidebarToggle(eventData: { toggleVal: boolean }) {
