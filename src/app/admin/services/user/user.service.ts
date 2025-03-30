@@ -3,6 +3,7 @@ import { environment } from '../../../../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, debounceTime, map, of } from 'rxjs';
 import { RoleDto } from '../../interfaces/roleDTO';
+import { UserDto } from '../../interfaces/userDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
-  createUser(dto :RoleDto):Observable<any>{
+  createUser(dto :UserDto):Observable<any>{
 
-    return this.http.post<RoleDto>(`${this.apiUrl}/user`, dto );
+    return this.http.post<UserDto>(`${this.apiUrl}/user`, dto );
   }
 
   userExistByEmail(email: string): Observable<boolean> {

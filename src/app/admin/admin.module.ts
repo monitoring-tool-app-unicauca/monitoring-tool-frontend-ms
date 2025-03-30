@@ -29,6 +29,8 @@ import { ProfileSidMenuComponent } from './components/user-manager/profile-sid-m
 
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
+import { EmployeesComponent } from './components/employees/employees.component';
+import { EmployeesListComponent } from './components/employees/employees-list/employees-list.component';
 
 
 @NgModule({
@@ -51,6 +53,9 @@ import { ProfileTabComponent } from './components/user-manager/profile-tab/profi
     ProfileHeadComponent,
     ProfileSidMenuComponent,
     ProfileTabComponent,
+    EmployeesComponent,
+    EmployeesListComponent,
+
   ],
   imports: [
     CommonModule,

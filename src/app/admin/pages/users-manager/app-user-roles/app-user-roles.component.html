@@ -7,7 +7,7 @@
             <div class="d-flex align-items-center justify-content-between">
                 <h4 class="heading mb-3">Account Setting</h4>
                 <a class="btn btn-primary btn-sm mb-3" data-bs-toggle="offcanvas" href="javascript:vode(0);" (click)="toggleExample()">+ Add a role</a>
-            </div>	
+            </div>
             <div class="col-xl-3 col-lg-4">
                 <div class="row">
                     <div class="col-xl-12">
@@ -67,7 +67,7 @@
                                                     <div class="d-flex align-items-center">
                                                         <img src="{{ item.image }}" class="avatar avatar-md rounded-circle" alt="">
                                                         <div class="ms-2">
-                                                            <p class="mb-0 text-start text-black font-w500">{{ item.name }}</p>	
+                                                            <p class="mb-0 text-start text-black font-w500">{{ item.name }}</p>
                                                             <span>{{ item.email }}</span>
                                                         </div>
                                                     </div>
@@ -114,7 +114,7 @@
                                                     <div class="d-flex align-items-center">
                                                         <img src="{{ item.image }}" class="avatar avatar-md rounded-circle" alt="">
                                                         <div class="ms-2">
-                                                            <p class="mb-0 text-start text-black font-w500">{{ item.name }}</p>	
+                                                            <p class="mb-0 text-start text-black font-w500">{{ item.name }}</p>
                                                             <span>{{ item.email }}</span>
                                                         </div>
                                                     </div>
@@ -143,7 +143,7 @@
                 </div>
             </div>
         </div>
-    
+
     </div>
 </div>
 
@@ -155,306 +155,147 @@
       </button>
     </div>
     <div class="offcanvas-body">
-      <div class="container-fluid">
-        <div class="col-xl-12 mb-3">
-            <label for="exampleFormControlInput1" class="form-label font-w500">Role Name<span class="text-danger">*</span></label>
-            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Enter Role Name">
-        </div>	
-          <h4 class="heading">User Access levels</h4>
-          <div class="table-responsive">
-             <table id="role" class="table role-tble">
-                <thead>
-                    <tr>
-                        <th>Entity</th>
-                        <th class="text-end">Add</th>
-                        <th class="text-end">Edit</th>
-                        <th class="text-end">Delete</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>User Management	</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox4" required="">
-                                <label class="form-check-label" for="customCheckBox4">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox5" required="">
-                                <label class="form-check-label" for="customCheckBox5">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox6" required="">
-                                <label class="form-check-label" for="customCheckBox6">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Release</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input"  id="customCheckBox7" required="">
-                                <label class="form-check-label" for="customCheckBox7">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox8" required="">
-                                <label class="form-check-label" for="customCheckBox8">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox9" required="">
-                                <label class="form-check-label" for="customCheckBox9">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Content Management</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input"  id="customCheckBox10" required="">
-                                <label class="form-check-label" for="customCheckBox10">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox11" required="">
-                                <label class="form-check-label" for="customCheckBox11">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox12" required="">
-                                <label class="form-check-label" for="customCheckBox12">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Libabry Management</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox131" required="">
-                                <label class="form-check-label" for="customCheckBox131">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox132" required="">
-                                <label class="form-check-label" for="customCheckBox132">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox13" required="">
-                                <label class="form-check-label" for="customCheckBox13">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Permissions for work items</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox14" required="">
-                                <label class="form-check-label" for="customCheckBox14">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input"  id="customCheckBox15" required="">
-                                <label class="form-check-label" for="customCheckBox15">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox16" required="">
-                                <label class="form-check-label" for="customCheckBox16">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>User Management	</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox17" required="">
-                                <label class="form-check-label" for="customCheckBox17">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox18" required="">
-                                <label class="form-check-label" for="customCheckBox18">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox19" required="">
-                                <label class="form-check-label" for="customCheckBox19">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Release</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox20" required="">
-                                <label class="form-check-label" for="customCheckBox20">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox21" required="">
-                                <label class="form-check-label" for="customCheckBox21">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox22" required="">
-                                <label class="form-check-label" for="customCheckBox22">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Content Management</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox23" required="">
-                                <label class="form-check-label" for="customCheckBox23">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox24" required="">
-                                <label class="form-check-label" for="customCheckBox24">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox25" required="">
-                                <label class="form-check-label" for="customCheckBox25">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Libabry Management</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox26" required="">
-                                <label class="form-check-label" for="customCheckBox26">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox27" required="">
-                                <label class="form-check-label" for="customCheckBox27">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox28" required="">
-                                <label class="form-check-label" for="customCheckBox28">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Permissions for work items</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox29" required="">
-                                <label class="form-check-label" for="customCheckBox29">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox30" required="">
-                                <label class="form-check-label" for="customCheckBox30">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox31" required="">
-                                <label class="form-check-label" for="customCheckBox31">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>User Management	</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox32" required="">
-                                <label class="form-check-label" for="customCheckBox32">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox33" required="">
-                                <label class="form-check-label" for="customCheckBox33">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox34" required="">
-                                <label class="form-check-label" for="customCheckBox34">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Release</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox35" required="">
-                                <label class="form-check-label" for="customCheckBox35">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox36" required="">
-                                <label class="form-check-label" for="customCheckBox36">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox37" required="">
-                                <label class="form-check-label" for="customCheckBox37">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Content Management</td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-primary">
-                                <input type="checkbox" class="form-check-input" id="customCheckBox38" required="">
-                                <label class="form-check-label" for="customCheckBox38">Add</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-warning">
-                                <input type="checkbox" class="form-check-input"  id="customCheckBox39" required="">
-                                <label class="form-check-label" for="customCheckBox39">Edit</label>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-check custom-checkbox checkbox-danger">
-                                <input type="checkbox" class="form-check-input" checked="" id="customCheckBox40" required="">
-                                <label class="form-check-label" for="customCheckBox40">Delete</label>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-             </table>
+      <form action="" id="roleForm" [formGroup]="roleForm" (ngSubmit)="submitForm()">
+        <div class="container-fluid">
+          <div class="col-xl-12 mb-3">
+              <label  class="form-label font-w500">Role Name<span class="text-danger">*</span></label>
+              <input type="text" class="form-control"  placeholder="Enter Role Name" formControlName="name">
           </div>
-            <div>
-                <a href="javascript:void(0)" class="btn btn-light btn-sm" >Discard</a>
-                <a href="javascript:void(0)" class="btn btn-primary btn-sm" >Submit</a>
+          <div class="col-xl-12 mb-3">
+            <label  class="form-label font-w500">Role Description<span class="text-danger">*</span></label>
+            <input type="text" class="form-control"  placeholder="Enter Role Description" formControlName="description">
+          </div>
+            <h4 class="heading">User Access levels</h4>
+            <div class="table-responsive">
+               <table id="role" class="table role-tble">
+                  <thead>
+                      <tr>
+                          <th>Entity</th>
+                          <th class="text-end">Add</th>
+                          <th class="text-end">Edit</th>
+                          <th class="text-end">Delete</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>User Management	</td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-primary">
+                                  <input type="checkbox" class="form-check-input" id="customCheckBox4" required="">
+                                  <label class="form-check-label" for="customCheckBox4">Add</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-warning">
+                                  <input type="checkbox" class="form-check-input" checked="" id="customCheckBox5" required="">
+                                  <label class="form-check-label" for="customCheckBox5">Edit</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-danger">
+                                  <input type="checkbox" class="form-check-input" checked="" id="customCheckBox6" required="">
+                                  <label class="form-check-label" for="customCheckBox6">Delete</label>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Release</td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-primary">
+                                  <input type="checkbox" class="form-check-input"  id="customCheckBox7" required="">
+                                  <label class="form-check-label" for="customCheckBox7">Add</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-warning">
+                                  <input type="checkbox" class="form-check-input" id="customCheckBox8" required="">
+                                  <label class="form-check-label" for="customCheckBox8">Edit</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-danger">
+                                  <input type="checkbox" class="form-check-input" id="customCheckBox9" required="">
+                                  <label class="form-check-label" for="customCheckBox9">Delete</label>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Content Management</td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-primary">
+                                  <input type="checkbox" class="form-check-input"  id="customCheckBox10" required="">
+                                  <label class="form-check-label" for="customCheckBox10">Add</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-warning">
+                                  <input type="checkbox" class="form-check-input" checked="" id="customCheckBox11" required="">
+                                  <label class="form-check-label" for="customCheckBox11">Edit</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-danger">
+                                  <input type="checkbox" class="form-check-input" id="customCheckBox12" required="">
+                                  <label class="form-check-label" for="customCheckBox12">Delete</label>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Libabry Management</td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-primary">
+                                  <input type="checkbox" class="form-check-input" id="customCheckBox131" required="">
+                                  <label class="form-check-label" for="customCheckBox131">Add</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-warning">
+                                  <input type="checkbox" class="form-check-input" checked="" id="customCheckBox132" required="">
+                                  <label class="form-check-label" for="customCheckBox132">Edit</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-danger">
+                                  <input type="checkbox" class="form-check-input" checked="" id="customCheckBox13" required="">
+                                  <label class="form-check-label" for="customCheckBox13">Delete</label>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td>Permissions for work items</td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-primary">
+                                  <input type="checkbox" class="form-check-input" checked="" id="customCheckBox14" required="">
+                                  <label class="form-check-label" for="customCheckBox14">Add</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-warning">
+                                  <input type="checkbox" class="form-check-input"  id="customCheckBox15" required="">
+                                  <label class="form-check-label" for="customCheckBox15">Edit</label>
+                              </div>
+                          </td>
+                          <td>
+                              <div class="form-check custom-checkbox checkbox-danger">
+                                  <input type="checkbox" class="form-check-input" id="customCheckBox16" required="">
+                                  <label class="form-check-label" for="customCheckBox16">Delete</label>
+                              </div>
+                          </td>
+                      </tr>
+
+                  </tbody>
+               </table>
             </div>
-        </div>
+              <div>
+                  <a href="javascript:void(0)" class="btn btn-light btn-sm" >Discard</a>
+                  <a href="javascript:void(0)" class="btn btn-primary btn-sm"  onclick="document.getElementById('roleForm').submit();">Save</a>
+                  <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                </div>
+          </div>
+      </form>
+
     </div>
-  </div>	
+  </div>
   @if(offcanvasExample){
     <div class="offcanvas-backdrop fade show" (click)="toggleExample()"></div>
   }
