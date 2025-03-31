@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { ProjectService } from '../../../services/project/project.service';
 import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.service';
 import { ProjectDto } from '../../../interfaces/projectDTO';
+import { Observable, debounceTime, map, switchMap } from 'rxjs';
+import { UserDto } from '../../../../admin/interfaces/userDTO';
+import { UserService } from '../../../../admin/services/user/user.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 export interface Dessert {
   account_title: string,
@@ -34,10 +38,18 @@ export class ProjectsPageComponent {
   projectForm!: FormGroup;
   projects: ProjectDto[]=[];
   orderData: ProjectDto[]=[]
+
+  userSearchCtrl = new FormControl('');
+  filteredUsers!: Observable<UserDto[]>;
+
+
+  selectedUsers= new MatTableDataSource<UserDto>([]);
+  userColumns: string[] = ['name', 'email', 'actions'];
   constructor(
     private fb: FormBuilder,
-    private projectService: ProjectService,
     private alertService: NgxToastrService,
+    private projectService: ProjectService,
+    private userService: UserService,
   ) {
 
 
@@ -58,6 +70,26 @@ export class ProjectsPageComponent {
     this.initForm()
     this.allData = this.paginator(this.orderData, this.page, this.totalRows);
     this.totalPage = this.allData.total_pages;
+
+    this.filteredUsers = this.userSearchCtrl.valueChanges.pipe(
+      debounceTime(300),
+      switchMap(value => this.userService.getUsersByName(value).pipe(
+        map(response => response.data || [])
+      ))
+    );
+  }
+  addUser(user: UserDto) {
+
+    if (!this.selectedUsers.data.some(u=>u.userId === user.userId)) {
+      this.selectedUsers.data = [...this.selectedUsers.data, user];
+    }
+
+    this.userSearchCtrl.setValue('');
+  }
+
+  removeUser(user: UserDto) {
+    this.selectedUsers.data = this.selectedUsers.data.filter(u => u.userId !== user.userId);
+
   }
   loadProjects(): void {
     this.projectService.getAllProjects().subscribe({
@@ -75,9 +107,10 @@ export class ProjectsPageComponent {
   }
   onSubmit(): void {
     if (this.projectForm.valid) {
+      const userIds = this.selectedUsers.data.map(user => user.userId);
       const requestData = {
         ...this.projectForm.value,
-        responsibleUserIds: []
+        responsibleUserIds: userIds
       };
       this.projectService.createProject(requestData).subscribe({
         next: (response) => {
@@ -86,7 +119,7 @@ export class ProjectsPageComponent {
           this.alertService.success('Project created successfully', 'toast-top-left');
           this.cleanForm()
           this.loadProjects();
-          // this.selectedRoles.data = []
+          this.selectedUsers.data = []
 
         },
         error: (error) => {

@@ -55,5 +55,8 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/${userId}/profile-image`, { responseType: 'blob' });
   }
 
+  getUsersByName(name: string | null): Observable<ResponseDto<UserDto[]>> {
+    return this.http.get<ResponseDto<UserDto[]>>(`${this.apiUrl}/user/by-name?name=${name}`)
+  }
 
 }
