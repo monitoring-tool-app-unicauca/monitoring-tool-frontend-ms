@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Sort } from '@angular/material/sort';
 import { ProjectService } from '../../../services/project/project.service';
 import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.service';
+import { ProjectDto } from '../../../interfaces/projectDTO';
 
 export interface Dessert {
   account_title: string,
@@ -31,15 +32,16 @@ export class ProjectsPageComponent {
   allData: any = [];
 
   projectForm!: FormGroup;
-
+  projects: ProjectDto[]=[];
+  orderData: ProjectDto[]=[]
   constructor(
     private fb: FormBuilder,
     private projectService: ProjectService,
     private alertService: NgxToastrService,
   ) {
-    this.orderData = this.desserts.slice();
 
-    this.initForm()
+
+
   }
   initForm(){
     this.projectForm = this.fb.group({
@@ -52,10 +54,25 @@ export class ProjectsPageComponent {
     this.projectForm.reset()
   }
   ngOnInit(): void {
+    this.loadProjects()
+    this.initForm()
     this.allData = this.paginator(this.orderData, this.page, this.totalRows);
     this.totalPage = this.allData.total_pages;
   }
-
+  loadProjects(): void {
+    this.projectService.getAllProjects().subscribe({
+      next: (response) => {
+        this.projects = response;
+        this.orderData = [...this.projects]
+        this.totalRows = this.projects.length;
+        this.allData = this.paginator(this.orderData, this.page, this.totalRows);
+        this.totalPage = this.allData.total_pages;
+      },
+      error: (err) => {
+        console.error('Error loading projects:', err);
+      }
+    });
+  }
   onSubmit(): void {
     if (this.projectForm.valid) {
       const requestData = {
@@ -68,6 +85,7 @@ export class ProjectsPageComponent {
 
           this.alertService.success('Project created successfully', 'toast-top-left');
           this.cleanForm()
+          this.loadProjects();
           // this.selectedRoles.data = []
 
         },
@@ -81,21 +99,12 @@ export class ProjectsPageComponent {
       console.log('Form Invalid');
     }
   }
-  desserts: Dessert[] = [
-    {
-      account_title: 'Saving',
-      amount: 500,
-      account_no: 1234500000000,
-      branch_code: 1234,
-      branch_name: 'Bank Of Uk'
-    },
 
-  ];
-
-  orderData: Dessert[];
-
+  trackByFn(index: number, item: ProjectDto): string {
+    return item.projectId;
+  }
   sortData(sort: Sort) {
-    const data = this.desserts.slice();
+    const data = this.projects.slice();
     if (!sort.active || sort.direction === '') {
       this.orderData = data;
       return;
@@ -104,11 +113,9 @@ export class ProjectsPageComponent {
     this.orderData = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'account_title': return compare(a.account_title, b.account_title, isAsc);
-        case 'amount': return compare(a.amount, b.amount, isAsc);
-        case 'account_no': return compare(a.account_no, b.account_no, isAsc);
-        case 'branch_code': return compare(a.branch_code, b.branch_code, isAsc);
-        case 'branch_name': return compare(a.branch_name, b.branch_name, isAsc);
+        case 'project_name': return compare(a.projectName, b.projectName, isAsc);
+        case 'project_id': return compare(a.projectId, b.projectId, isAsc);
+        case 'project_description': return compare(a.projectDescription, b.projectDescription, isAsc);
         default: return 0;
       }
     });

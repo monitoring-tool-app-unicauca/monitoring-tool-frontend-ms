@@ -51,28 +51,28 @@
                           <table matSort  id="empoloyees-tbl1" class="table">
                               <thead>
                                   <tr>
-                                      <th mat-sort-header="account_title">Project Name</th>
-                                      <th mat-sort-header="amount">Amount</th>
-                                      <th mat-sort-header="account_no">Project No</th>
-                                      <th mat-sort-header="branch_code">Branch Code</th>
-                                      <th mat-sort-header="branch_name">Branch Name</th>
+                                      <th mat-sort-header="project_id">Project Id</th>
+                                      <th mat-sort-header="project_name">Project Name</th>
+                                      <th mat-sort-header="project_description">Project No</th>
+                                      <th mat-sort-header="project_users">Users </th>
+
                                   </tr>
                               </thead>
                               <tbody>
                                   @for(item of allData.data; track item){
                                   <tr>
                                       <td>
-                                          <a href="javascript:void(0)" class="text-primary">{{ item.account_title }}</a>
+                                          <span>{{ item.projectId }}</span>
                                       </td>
-                                      <td><span>{{ item.amount | currency:'USD':true:'2.0' }}</span></td>
+
                                       <td>
-                                          <span>{{ item.account_no }}</span>
-                                      </td>
-                                      <td>
-                                          <span>{{ item.branch_code }}</span>
+                                          <span>{{ item.projectName }}</span>
                                       </td>
                                       <td>
-                                          <span>{{ item.branch_name }}</span>
+                                          <span>{{ item.projectDescription }}</span>
+                                      </td>
+                                      <td>
+                                          <span>{{ item.responsibleUserIds.length }}</span>
                                       </td>
                                   </tr>
                                   }
