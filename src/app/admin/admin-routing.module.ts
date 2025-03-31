@@ -7,6 +7,7 @@ import { AppEditProfileComponent } from './pages/users-manager/app-edit-profile/
 import { UsersComponent } from './components/users/users.component';
 import { AppAddRoleComponent } from './pages/users-manager/app-add-role/app-add-role.component';
 import { AppUserRolesComponent } from './pages/users-manager/app-user-roles/app-user-roles.component';
+import { ProjectsPageComponent } from '../monitoring/pages/projects/projects-page/projects-page.component';
 
 
 const routes: Routes = [
@@ -21,6 +22,8 @@ const routes: Routes = [
       { path: 'employee', component: UsersComponent },
       { path: 'user-roles', component: AppUserRolesComponent },
       { path: 'add-role', component: AppAddRoleComponent },
+
+      { path: 'add-project',component: ProjectsPageComponent}
     ]
   }
 ];

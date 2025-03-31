@@ -30,16 +30,17 @@ import { ProfileSidMenuComponent } from './components/user-manager/profile-sid-m
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { ToastrModule } from 'ngx-toastr';
 
 
 import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
 import { UsersComponent } from './components/users/users.component';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
 
-import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
