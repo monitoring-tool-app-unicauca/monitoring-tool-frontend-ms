@@ -6,7 +6,9 @@
           <div class="col-xxl-3 col-xl-4">
               <div class="card h-auto">
                   <div class="card-header">
-                      <h4 class="heading mb-0">Add New Project </h4>
+                    <h4 class="heading mb-0">
+                      {{ isEditMode ? 'Edit Project' : 'Add New Project' }}
+                    </h4>
                   </div>
                   <div class="card-body">
                       <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="finance-hr">
@@ -86,7 +88,7 @@
                   <div class="card-body p-0">
                       <div class="table-responsive active-projects manage-client dataTables_wrapper">
                           <div class="tbl-caption">
-                              <h4 class="heading mb-0">Finance</h4>
+                              <h4 class="heading mb-0">Projects</h4>
                           </div>
                           <!-- (matSortChange)="sortData($event)" -->
                           <table matSort  id="empoloyees-tbl1" class="table">
@@ -96,6 +98,7 @@
                                       <th mat-sort-header="project_name">Project Name</th>
                                       <th mat-sort-header="project_description">Project No</th>
                                       <th mat-sort-header="project_users">Users </th>
+                                      <th mat-sort-header="project_actions">Actions </th>
 
                                   </tr>
                               </thead>
@@ -115,6 +118,14 @@
                                       <td>
                                           <span>{{ item.responsibleUserIds.length }}</span>
                                       </td>
+                                      <td>
+
+                                        <button type="button" class="btn btn-warning btn-sm" (click)="editProject(item)">
+                                           <span class="btn-icon">
+                                            <i class="fas fa-pencil"></i>
+                                          </span>
+                                        </button>
+                                    </td>
                                   </tr>
                                   }
                               </tbody>

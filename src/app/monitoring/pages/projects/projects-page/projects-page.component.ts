@@ -45,6 +45,7 @@ export class ProjectsPageComponent {
 
   selectedUsers= new MatTableDataSource<UserDto>([]);
   userColumns: string[] = ['name', 'email', 'actions'];
+  isEditMode: boolean = false;
   constructor(
     private fb: FormBuilder,
     private alertService: NgxToastrService,
@@ -105,13 +106,61 @@ export class ProjectsPageComponent {
       }
     });
   }
+  editProject(project: any): void {
+    console.log("PROJECT ",project)
+    this.isEditMode = true;
+    this.projectForm.patchValue({
+      projectId: project.projectId,
+      projectName: project.projectName,
+      projectDescription: project.projectDescription,
+    });
+
+    // Deshabilitar el campo projectId para que no se edite
+    this.projectForm.get('projectId')?.disable();
+
+
+    // Cargar usuarios completos por sus IDs
+    this.userService.getUsersByIds(project.responsibleUserIds).subscribe({
+      next: (users) => {
+        this.selectedUsers.data = users.data ?? []; // Asignar los objetos completos
+      },
+      error: (err) => {
+        console.error('Error loading users by ID', err);
+      }
+    });
+  }
   onSubmit(): void {
-    if (this.projectForm.valid) {
-      const userIds = this.selectedUsers.data.map(user => user.userId);
-      const requestData = {
-        ...this.projectForm.value,
-        responsibleUserIds: userIds
-      };
+    if (this.projectForm.invalid) {
+      this.projectForm.markAllAsTouched();
+      console.log('Form Invalid');
+      return;
+    }
+
+    const userIds = this.selectedUsers.data.map(user => user.userId);
+    const formValue = this.projectForm.getRawValue();
+    const requestData = {
+      ...formValue,
+      responsibleUserIds: userIds
+    };
+
+    if (this.isEditMode) {
+      this.projectService.editProject(requestData).subscribe({
+        next: (response) => {
+
+
+          this.alertService.success('Project updated successfully', 'toast-top-left');
+          this.cleanForm()
+          this.loadProjects();
+          this.selectedUsers.data = []
+
+        },
+        error: (error) => {
+          console.error(error);
+
+          this.alertService.error('Error updating project', 'toast-top-left');
+        }
+      })
+    } else {
       this.projectService.createProject(requestData).subscribe({
         next: (response) => {
 
@@ -128,9 +177,14 @@ export class ProjectsPageComponent {
           this.alertService.error('Error creating project', 'toast-top-left');
         }
       });
-    } else {
-      console.log('Form Invalid');
+
     }
+
+    this.projectForm.reset();
+    this.projectForm.get('projectId')?.enable();
+    this.selectedUsers.data = [];
+    this.isEditMode = false;
+
   }
 
   trackByFn(index: number, item: ProjectDto): string {

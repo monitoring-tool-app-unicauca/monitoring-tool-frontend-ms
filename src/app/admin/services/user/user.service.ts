@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError, debounceTime, map, of } from 'rxjs';
 import { RoleDto } from '../../interfaces/roleDTO';
 import { UserDto } from '../../interfaces/userDTO';
@@ -57,6 +57,11 @@ export class UserService {
 
   getUsersByName(name: string | null): Observable<ResponseDto<UserDto[]>> {
     return this.http.get<ResponseDto<UserDto[]>>(`${this.apiUrl}/user/by-name?name=${name}`)
+  }
+
+  getUsersByIds(ids: number[]): Observable<ResponseDto<UserDto[]>> {
+    const params = new HttpParams({ fromObject: { ids: ids.map(String) } });
+    return this.http.get<ResponseDto<UserDto[]>>(`${this.apiUrl}/user/by-ids`, { params });
   }
 
 }

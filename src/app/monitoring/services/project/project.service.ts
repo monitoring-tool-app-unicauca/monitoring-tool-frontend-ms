@@ -15,6 +15,9 @@ export class ProjectService {
   createProject(project: ProjectDto): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/project`, project);
   }
+  editProject(project: ProjectDto): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/project/${project.projectId}`, project);
+  }
   getAllProjects(): Observable<ProjectDto[]> {
     return this.http.get<{ data: ProjectDto[]; status: number; message: string }>(`${this.apiUrl}/project`).pipe(
       map(response => response.data)

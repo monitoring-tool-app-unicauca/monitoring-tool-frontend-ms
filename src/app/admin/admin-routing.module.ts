@@ -23,7 +23,7 @@ const routes: Routes = [
       { path: 'user-roles', component: AppUserRolesComponent },
       { path: 'add-role', component: AppAddRoleComponent },
 
-      { path: 'add-project',component: ProjectsPageComponent}
+      { path: 'projects',component: ProjectsPageComponent}
     ]
   }
 ];
