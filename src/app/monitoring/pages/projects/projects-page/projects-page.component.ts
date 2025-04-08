@@ -107,7 +107,7 @@ export class ProjectsPageComponent {
     });
   }
   editProject(project: any): void {
-    console.log("PROJECT ",project)
+
     this.isEditMode = true;
     this.projectForm.patchValue({
       projectId: project.projectId,
@@ -128,6 +128,12 @@ export class ProjectsPageComponent {
         console.error('Error loading users by ID', err);
       }
     });
+  }
+  onCancelEdit(){
+    this.projectForm.reset()
+    this.selectedUsers.data = []
+    this.isEditMode = false;
+
   }
   onSubmit(): void {
     if (this.projectForm.invalid) {

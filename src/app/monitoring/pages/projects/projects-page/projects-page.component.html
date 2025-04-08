@@ -78,7 +78,8 @@
                             </table>
                           </div>
 
-                          <button type="submit" class="btn btn-primary mb-3">Save Project</button>
+                          <button type="submit" class="btn btn-primary mb-3">Save</button>
+                          <button *ngIf="isEditMode" (click)="onCancelEdit()" class="btn btn-secondary mb-3 ms-3">Cancel</button>
                       </form>
                   </div>
               </div>
