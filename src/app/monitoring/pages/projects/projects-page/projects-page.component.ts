@@ -8,6 +8,7 @@ import { Observable, debounceTime, map, switchMap } from 'rxjs';
 import { UserDto } from '../../../../admin/interfaces/userDTO';
 import { UserService } from '../../../../admin/services/user/user.service';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 
 export interface Dessert {
   account_title: string,
@@ -51,6 +52,7 @@ export class ProjectsPageComponent {
     private alertService: NgxToastrService,
     private projectService: ProjectService,
     private userService: UserService,
+    private router: Router
   ) {
 
 
@@ -134,6 +136,9 @@ export class ProjectsPageComponent {
     this.selectedUsers.data = []
     this.isEditMode = false;
 
+  }
+  onDetailProject(project : any){
+    this.router.navigate(['/projects/overview']);
   }
   onSubmit(): void {
     if (this.projectForm.invalid) {

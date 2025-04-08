@@ -8,7 +8,7 @@ import { UsersComponent } from './components/users/users.component';
 import { AppAddRoleComponent } from './pages/users-manager/app-add-role/app-add-role.component';
 import { AppUserRolesComponent } from './pages/users-manager/app-user-roles/app-user-roles.component';
 import { ProjectsPageComponent } from '../monitoring/pages/projects/projects-page/projects-page.component';
-
+import { ProjectOverviewComponent } from '../monitoring/components/project-overview/project-overview.component';
 
 const routes: Routes = [
   {
@@ -23,7 +23,8 @@ const routes: Routes = [
       { path: 'user-roles', component: AppUserRolesComponent },
       { path: 'add-role', component: AppAddRoleComponent },
 
-      { path: 'projects',component: ProjectsPageComponent}
+      { path: 'projects',component: ProjectsPageComponent},
+      { path: 'projects/overview',component: ProjectOverviewComponent},
     ]
   }
 ];

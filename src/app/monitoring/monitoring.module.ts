@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 
 import { MonitoringRoutingModule } from './monitoring-routing.module';
 import { ProjectsPageComponent } from './pages/projects/projects-page/projects-page.component';
+import { ProjectOverviewHeadComponent } from './components/project-overview-head/project-overview-head.component';
+import { ProjectOverviewComponent } from './components/project-overview/project-overview.component';
+import { ProjectSettingsComponent } from './components/project-settings/project-settings.component';
+
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -15,7 +19,11 @@ import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [
-    ProjectsPageComponent
+    ProjectsPageComponent,
+    ProjectOverviewComponent,
+    ProjectOverviewHeadComponent,
+    ProjectSettingsComponent,
+
   ],
   imports: [
     CommonModule,
@@ -32,7 +40,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatIconModule,
   ],
   exports:[
-    ProjectsPageComponent
+    ProjectsPageComponent,
+    ProjectOverviewComponent
   ]
 })
 export class MonitoringModule { }
