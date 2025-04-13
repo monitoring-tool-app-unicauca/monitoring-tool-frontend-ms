@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
 
@@ -9,7 +9,21 @@ import { Location } from '@angular/common';
   styleUrl: './project-overview-head.component.css'
 })
 export class ProjectOverviewHeadComponent {
+  breadcrumbList = {
+    breadcrumb_path: 'Projects',
+    currentURL: 'Overview',
+  }
   currentUrl: string = '';
+  @Input() project: any
+  @Output() exit: EventEmitter<any> = new EventEmitter<any>()
+  activeTab: string = 'overview';
+
+  setActiveTab(tab: string) {
+    this.activeTab = tab;
+  }
+  goBack(){
+    this.exit.emit()
+  }
   constructor(private router: Router, private location: Location) {
     this.currentUrl = this.router.url;
   }

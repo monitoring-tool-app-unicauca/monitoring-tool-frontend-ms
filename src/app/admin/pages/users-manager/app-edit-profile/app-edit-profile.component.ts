@@ -226,16 +226,28 @@ export class AppEditProfileComponent implements OnInit {
     });
   }
   loadProfileImage(userId: number) {
+    // this.service.getUserImage(userId).subscribe({
+    //   next: (imageBlob) => {
+    //     const reader = new FileReader();
+    //     reader.onload = () => {
+    //       this.userProfileImage = reader.result as string; // Convertir Blob a URL base64
+    //     };
+    //     reader.readAsDataURL(imageBlob);
+    //   },
+    //   error: () => {
+    //     this.userProfileImage = this.defaultImage; // Usar imagen por defecto si hay error
+    //   }
+    // });
     this.service.getUserImage(userId).subscribe({
-      next: (imageBlob) => {
+      next: (blob) => {
         const reader = new FileReader();
         reader.onload = () => {
-          this.userProfileImage = reader.result as string; // Convertir Blob a URL base64
+          this.userProfileImage = reader.result as string;
         };
-        reader.readAsDataURL(imageBlob);
+        reader.readAsDataURL(blob); // <-- esta línea convierte correctamente el blob a Base64
       },
       error: () => {
-        this.userProfileImage = this.defaultImage; // Usar imagen por defecto si hay error
+        this.userProfileImage = this.defaultImage;
       }
     });
   }

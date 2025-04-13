@@ -47,6 +47,8 @@ export class ProjectsPageComponent {
   selectedUsers= new MatTableDataSource<UserDto>([]);
   userColumns: string[] = ['name', 'email', 'actions'];
   isEditMode: boolean = false;
+  showDetails:boolean = false;
+  selectedProject: any= null;
   constructor(
     private fb: FormBuilder,
     private alertService: NgxToastrService,
@@ -137,8 +139,11 @@ export class ProjectsPageComponent {
     this.isEditMode = false;
 
   }
-  onDetailProject(project : any){
-    this.router.navigate(['/projects/overview']);
+  toggleDetails(project : any){
+    // this.router.navigate(['/projects/overview']);
+
+    this.showDetails = !this.showDetails
+    if(project!=null) this.selectedProject = project
   }
   onSubmit(): void {
     if (this.projectForm.invalid) {
