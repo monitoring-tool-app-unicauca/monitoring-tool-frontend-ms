@@ -88,7 +88,7 @@
             <a (click)="setActiveTab('overview')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'overview'">Overview</a>
           </li>
           <li class="nav-item ms-1" role="presentation">
-            <a (click)="setActiveTab('settings')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'settings'">Settings</a>
+            <a (click)="setActiveTab('createEndpoint')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'createEndpoint'">Add Monitoring Endpoint</a>
           </li>
 
 
@@ -104,7 +104,10 @@
       > </app-project-overview>
 
       <!-- componente settings -->
-      <app-project-settings *ngSwitchCase="'settings'"></app-project-settings>
+      <app-project-settings
+        *ngSwitchCase="'createEndpoint'"
+        [project]="project"
+      ></app-project-settings>
     </ng-container>
 
   </div>
