@@ -103,12 +103,14 @@
       <app-project-overview
         *ngSwitchCase="'overview'"
         [project]="project"
+        (exit)="goBack()"
       > </app-project-overview>
 
       <!-- componente settings -->
       <app-project-settings
         *ngSwitchCase="'createEndpoint'"
         [project]="project"
+        (exit)="goBack()"
       ></app-project-settings>
 
       <!-- componente para ver endpoints  -->

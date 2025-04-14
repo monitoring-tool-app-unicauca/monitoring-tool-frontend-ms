@@ -267,7 +267,8 @@
                 </div>
                 <div class="mx-3">
                   <h6 class="mb-0 fw-semibold">You are deactivating this project</h6>
-                  <p class="mb-0">For extra security, this requires you to confirm your email.
+                  <p class="mb-0">
+                    {{project.projectId}}
                   </p>
                 </div>
               </div>
@@ -277,7 +278,7 @@
               </div>
             </div>
             <div class="card-footer text-end">
-              <a href="javascript:void(0);" class="btn btn-danger ms-2">Deactivate Project</a>
+              <button class="btn btn-danger ms-2" (click)="deleteProject()" >Deactivate</button>
             </div>
           </div>
         </div>

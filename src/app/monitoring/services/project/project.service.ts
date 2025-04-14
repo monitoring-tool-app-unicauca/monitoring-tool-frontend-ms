@@ -23,4 +23,7 @@ export class ProjectService {
       map(response => response.data)
     );
   }
+  deleteProject(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/project/${id}`);
+  }
 }

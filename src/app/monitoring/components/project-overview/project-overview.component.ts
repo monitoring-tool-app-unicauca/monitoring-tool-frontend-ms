@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UserService } from '../../../admin/services/user/user.service';
 import { UserDto } from '../../../admin/interfaces/userDTO';
+import { ProjectService } from '../../services/project/project.service';
+import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
 
 
 @Component({
@@ -19,11 +21,14 @@ export class ProjectOverviewComponent {
   }
 
   @Input() project: any
+  @Output() exit: EventEmitter<boolean> = new EventEmitter();
 
   responsibleUsers: UserDto[] = [];
   defaultImage= 'assets/images/user/default_tab.jpg'
   constructor(
-    private userService: UserService
+    private userService: UserService,
+    private projectService: ProjectService,
+    private alertService: NgxToastrService,
   ){
 
   }
@@ -33,6 +38,34 @@ export class ProjectOverviewComponent {
     }
   }
 
+  deleteProject() {
+    const checkbox = document.getElementById('checkboxDeactivation') as HTMLInputElement;
+
+    if (!checkbox?.checked) {
+      this.alertService.warning('You must confirm the deactivation by checking the box.','toast-top-left');
+      return;
+    }
+
+    const id = this.project.projectId
+    if (!id) {
+      this.alertService.error('No project ID found.','toast-top-left');
+      return;
+    }
+
+    this.projectService.deleteProject(id).subscribe({
+      next: (response) => {
+        console.log("exitoso")
+        this.alertService.success('Deleted successfully!','toast-top-left');
+        this.exit.emit(true)
+      },
+      error: (error) => {
+        // error?.error?.message ||
+        const message = 'Error deleting project';
+        this.alertService.error(message,'toast-top-left');
+        console.error(error);
+      }
+    });
+  }
   getResponsibleUsers(ids: number[]) {
     this.userService.getUsersByIds(ids).subscribe(
       (response) => {

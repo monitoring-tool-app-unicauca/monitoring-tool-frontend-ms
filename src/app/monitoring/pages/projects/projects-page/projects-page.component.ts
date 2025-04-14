@@ -140,10 +140,10 @@ export class ProjectsPageComponent {
 
   }
   toggleDetails(project : any){
-    // this.router.navigate(['/projects/overview']);
 
     this.showDetails = !this.showDetails
     if(project!=null) this.selectedProject = project
+    if(project==null) this.loadProjects()
   }
   onSubmit(): void {
     if (this.projectForm.invalid) {
