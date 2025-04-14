@@ -6,7 +6,7 @@ import { ProjectsPageComponent } from './pages/projects/projects-page/projects-p
 import { ProjectOverviewHeadComponent } from './components/project-overview-head/project-overview-head.component';
 import { ProjectOverviewComponent } from './components/project-overview/project-overview.component';
 import { ProjectSettingsComponent } from './components/project-settings/project-settings.component';
-
+import { ProjectHealthendpointsComponent } from './components/project-healthendpoints/project-healthendpoints.component';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -23,7 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
     ProjectOverviewComponent,
     ProjectOverviewHeadComponent,
     ProjectSettingsComponent,
-
+    ProjectHealthendpointsComponent,
   ],
   imports: [
     CommonModule,

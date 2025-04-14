@@ -90,7 +90,9 @@
           <li class="nav-item ms-1" role="presentation">
             <a (click)="setActiveTab('createEndpoint')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'createEndpoint'">Add Monitoring Endpoint</a>
           </li>
-
+          <li class="nav-item ms-1" role="presentation">
+            <a (click)="setActiveTab('endpoints')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'endpoints'">Monitored Endpoints</a>
+          </li>
 
         </ul>
 
@@ -108,6 +110,12 @@
         *ngSwitchCase="'createEndpoint'"
         [project]="project"
       ></app-project-settings>
+
+      <!-- componente para ver endpoints  -->
+      <app-project-healthendpoints
+        *ngSwitchCase="'endpoints'"
+        [project]="project"
+      ></app-project-healthendpoints>
     </ng-container>
 
   </div>

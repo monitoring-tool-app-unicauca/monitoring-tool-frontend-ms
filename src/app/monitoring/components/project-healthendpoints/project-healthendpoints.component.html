@@ -1,0 +1,71 @@
+<div class="tab-content" id="tabContentMyProfileBottom">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0 py-3 d-flex justify-content-between align-items-center">
+          <h4 class="heading mb-0">Health Endpoints</h4>
+          <div id="tableLogsExcelBTN"></div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive active-projects dataTables_wrapper">
+            <table class="table table-striped-thead table-wide table-sm">
+              <thead>
+                <tr>
+                  <!-- <th>Project</th> -->
+                  <th>Status</th>
+                  <th>URL</th>
+                  <th>Last Checked</th>
+                  <th>Next Check</th>
+                  <th>Response Time (ms)</th>
+                  <th>Active</th>
+                  <th>Notifications</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (endpoint of allData.data; track endpoint.id) {
+                <tr>
+                  <!-- <td>{{ endpoint.project.projectName }}</td> -->
+                  <td>
+                    <span
+                      class="badge badge-sm badge-{{ endpoint.status === 'DOWN' ? 'danger' : 'success' }} light border-0">
+                      {{ endpoint.status }}
+                    </span>
+                  </td>
+                  <td class="text-break">{{ endpoint.url }}</td>
+                  <td class="text-nowrap">{{ endpoint.lastCheckedAt | date: 'short' }}</td>
+                  <td class="text-nowrap">{{ endpoint.nextCheckedAt | date: 'short' }}</td>
+                  <td>{{ endpoint.responseTimeMs }}</td>
+                  <td>
+                    <span class="badge badge-sm badge-{{ endpoint.active ? 'success' : 'secondary' }} light border-0">
+                      {{ endpoint.active ? 'Yes' : 'No' }}
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge badge-sm badge-{{ endpoint.notificationsEnabled ? 'info' : 'secondary' }} light border-0">
+                      {{ endpoint.notificationsEnabled ? 'Enabled' : 'Disabled' }}
+                    </span>
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center px-3 pb-3">
+              <div>
+                Mostrando página {{ page }} de {{ totalPage }} - Total: {{ allData.total }} registros
+              </div>
+              <div>
+                <app-pagination
+                  [totalPage]="totalPage"
+                  [page]="page"
+                  (newPage)="pageChange($event)">
+                </app-pagination>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
