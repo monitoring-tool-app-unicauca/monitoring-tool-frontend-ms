@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
@@ -12,11 +12,13 @@ import { HealthService } from '../../services/health/health.service';
 })
 export class ProjectSettingsComponent {
 
+
   breadcrumbList = {
     breadcrumb_path: 'Projects',
     currentURL: 'Settings',
   }
   @Input() project: any
+  @Output() exit: EventEmitter<any> = new EventEmitter();
   healthForm!: FormGroup;
 
   notificationForm!: FormGroup;
@@ -42,14 +44,14 @@ export class ProjectSettingsComponent {
     this.initNotificationForm();
     this.healthService.endpointToEdit$.subscribe((endpoint) => {
       if (endpoint) {
-        this.healthForm.patchValue(endpoint); // O como cargues tu formulario
+        this.healthForm.patchValue(endpoint);
         this.isEditMode = true;
       }
     });
   }
   initHealthForm(){
     this.healthForm = this.fb.group({
-      id:[],
+      id:[''],
       projectId: [{ value: this.project.projectId, disabled: true }, Validators.required],
       url: ['', [Validators.required, Validators.pattern(/^(https?|ftp):\/\/[^ /$.?#].[^ ]*$/)]],
       active: [true, Validators.required],
@@ -65,6 +67,33 @@ export class ProjectSettingsComponent {
     });
 
     this.notificationForm = this.fb.group(controls);
+  }
+
+  deleteEndpoint() {
+    const checkbox = document.getElementById('checkboxDeactivation') as HTMLInputElement;
+
+    if (!checkbox?.checked) {
+      this.alertService.warning('You must confirm the deactivation by checking the box.','toast-top-left');
+      return;
+    }
+
+    const id = this.healthForm.get('id')?.value
+    if (!id) {
+      this.alertService.error('No health endpoint ID found.','toast-top-left');
+      return;
+    }
+
+    this.healthService.deleteHealthEndpoint(id).subscribe({
+      next: (response) => {
+        this.alertService.success(response.message || 'Deleted successfully!','toast-top-left');
+        this.cleanForm()
+      },
+      error: (error) => {
+        const message = error?.error?.message || 'Error deleting health endpoint';
+        this.alertService.error(message,'toast-top-left');
+        console.error(error);
+      }
+    });
   }
   onSubmit(): void {
     if (this.healthForm.invalid) {
@@ -92,6 +121,7 @@ export class ProjectSettingsComponent {
         }
       });
     } else {
+      delete payload.id;
       this.healthService.createHealthEndpoint(payload).subscribe({
         next: () => {
           this.cleanForm();

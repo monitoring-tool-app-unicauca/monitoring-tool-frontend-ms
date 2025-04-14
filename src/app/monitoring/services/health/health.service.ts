@@ -37,6 +37,10 @@ export class HealthService {
     return this.http.patch(url, payload);
   }
 
+  deleteHealthEndpoint(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/health-endpoint/${id}`);
+  }
+
   getHealthEndpointsByProject(projectId: string): Observable<any[]> {
     return new Observable(observer => {
       const url = `${this.apiUrl}/health-endpoint-stream/by-project?projectId=${projectId}`;
