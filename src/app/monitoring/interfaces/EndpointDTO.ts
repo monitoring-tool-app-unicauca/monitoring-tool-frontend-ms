@@ -1,4 +1,4 @@
-export interface HealthEndpointDTO {
+export interface EndpointDTO {
   id?: number;
   projectId: string;
   url: string;

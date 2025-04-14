@@ -4,7 +4,9 @@
         <div class="col-xl-8">
           <div class="card">
             <div class="card-header">
-              <h6 class="card-title">Basic Info Health Endpoint</h6>
+              <h6 class="card-title">
+                {{ isEditMode ? 'Edit Health Endpoint' : 'Create Health Endpoint' }}
+              </h6>
             </div>
             <form action="#" class="mt-2" [formGroup]="healthForm" (ngSubmit)="onSubmit()">
             <div class="card-body">
@@ -14,6 +16,9 @@
                 </div>
                 <div class="col-md-9">
                   <input type="text" class="form-control" formControlName="projectId" placeholder="Enter project ID">
+                  <div *ngIf="healthForm.get('projectId')?.invalid && healthForm.get('projectId')?.touched" class="text-danger mt-1">
+                    Project ID is required.
+                  </div>
                 </div>
               </div>
 
@@ -23,6 +28,10 @@
                 </div>
                 <div class="col-md-9">
                   <input type="text" class="form-control" formControlName="url" placeholder="https://yourendpoint.com/health">
+                  <div *ngIf="healthForm.get('url')?.invalid && healthForm.get('url')?.touched" class="text-danger mt-1">
+                    <div *ngIf="healthForm.get('url')?.errors?.['required']">URL is required.</div>
+                    <div *ngIf="healthForm.get('url')?.errors?.['pattern']">Enter a valid URL (starting with http or https).</div>
+                  </div>
                 </div>
               </div>
 
@@ -32,6 +41,10 @@
                 </div>
                 <div class="col-md-9">
                   <input type="number" class="form-control" formControlName="monitoringInterval" placeholder="e.g. 60">
+                  <div *ngIf="healthForm.get('monitoringInterval')?.invalid && healthForm.get('monitoringInterval')?.touched" class="text-danger mt-1">
+                    <div *ngIf="healthForm.get('monitoringInterval')?.errors?.['required']">Monitoring interval is required.</div>
+                    <div *ngIf="healthForm.get('monitoringInterval')?.errors?.['min']">Must be greater than 0.</div>
+                  </div>
                 </div>
               </div>
 

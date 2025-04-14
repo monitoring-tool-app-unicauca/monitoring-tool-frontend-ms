@@ -1,7 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HealthService } from '../../services/health/health.service';
 import { Sort } from '@angular/material/sort';
 import { EndpointResponseDTO } from '../../interfaces/Endpoint.ResponseDTO';
+import { EndpointDTO } from '../../interfaces/EndpointDTO';
 
 
 
@@ -22,6 +23,7 @@ export class ProjectHealthendpointsComponent implements OnInit {
   };
 
   @Input() project:any;
+  @Output() selectTab : EventEmitter<string> = new EventEmitter();
   active = 1;
   page: any = 1;
   totalRows: number = 7;
@@ -54,7 +56,10 @@ export class ProjectHealthendpointsComponent implements OnInit {
       }
     });
   }
-
+  editEndpoint(endpoint: EndpointDTO) {
+    this.healthService.setEndpointToEdit(endpoint);
+    this.selectTab.emit('createEndpoint');
+  }
   sortData(sort: Sort) {
     const data = this.endpoints.slice();
     if (!sort.active || sort.direction === '') {

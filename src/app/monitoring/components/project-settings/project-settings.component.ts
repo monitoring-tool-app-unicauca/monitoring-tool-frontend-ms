@@ -21,6 +21,7 @@ export class ProjectSettingsComponent {
 
   notificationForm!: FormGroup;
 
+  isEditMode:boolean = false
   endpointEvents = [
     { key: 'down', label: 'Endpoint Down' },
     { key: 'slow', label: 'Slow Performance' },
@@ -39,9 +40,16 @@ export class ProjectSettingsComponent {
   ngOnInit(): void {
     this.initHealthForm();
     this.initNotificationForm();
+    this.healthService.endpointToEdit$.subscribe((endpoint) => {
+      if (endpoint) {
+        this.healthForm.patchValue(endpoint); // O como cargues tu formulario
+        this.isEditMode = true;
+      }
+    });
   }
   initHealthForm(){
     this.healthForm = this.fb.group({
+      id:[],
       projectId: [{ value: this.project.projectId, disabled: true }, Validators.required],
       url: ['', [Validators.required, Validators.pattern(/^(https?|ftp):\/\/[^ /$.?#].[^ ]*$/)]],
       active: [true, Validators.required],
@@ -61,27 +69,42 @@ export class ProjectSettingsComponent {
   onSubmit(): void {
     if (this.healthForm.invalid) {
       this.healthForm.markAllAsTouched();
+      this.alertService.warning('HealthEndpoint is INVALID', 'toast-top-left');
       return;
     }
 
-    const payload = this.healthForm.getRawValue();
-
-    this.healthService.createHealthEndpoint(payload).subscribe({
-      next: () => {
-        this.cleanForm()
-        this.alertService.success('HealthEndpoint Created successfully', 'toast-top-left');
-      },
-      error: (err) => {
-        console.error('Error creating health endpoint', err);
-        // Mostrar error al usuario
-      }
-    });
+    const payload = {
+      ...this.healthForm.getRawValue(),
+      active: this.healthForm.value.active === 'true' || this.healthForm.value.active === true,
+      notificationsEnabled: this.healthForm.value.notificationsEnabled === 'true' || this.healthForm.value.notificationsEnabled === true
+    };
 
 
-    console.log(payload);
-
-
+    if (this.isEditMode && payload.id) {
+      this.healthService.updateHealthEndpoint(payload.id, payload).subscribe({
+        next: () => {
+          this.cleanForm();
+          this.alertService.success('HealthEndpoint updated successfully', 'toast-top-left');
+        },
+        error: (err) => {
+          console.error('Error updating health endpoint', err);
+          this.alertService.error('Error updating healthendpoint','toast-rop-left')
+        }
+      });
+    } else {
+      this.healthService.createHealthEndpoint(payload).subscribe({
+        next: () => {
+          this.cleanForm();
+          this.alertService.success('HealthEndpoint created successfully', 'toast-top-left');
+        },
+        error: (err) => {
+          console.error('Error creating health endpoint', err);
+          this.alertService.error('Error creating healthendpoint','toast-rop-left')
+        }
+      });
+    }
   }
+
 
   onSubmitNotificationForm(){
 
@@ -89,6 +112,9 @@ export class ProjectSettingsComponent {
   cleanForm(){
     this.healthForm.reset()
     this.notificationForm.reset()
+
+    this.isEditMode = false;
+    this.healthService.clear();
   }
   onReset() {
     this.notificationForm.reset()

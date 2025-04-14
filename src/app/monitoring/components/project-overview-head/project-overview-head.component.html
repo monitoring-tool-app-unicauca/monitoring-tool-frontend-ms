@@ -88,10 +88,10 @@
             <a (click)="setActiveTab('overview')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'overview'">Overview</a>
           </li>
           <li class="nav-item ms-1" role="presentation">
-            <a (click)="setActiveTab('createEndpoint')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'createEndpoint'">Add Monitoring Endpoint</a>
+            <a (click)="setActiveTab('createEndpoint')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'createEndpoint'">Monitoring Endpoint</a>
           </li>
           <li class="nav-item ms-1" role="presentation">
-            <a (click)="setActiveTab('endpoints')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'endpoints'">Monitored Endpoints</a>
+            <a (click)="setActiveTab('endpoints')" class="nav-link py-3 border-3 text-dark " [class.active]="activeTab == 'endpoints'">Endpoints</a>
           </li>
 
         </ul>
@@ -115,6 +115,7 @@
       <app-project-healthendpoints
         *ngSwitchCase="'endpoints'"
         [project]="project"
+        (selectTab)="setActiveTab($event)"
       ></app-project-healthendpoints>
     </ng-container>
 
