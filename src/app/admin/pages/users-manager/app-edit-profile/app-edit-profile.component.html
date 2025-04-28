@@ -1,4 +1,7 @@
-<div class="content-body">
+
+  <div class="content-body">
+    <!-- Breadcrumb  -->
+  <app-breadcrumb [breadcrumb]="breadcrumbList"> </app-breadcrumb>
     <!-- row -->
     <div class="container-fluid">
         <!-- row -->
@@ -10,7 +13,8 @@
                             <div class="p-5">
                                 <div class="author-profile">
                                     <div class="author-media">
-                                        <img [src]="imagePreview || userProfileImage || defaultImage"alt="Profile Image">
+                                      <img [src]="imagePreview || userProfileImage || defaultImage" alt="Profile Image">
+
                                         <div class="upload-link" title="update" data-toggle="tooltip" data-placement="right" data-original-title="update">
                                             <input type="file" class="update-flie" (change)="onFileSelected($event)">
                                             <i class="fa fa-camera"></i>

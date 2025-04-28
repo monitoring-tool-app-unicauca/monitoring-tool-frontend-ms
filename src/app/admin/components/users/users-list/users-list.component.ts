@@ -23,19 +23,14 @@ export interface Dessert {
 })
 export class UsersListComponent {
   offcanvasExample: boolean = false;
-  toggleExample() {
-    this.offcanvasExample = !this.offcanvasExample;
-  }
 
-  openCenter(content: TemplateRef<any>) {
-    this.modalService.open(content, { centered: true });
-  }
+
 
   @Input() offset_limit: any;
   @Input() checkbox: boolean = false;
 
   active = 1;
-  page: any = 0;
+  page: any = 1;
   totalRows: number = 1;
   totalPage: any = 0;
   allData: any = [];
@@ -45,7 +40,7 @@ export class UsersListComponent {
 
   orderData: UserDto[] = [];
   constructor(
-    private modalService: NgbModal,
+
     private userService: UserService
     ) {
 
@@ -55,8 +50,8 @@ export class UsersListComponent {
 
   }
   fetchUsers() {
-    this.userService.getUsers(this.page).subscribe((response) => {
-      console.log(response); // Verifica la respuesta aquí.
+    this.userService.getUsers(this.page-1).subscribe((response) => {
+
 
       if (response && response.data && Array.isArray(response.data.content)) {
         this.users = response.data.content.map((user: { userImage: any; }) => ({
