@@ -38,11 +38,12 @@ export class UserService {
     );
   }
 
-  getUsers(): Observable<UserDto[]> {
-    return this.http.get<{ data: UserDto[]; status: number; message: string }>(`${this.apiUrl}/user`).pipe(
-      map(response => response.data)
+  getUsers(page: number): Observable<any> {
+    return this.http.get<{ content: any[], totalElements: number, totalPages: number }>(`${this.apiUrl}/user?page=${page}`).pipe(
+      map(response => response)
     );
   }
+
 
   getUserById(id:number): Observable<ResponseDto<UserDto>> {
     return this.http.get<ResponseDto<UserDto>>(`${this.apiUrl}/user/${id}`)

@@ -44,7 +44,7 @@ export class ProjectsPageComponent {
   filteredUsers!: Observable<UserDto[]>;
 
 
-  selectedUsers= new MatTableDataSource<UserDto>([]);
+  selectedUsers: UserDto[] =[]//new MatTableDataSource<UserDto>([]);
   userColumns: string[] = ['name', 'email', 'actions'];
   isEditMode: boolean = false;
   showDetails:boolean = false;
@@ -64,7 +64,8 @@ export class ProjectsPageComponent {
     this.projectForm = this.fb.group({
       projectId: ['', [Validators.required, Validators.min(1)]],
       projectName: ['', [Validators.required, Validators.minLength(3)]],
-      projectDescription: ['', [Validators.required, Validators.minLength(5)]]
+      projectDescription: ['', [Validators.required, Validators.minLength(5)]],
+      minimumAllowedIntervalValue: [null, [Validators.required, Validators.min(1)]],
     });
   }
   cleanForm(){
@@ -73,8 +74,8 @@ export class ProjectsPageComponent {
   ngOnInit(): void {
     this.loadProjects()
     this.initForm()
-    this.allData = this.paginator(this.orderData, this.page, this.totalRows);
-    this.totalPage = this.allData.total_pages;
+
+
 
     this.filteredUsers = this.userSearchCtrl.valueChanges.pipe(
       debounceTime(300),
@@ -85,31 +86,35 @@ export class ProjectsPageComponent {
   }
   addUser(user: UserDto) {
 
-    if (!this.selectedUsers.data.some(u=>u.userId === user.userId)) {
-      this.selectedUsers.data = [...this.selectedUsers.data, user];
+    if (!this.selectedUsers.some(u=>u.userId === user.userId)) {
+      this.selectedUsers = [...this.selectedUsers, user];
     }
 
     this.userSearchCtrl.setValue('');
   }
 
   removeUser(user: UserDto) {
-    this.selectedUsers.data = this.selectedUsers.data.filter(u => u.userId !== user.userId);
+    this.selectedUsers = this.selectedUsers.filter(u => u.userId !== user.userId);
 
   }
   loadProjects(): void {
-    this.projectService.getAllProjects().subscribe({
+    const sort = 'projectId,asc'; // O dinámico si quieres cambiar
+    const size = this.totalRows; // Número de ítems por página
+    const page = this.page - 1; // ¡OJO! Backend empieza en 0
+
+    this.projectService.getAllProjects(page, size, sort).subscribe({
       next: (response) => {
-        this.projects = response;
-        this.orderData = [...this.projects]
-        this.totalRows = this.projects.length;
-        this.allData = this.paginator(this.orderData, this.page, this.totalRows);
-        this.totalPage = this.allData.total_pages;
+        this.projects = response.content;
+        this.totalPage = response.totalPages;
+        this.totalRows = response.totalElements;
+        this.allData = { data: this.projects }; // Simplificamos
       },
       error: (err) => {
         console.error('Error loading projects:', err);
       }
     });
   }
+
   editProject(project: any): void {
 
     this.isEditMode = true;
@@ -117,25 +122,18 @@ export class ProjectsPageComponent {
       projectId: project.projectId,
       projectName: project.projectName,
       projectDescription: project.projectDescription,
+      minimumAllowedIntervalValue: project.minimumAllowedIntervalValue,
     });
 
     // Deshabilitar el campo projectId para que no se edite
     this.projectForm.get('projectId')?.disable();
 
+    this.selectedUsers=project.users
 
-    // Cargar usuarios completos por sus IDs
-    this.userService.getUsersByIds(project.responsibleUserIds).subscribe({
-      next: (users) => {
-        this.selectedUsers.data = users.data ?? []; // Asignar los objetos completos
-      },
-      error: (err) => {
-        console.error('Error loading users by ID', err);
-      }
-    });
   }
   onCancelEdit(){
     this.projectForm.reset()
-    this.selectedUsers.data = []
+    this.selectedUsers = []
     this.isEditMode = false;
 
   }
@@ -152,7 +150,7 @@ export class ProjectsPageComponent {
       return;
     }
 
-    const userIds = this.selectedUsers.data.map(user => user.userId);
+    const userIds = this.selectedUsers.map(user => user.userId);
     const formValue = this.projectForm.getRawValue();
     const requestData = {
       ...formValue,
@@ -167,7 +165,7 @@ export class ProjectsPageComponent {
           this.alertService.success('Project updated successfully', 'toast-top-left');
           this.cleanForm()
           this.loadProjects();
-          this.selectedUsers.data = []
+          this.selectedUsers = []
 
         },
         error: (error) => {
@@ -184,7 +182,7 @@ export class ProjectsPageComponent {
           this.alertService.success('Project created successfully', 'toast-top-left');
           this.cleanForm()
           this.loadProjects();
-          this.selectedUsers.data = []
+          this.selectedUsers = []
 
         },
         error: (error) => {
@@ -198,7 +196,7 @@ export class ProjectsPageComponent {
 
     this.projectForm.reset();
     this.projectForm.get('projectId')?.enable();
-    this.selectedUsers.data = [];
+    this.selectedUsers = [];
     this.isEditMode = false;
 
   }
@@ -206,49 +204,13 @@ export class ProjectsPageComponent {
   trackByFn(index: number, item: ProjectDto): string {
     return item.projectId;
   }
-  sortData(sort: Sort) {
-    const data = this.projects.slice();
-    if (!sort.active || sort.direction === '') {
-      this.orderData = data;
-      return;
-    }
 
-    this.orderData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'project_name': return compare(a.projectName, b.projectName, isAsc);
-        case 'project_id': return compare(a.projectId, b.projectId, isAsc);
-        case 'project_description': return compare(a.projectDescription, b.projectDescription, isAsc);
-        default: return 0;
-      }
-    });
-    this.allData = this.paginator(this.orderData, this.page, this.totalRows);
-  }
 
-  pageChange(e: any) {    //  Page Change funcation   ---------
+  pageChange(e: any) {
     this.page = e;
-    this.allData = this.paginator(this.orderData, this.page, this.totalRows);
-    this.totalPage = this.allData.total_pages;
+    this.loadProjects();
   }
 
-  paginator(items: any, current_page: any, per_page_items: any) {
-    let page = current_page || 1,
-      per_page = per_page_items || 10,
-      offset = (page - 1) * per_page,
-
-      paginatedItems = items.slice(offset).slice(0, per_page_items),
-      total_pages = Math.ceil(items.length / per_page);
-
-    return {
-      page: page,
-      per_page: per_page,
-      pre_page: page - 1 ? page - 1 : null,
-      next_page: (total_pages > page) ? page + 1 : null,
-      total: items.length,
-      total_pages: total_pages,
-      data: paginatedItems
-    };
-  }
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {

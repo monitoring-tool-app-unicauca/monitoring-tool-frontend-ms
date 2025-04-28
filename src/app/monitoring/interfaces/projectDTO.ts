@@ -1,6 +1,9 @@
+import { UserDto } from "../../admin/interfaces/userDTO";
+
 export interface ProjectDto {
   projectId: string;
   projectName: string;
   projectDescription: string;
-  responsibleUserIds?: number[];
+  users: UserDto[];
+  minimumAllowedIntervalValue: number;
 }

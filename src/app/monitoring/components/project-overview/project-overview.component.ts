@@ -3,6 +3,7 @@ import { UserService } from '../../../admin/services/user/user.service';
 import { UserDto } from '../../../admin/interfaces/userDTO';
 import { ProjectService } from '../../services/project/project.service';
 import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
+import { ProjectDto } from '../../interfaces/projectDTO';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class ProjectOverviewComponent {
     value: ['Slow All', 'In Stock', 'Out of Stock']
   }
 
-  @Input() project: any
+  @Input()
+  project!: ProjectDto;
   @Output() exit: EventEmitter<boolean> = new EventEmitter();
 
   responsibleUsers: UserDto[] = [];
@@ -33,8 +35,9 @@ export class ProjectOverviewComponent {
 
   }
   ngOnInit() {
-    if (this.project?.responsibleUserIds?.length > 0) {
-      this.getResponsibleUsers(this.project.responsibleUserIds);
+    if (this.project?.users?.length > 0) {
+      // this.getResponsibleUsers(this.project.users.);
+      this.loadResponsibleUsers(this.project.users)
     }
   }
 
@@ -66,6 +69,41 @@ export class ProjectOverviewComponent {
       }
     });
   }
+  loadResponsibleUsers(users: UserDto[]) {
+    users.forEach(user => {
+      const userObj: UserDto = {
+        ...user, // copio toda la info que ya viene (name, email, etc.)
+        userImage: this.defaultImage // inicializo con la imagen por defecto
+      };
+
+      if (user.userId !== undefined) {
+        this.userService.getUserImage(user.userId).subscribe({
+          next: (blob) => {
+            // Verificamos si el blob tiene contenido válido (tamaño > 0)
+            if (blob && blob.size > 0) {
+              const reader = new FileReader();
+              reader.onload = () => {
+                userObj.userImage = reader.result as string;
+                this.responsibleUsers.push(userObj);
+              };
+              reader.readAsDataURL(blob);
+            } else {
+
+              this.responsibleUsers.push(userObj);
+            }
+          },
+          error: () => {
+
+            this.responsibleUsers.push(userObj);
+          }
+        });
+      } else {
+
+        this.responsibleUsers.push(userObj);
+      }
+    });
+  }
+
   getResponsibleUsers(ids: number[]) {
     this.userService.getUsersByIds(ids).subscribe(
       (response) => {

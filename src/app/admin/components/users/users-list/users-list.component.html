@@ -6,7 +6,7 @@
             <button type="button" class="btn btn-secondary btn-sm" (click)="openCenter(exampleModal1)">+ Invite Employee </button>
         </div>
     </div>
-    <table matSort (matSortChange)="sortData($event)" id="empoloyees-tbl" class="table mb-0">
+    <table id="empoloyees-tbl" class="table mb-0">
         <thead>
             <tr>
                 @if(checkbox){
@@ -18,19 +18,18 @@
                     </div>
                 </th>
                 }
-                <th mat-sort-header="userId">User ID</th>
-                <th mat-sort-header="name">Name</th>
-                <th mat-sort-header="email">Email Address</th>
-                <th mat-sort-header="documentNumber">Document</th>
-                <th mat-sort-header="phoneNumber">Phone Number</th>
+                <th >User ID</th>
+                <th >Name</th>
+                <th >Email Address</th>
+                <th >Document</th>
+                <th >Phone Number</th>
                 <!-- <th mat-sort-header="roles">Roles</th> -->
-                <th mat-sort-header="actions">Actions</th>
+                <th >Actions</th>
 
             </tr>
         </thead>
         <tbody>
-            @for(item of allData.data; track item){
-            <tr>
+          <tr *ngFor="let item of users">
                 @if(checkbox){
                 <td>
                     <div class="form-check custom-checkbox">
@@ -45,7 +44,7 @@
                         <!-- <img [src]="getUserImage(item.userId)"  class="avatar avatar-md" alt=""> -->
                         <div>
                             <h6><a href="javascript:void(0)">{{ item.name }} {{ item.lastName }}</a></h6>
-                            <span>{{ item.userPosition }}</span>
+                            <!-- <span>{{ item.userPosition }}</span> -->
                         </div>
                     </div>
                 </td>
@@ -65,7 +64,7 @@
                   </button>
               </td>
             </tr>
-            }
+
         </tbody>
     </table>
     <div class="dataTables_info" id="example5_info" role="status" aria-live="polite">Showing {{page}} to
