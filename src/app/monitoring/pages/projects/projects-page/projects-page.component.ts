@@ -98,16 +98,16 @@ export class ProjectsPageComponent {
 
   }
   loadProjects(): void {
-    const sort = 'projectId,asc'; // O dinámico si quieres cambiar
-    const size = this.totalRows; // Número de ítems por página
-    const page = this.page - 1; // ¡OJO! Backend empieza en 0
+    const sort = 'projectId,asc';
+    const size = this.totalRows;
+    const page = this.page - 1;
 
     this.projectService.getAllProjects(page, size, sort).subscribe({
       next: (response) => {
         this.projects = response.content;
         this.totalPage = response.totalPages;
         this.totalRows = response.totalElements;
-        this.allData = { data: this.projects }; // Simplificamos
+        this.allData = { data: this.projects };
       },
       error: (err) => {
         console.error('Error loading projects:', err);
@@ -213,6 +213,3 @@ export class ProjectsPageComponent {
 
 }
 
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}

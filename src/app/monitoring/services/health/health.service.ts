@@ -50,7 +50,13 @@ export class HealthService {
         this.zone.run(() => {
           try {
             const parsedData = JSON.parse(event.data);
-            observer.next(parsedData.data); // <- Aquí emitimos solo el array de health endpoints
+            let healthData = parsedData.data;
+
+            if (!Array.isArray(healthData)) {
+              healthData = [healthData];
+            }
+
+            observer.next(healthData);
           } catch (e) {
             console.error('Error parsing SSE data:', e);
           }
@@ -65,9 +71,11 @@ export class HealthService {
         });
       };
 
+      // Cuando el observable se destruya, cerramos la conexión
       return () => {
         eventSource.close();
       };
     });
   }
+
 }

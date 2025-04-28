@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HealthService } from '../../services/health/health.service';
 import { Sort } from '@angular/material/sort';
 import { EndpointResponseDTO } from '../../interfaces/Endpoint.ResponseDTO';
 import { EndpointDTO } from '../../interfaces/EndpointDTO';
+import { Subscription } from 'rxjs';
 
 
 
@@ -40,22 +41,41 @@ export class ProjectHealthendpointsComponent implements OnInit {
   endpoints: EndpointResponseDTO[] = [];
   orderData: EndpointResponseDTO[] = [];
 
-  constructor(private healthService: HealthService) {}
+  private sseSubscription: Subscription | null = null;
+
+  constructor(private healthService: HealthService,private cdRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     const projectId = this.project.projectId;
-    this.healthService.getHealthEndpointsByProject(projectId).subscribe({
+    if (!this.sseSubscription) {
+      this.connectToSSE(projectId);
+    }
+
+  }
+  ngOnDestroy(): void {
+    // Asegurarse de cerrar la conexión SSE cuando el componente se destruya
+    if (this.sseSubscription) {
+      this.sseSubscription.unsubscribe(); // Usamos unsubscribe para cerrar la suscripción
+      this.sseSubscription = null;
+    }
+  }
+  private connectToSSE(projectId: string): void {
+    this.sseSubscription = this.healthService.getHealthEndpointsByProject(projectId).subscribe({
       next: (data: EndpointResponseDTO[]) => {
         this.endpoints = data;
         this.orderData = [...data];
         this.allData = this.paginator(this.orderData, this.page, this.totalRows);
         this.totalPage = this.allData.total_pages;
+
+        // Actualiza la vista
+        this.cdRef.detectChanges();
       },
       error: (err) => {
         console.error('Error receiving SSE data:', err);
       }
     });
   }
+
   editEndpoint(endpoint: EndpointDTO) {
     this.healthService.setEndpointToEdit(endpoint);
     this.selectTab.emit('createEndpoint');
