@@ -16,6 +16,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
+import { HealthEndpointLineChartComponent } from './components/healthendpoint-line-chart/health-endpoint-line-chart/health-endpoint-line-chart.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
     ProjectOverviewHeadComponent,
     ProjectSettingsComponent,
     ProjectHealthendpointsComponent,
+    HealthEndpointLineChartComponent,
   ],
   imports: [
     CommonModule,

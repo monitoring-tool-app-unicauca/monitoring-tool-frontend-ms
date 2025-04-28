@@ -1,9 +1,10 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { HealthService } from '../../services/health/health.service';
 import { Sort } from '@angular/material/sort';
 import { EndpointResponseDTO } from '../../interfaces/Endpoint.ResponseDTO';
 import { EndpointDTO } from '../../interfaces/EndpointDTO';
 import { Subscription } from 'rxjs';
+import { HealthEndpointLineChartComponent } from '../healthendpoint-line-chart/health-endpoint-line-chart/health-endpoint-line-chart.component';
 
 
 
@@ -25,6 +26,9 @@ export class ProjectHealthendpointsComponent implements OnInit {
 
   @Input() project:any;
   @Output() selectTab : EventEmitter<string> = new EventEmitter();
+  @ViewChild(HealthEndpointLineChartComponent)
+  healthEndpointChartComponent!: HealthEndpointLineChartComponent;
+
   active = 1;
   page: any = 1;
   totalRows: number = 7;
@@ -37,6 +41,9 @@ export class ProjectHealthendpointsComponent implements OnInit {
     desc: 'Lorem ipsum  dolor sit amet',
     title_path: 'Dashboard'
   };
+
+  selectedEndpoint: any;
+  endpointChartVisible: boolean = false;
 
   endpoints: EndpointResponseDTO[] = [];
   orderData: EndpointResponseDTO[] = [];
@@ -69,6 +76,17 @@ export class ProjectHealthendpointsComponent implements OnInit {
 
         // Actualiza la vista
         this.cdRef.detectChanges();
+        if (this.selectedEndpoint && this.healthEndpointChartComponent) {
+          // Buscar el endpoint actualizado correspondiente
+          const updatedEndpoint = data.find(ep => ep.id === this.selectedEndpoint.id);
+
+          if (updatedEndpoint) {
+            this.selectedEndpoint = updatedEndpoint; // Opcional: actualizas la info del seleccionado
+            this.healthEndpointChartComponent.addPoint(new Date(), updatedEndpoint.responseTimeMs);
+          }
+        }
+
+
       },
       error: (err) => {
         console.error('Error receiving SSE data:', err);
@@ -76,6 +94,18 @@ export class ProjectHealthendpointsComponent implements OnInit {
     });
   }
 
+
+
+  viewEndpointChart(endpoint: any) {
+    if (this.selectedEndpoint === endpoint) {
+
+      this.endpointChartVisible = !this.endpointChartVisible;
+    } else {
+
+      this.selectedEndpoint = endpoint;
+      this.endpointChartVisible = true;
+    }
+  }
   editEndpoint(endpoint: EndpointDTO) {
     this.healthService.setEndpointToEdit(endpoint);
     this.selectTab.emit('createEndpoint');
