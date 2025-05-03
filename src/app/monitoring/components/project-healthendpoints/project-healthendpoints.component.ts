@@ -42,7 +42,7 @@ export class ProjectHealthendpointsComponent implements OnInit {
     title_path: 'Dashboard'
   };
 
-  selectedEndpoint: any;
+  selectedEndpoint: any = {};
   endpointChartVisible: boolean = false;
 
   endpoints: EndpointResponseDTO[] = [];
@@ -69,24 +69,39 @@ export class ProjectHealthendpointsComponent implements OnInit {
   private connectToSSE(projectId: string): void {
     this.sseSubscription = this.healthService.getHealthEndpointsByProject(projectId).subscribe({
       next: (data: EndpointResponseDTO[]) => {
-        this.endpoints = data;
-        this.orderData = [...data];
+        // Itera sobre los nuevos datos de los endpoints
+        data.forEach((newEndpoint: EndpointResponseDTO) => {
+          // Encuentra el endpoint correspondiente en el arreglo actual
+          const existingEndpoint = this.endpoints.find(ep => ep.id === newEndpoint.id);
+
+          // Si existe, actualiza solo sus valores
+          if (existingEndpoint) {
+            existingEndpoint.status = newEndpoint.status;
+            existingEndpoint.lastCheckedAt = newEndpoint.lastCheckedAt;
+            existingEndpoint.nextCheckedAt = newEndpoint.nextCheckedAt;
+            existingEndpoint.responseTimeMs = newEndpoint.responseTimeMs;
+          } else {
+            // Si no existe, agrega el endpoint a la lista
+            this.endpoints.push(newEndpoint);
+          }
+        });
+
+        // Después de actualizar, realiza la paginación
+        this.orderData = [...this.endpoints];
         this.allData = this.paginator(this.orderData, this.page, this.totalRows);
         this.totalPage = this.allData.total_pages;
 
         // Actualiza la vista
         this.cdRef.detectChanges();
-        if (this.selectedEndpoint && this.healthEndpointChartComponent) {
-          // Buscar el endpoint actualizado correspondiente
-          const updatedEndpoint = data.find(ep => ep.id === this.selectedEndpoint.id);
 
+        // Si hay un endpoint seleccionado, actualízalo en el gráfico
+        if (this.selectedEndpoint && this.healthEndpointChartComponent) {
+          const updatedEndpoint = data.find(ep => ep.id === this.selectedEndpoint.id);
           if (updatedEndpoint) {
-            this.selectedEndpoint = updatedEndpoint; // Opcional: actualizas la info del seleccionado
+            this.selectedEndpoint = updatedEndpoint; // Actualiza la información del seleccionado
             this.healthEndpointChartComponent.addPoint(new Date(), updatedEndpoint.responseTimeMs);
           }
         }
-
-
       },
       error: (err) => {
         console.error('Error receiving SSE data:', err);
@@ -96,7 +111,9 @@ export class ProjectHealthendpointsComponent implements OnInit {
 
 
 
+
   viewEndpointChart(endpoint: any) {
+
     if (this.selectedEndpoint === endpoint) {
 
       this.endpointChartVisible = !this.endpointChartVisible;

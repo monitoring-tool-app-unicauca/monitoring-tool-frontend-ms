@@ -59,12 +59,12 @@
                     <button
                       type="button"
                       class="btn btn-primary btn-sm"
-                      (click)="viewEndpointChart(endpoint)"
-                      >
+                      (click)="viewEndpointChart(endpoint)">
                       <span class="btn-icon">
-                        <i class="fas" [ngClass]="selectedEndpoint === endpoint && endpointChartVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+                        <i class="fas" [ngClass]="selectedEndpoint?.id === endpoint.id && endpointChartVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
                       </span>
                     </button>
+
                   </td>
                 </tr>
                 }
