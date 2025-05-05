@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../auth/services/auth/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -13,12 +14,21 @@ export class HeaderComponent {
   toggleMode: 'dark' | 'light' | undefined;
   localData: string | null = '';
 
-  constructor(private router: Router, private route: ActivatedRoute) {
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    ) {
     this.route.queryParams.subscribe((params: any) => {
       if (params.theme === 'dark' || params.theme === 'light') {
         localStorage.setItem("data-theme-version", params.theme);
       }
     });
+  }
+  logout(): void {
+
+    this.authService.logout();
+
   }
 
   ngDoCheck() {

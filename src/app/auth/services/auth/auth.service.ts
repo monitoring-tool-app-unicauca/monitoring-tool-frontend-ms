@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,13 @@ import { Observable, of } from 'rxjs';
 export class AuthService {
 
   private apiUrl = environment.API_USERS_URL;
+  private TOKEN_KEY = 'auth_token';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
+
 
   validateEmail(email: string): Observable<{ available: boolean }> {
     return this.http.get<{ available: boolean }>(`${this.apiUrl}/user/by-email?email=${email}`);
@@ -19,12 +25,29 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/register`, { name, email, password });
   }
 
-  login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password });
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
+  login(username: string, password: string):Observable<any> {
+    const payload = { username, password };
+    return this.http.post<any>(`${this.apiUrl}/user/authenticate`, payload);
+  }
+
+  saveToken(token: string): void {
+    localStorage.setItem(this.TOKEN_KEY, token);
+  }
+
+
   logout(): void {
-    localStorage.removeItem('token');
+
+    localStorage.removeItem(this.TOKEN_KEY);
+    this.router.navigate(['/auth/login'])
+  }
+
+
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
   recoverPassword(email: string): Observable<any> {
