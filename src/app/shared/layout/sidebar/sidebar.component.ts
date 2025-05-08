@@ -3,6 +3,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule, Location, NgClass, PlatformLocation } from '@angular/common';
 import { SafeHtmlSvgPipe } from '../../../_services/svg-pipe/safe-html-svg.pipe';
+import { AuthService } from '../../../auth/services/auth/auth.service';
 interface MenuItem {
   label?: string
   title: string;
@@ -38,7 +39,13 @@ export class SidebarComponent {
 									<path d="M7.5 18.3333V10H12.5V18.3333" stroke="#888888" stroke-linecap="round" stroke-linejoin="round"/>
 								</svg>`;
 
-  constructor(private router: Router, private location: Location, private backLocation: PlatformLocation) {
+  sidebarMenu: MenuItem[] =[]
+  constructor(
+    private router: Router,
+    private location: Location,
+    private backLocation: PlatformLocation,
+    private authService: AuthService
+  ) {
     router.events.subscribe((val) => {
       if (location.path() != '') {
         this.currentHref = location.path();
@@ -49,6 +56,17 @@ export class SidebarComponent {
     backLocation.onPopState(() => {   // back click get url
       this.handleActiveMenu(window.location.pathname);
     });
+
+    const user = this.authService.getCurrentUser();
+    if (user) {
+      const isAdmin = user.roles?.some((role: { roleId: number; }) => role.roleId === 1);
+
+      if (isAdmin) {
+        this.sidebarMenu = this.getAdminMenu();
+      } else {
+        this.sidebarMenu = this.getUserMenu();
+      }
+    }
   }
 
   ngDoCheck(): void {
@@ -130,9 +148,30 @@ export class SidebarComponent {
     }
   }
 
-
-  sidebarMenu: MenuItem[] = [
+  getUserMenu(): MenuItem[] {
+    return [
+      {
+        label: 'MY SPACE',
+        title: "Inicio",
+        icon: `<svg>...</svg>`,
+        route: "/dashboard"
+      },
+      {
+        title: "Mis documentos",
+        route: "/user/documents",
+        icon: `<svg>...</svg>`
+      },
+      {
+        title: "Mi perfil",
+        route: "/user/profile",
+        icon: `<svg>...</svg>`
+      }
+    ];
+  }
+  getAdminMenu(): MenuItem[]
     {
+      return [
+      {
       label: 'YOUR COMPANY',
       title: "Dashboard",
       icon: `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -459,6 +498,7 @@ export class SidebarComponent {
           route: "/admin/empty-page"
         }
       ]
-    },
-  ]
+    }
+    ]
+  }
 }

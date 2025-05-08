@@ -10,7 +10,7 @@ import { MonitoringModule } from './monitoring/monitoring.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
-
+import { SharedModule } from './shared/shared.module';
 @NgModule({
   declarations: [
     AppComponent
@@ -24,6 +24,7 @@ import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
     AuthModule,
     AdminModule,
     MonitoringModule,
+    SharedModule,
     BrowserAnimationsModule
   ],
   providers: [

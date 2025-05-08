@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
+import { UserDto } from '../../../admin/interfaces/userDTO';
 
 @Component({
   selector: 'app-login-login',
@@ -57,8 +58,22 @@ export class LoginComponent {
           this.authService.saveToken(token);
           this.alertService.success('Succesfull login', 'toast-top-left');
 
+          //obtener info de persona y ver si es un admin
+          if (email) {
+            this.authService.getUserByEmail(email).subscribe(userResponse => {
+              const userData: UserDto = userResponse.data;
+              this.authService.setCurrentUser(userData);
 
-          this.router.navigate(['/admin']);
+              const isAdmin = userData.roles?.some(role => role.roleId === 1);
+              console.log("Is admin ? ",isAdmin)
+              if (isAdmin) {
+                this.router.navigate(['/admin']);
+              } else {
+                this.router.navigate(['/monitoring']);
+              }
+            });
+
+          }
         } else {
           this.alertService.error('No Token', 'toast-top-left');
         }

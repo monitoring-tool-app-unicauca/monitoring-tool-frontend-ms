@@ -3,8 +3,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth/auth.service';
-import { UserDto } from '../../interfaces/userDTO';
-import { UserService } from '../../services/user/user.service';
+import { UserDto } from '../../../admin/interfaces/userDTO';
+import { UserService } from '../../../admin/services/user/user.service';
 
 @Component({
   selector: 'app-header',

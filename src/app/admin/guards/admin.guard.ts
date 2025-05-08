@@ -2,6 +2,7 @@ import { CanActivate, CanActivateFn, Router } from '@angular/router';
 import { AuthService } from '../../auth/services/auth/auth.service';
 import { Injectable } from '@angular/core';
 import { Observable, of, tap } from 'rxjs';
+import { UserDto } from '../interfaces/userDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +11,14 @@ export class AdminGuard implements CanActivate {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(): Observable<boolean> {
-    return of(true)
-    const userEmail = localStorage.getItem('userEmail');
-    console.log("User email ",userEmail)
-    if (!userEmail) {
-      /* this.router.navigate(['/auth/login']); */
-      return new Observable<boolean>(observer => {
-        observer.next(false);
-        observer.complete();
-      });
+  canActivate(): boolean {
+    const user:UserDto = this.authService.getCurrentUser();
+
+    if (user && user.roles?.some(role => role.roleId === 1)) {
+      return true;
     }
 
-    //return this.authService.isAdmin(userEmail).pipe(
-    //  tap(isAdmin => {
-    //    if (!isAdmin) {
-          /* this.router.navigate(['/auth/login']); */
-    //    }
-    //  })
-    //);
+    this.router.navigate(['/monitoring']);
+    return false;
   }
 }

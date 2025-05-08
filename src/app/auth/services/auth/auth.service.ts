@@ -12,6 +12,7 @@ export class AuthService {
 
   private apiUrl = environment.API_USERS_URL;
   private TOKEN_KEY = 'auth_token';
+  private USER_KEY ='current_user';
   private currentUser!: UserDto ;
 
   constructor(
@@ -44,6 +45,7 @@ export class AuthService {
   logout(): void {
 
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_KEY);
     this.router.navigate(['/auth/login'])
   }
 
@@ -54,7 +56,7 @@ export class AuthService {
 
 setCurrentUser(user: any): void {
   this.currentUser = user;
-  localStorage.setItem('current_user', JSON.stringify(user));
+  localStorage.setItem(this.USER_KEY, JSON.stringify(user));
   console.log("Set current user ",this.currentUser)
 }
 
@@ -62,7 +64,7 @@ getCurrentUser(): any {
   if (this.currentUser) {
     return this.currentUser;
   }
-  const storedUser = localStorage.getItem('current_user');
+  const storedUser = localStorage.getItem(this.USER_KEY);
   return storedUser ? JSON.parse(storedUser) : null;
 }
 
