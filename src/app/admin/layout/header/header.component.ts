@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth/auth.service';
+import { UserDto } from '../../interfaces/userDTO';
+import { UserService } from '../../services/user/user.service';
 
 @Component({
   selector: 'app-header',
@@ -13,11 +15,16 @@ export class HeaderComponent {
   fullScreenClass: boolean = false;
   toggleMode: 'dark' | 'light' | undefined;
   localData: string | null = '';
+  currentUser: any;
+  userProfileImage: string | null = null;
+  defaultImage: string = 'assets/images/user/default_tab.jpg';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private userService: UserService,
+    private cdRef: ChangeDetectorRef,
     ) {
     this.route.queryParams.subscribe((params: any) => {
       if (params.theme === 'dark' || params.theme === 'light') {
@@ -25,11 +32,49 @@ export class HeaderComponent {
       }
     });
   }
+
+  ngOnInit(): void {
+    const storedUser = localStorage.getItem('current_user');
+    if (storedUser) {
+      this.currentUser = JSON.parse(storedUser);
+      if (this.currentUser?.userId) {
+        this.loadProfileImage(this.currentUser.userId);
+      }
+    }
+
+  }
   logout(): void {
 
     this.authService.logout();
 
   }
+  loadProfileImage(userId: string) {
+    let userImage = this.defaultImage;
+
+    if (userId !== undefined) {
+      this.userService.getUserImage(+userId).subscribe({
+        next: (blob) => {
+          if (blob && blob.size > 0) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              userImage = reader.result as string;
+              this.userProfileImage = userImage;
+              this.cdRef.detectChanges();
+            };
+            reader.readAsDataURL(blob);
+          } else {
+            this.userProfileImage = userImage;
+          }
+        },
+        error: () => {
+          this.userProfileImage = userImage;
+        }
+      });
+    } else {
+      this.userProfileImage = userImage;
+    }
+  }
+
 
   ngDoCheck() {
     this.applyThemeMode();

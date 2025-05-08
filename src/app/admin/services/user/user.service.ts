@@ -65,4 +65,8 @@ export class UserService {
     return this.http.get<ResponseDto<UserDto[]>>(`${this.apiUrl}/user/by-ids`, { params });
   }
 
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/by-email?email=${encodeURIComponent(email)}`);
+  }
+
 }

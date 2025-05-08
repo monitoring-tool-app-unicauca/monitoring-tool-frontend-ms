@@ -3,6 +3,7 @@ import { environment } from '../../../../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserDto } from '../../../admin/interfaces/userDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,7 @@ export class AuthService {
 
   private apiUrl = environment.API_USERS_URL;
   private TOKEN_KEY = 'auth_token';
+  private currentUser!: UserDto ;
 
   constructor(
     private http: HttpClient,
@@ -50,29 +52,27 @@ export class AuthService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
+setCurrentUser(user: any): void {
+  this.currentUser = user;
+  localStorage.setItem('current_user', JSON.stringify(user));
+  console.log("Set current user ",this.currentUser)
+}
+
+getCurrentUser(): any {
+  if (this.currentUser) {
+    return this.currentUser;
+  }
+  const storedUser = localStorage.getItem('current_user');
+  return storedUser ? JSON.parse(storedUser) : null;
+}
+
   recoverPassword(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/recover-password`, { email });
   }
 
   getUserByEmail(email: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/by-email?email=${email}`);
+    return this.http.get<any>(`${this.apiUrl}/user/by-email?email=${email}`);
   }
 
-  isAdmin(email: string): Observable<boolean> {
-    return of(true)
-    /* return new Observable<boolean>((observer) => {
-      this.getUserByEmail(email).subscribe(response => {
-        const userRoles = response.data.roles || [];
-        const isAdmin = userRoles.some((role: { name: string; }) => role.name === 'ADMIN');
-        observer.next(isAdmin);
-        observer.complete();
-      }, error => {
-        observer.next(false);
-        observer.complete();
-      });
-    }); */
-  }
-  /* getUser(): Observable<any> {
-    return of(null)
-  } */
+
 }
