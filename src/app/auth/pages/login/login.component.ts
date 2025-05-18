@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
 import { UserDto } from '../../../admin/interfaces/userDTO';
+import { APP_CONSTANTS } from '../../../../constants';
 
 @Component({
   selector: 'app-login-login',
@@ -16,7 +17,8 @@ export class LoginComponent {
 
   loginForm!: FormGroup  ;
   hide_show: boolean = false;
-
+  appName = APP_CONSTANTS.APP_NAME
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,

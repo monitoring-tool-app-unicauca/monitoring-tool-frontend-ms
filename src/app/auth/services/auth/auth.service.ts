@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserDto } from '../../../admin/interfaces/userDTO';
@@ -54,22 +54,28 @@ export class AuthService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-setCurrentUser(user: any): void {
-  this.currentUser = user;
-  localStorage.setItem(this.USER_KEY, JSON.stringify(user));
-  console.log("Set current user ",this.currentUser)
-}
-
-getCurrentUser(): any {
-  if (this.currentUser) {
-    return this.currentUser;
+  setCurrentUser(user: any): void {
+    this.currentUser = user;
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    console.log("Set current user ",this.currentUser)
   }
-  const storedUser = localStorage.getItem(this.USER_KEY);
-  return storedUser ? JSON.parse(storedUser) : null;
-}
 
-  recoverPassword(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/recover-password`, { email });
+  getCurrentUser(): any {
+    if (this.currentUser) {
+      return this.currentUser;
+    }
+    const storedUser = localStorage.getItem(this.USER_KEY);
+    return storedUser ? JSON.parse(storedUser) : null;
+  }
+
+   forgotPassword(email: string): Observable<any> {
+    const params = new HttpParams().set('email', email);
+    return this.http.post(`${this.apiUrl}/user/forgot-password`, null, { params });
+  }
+
+  recoverPassword(payload:any):Observable<any> {
+    
+    return this.http.patch<any>(`${this.apiUrl}/user/reset-password`, payload);
   }
 
   getUserByEmail(email: string): Observable<any> {
