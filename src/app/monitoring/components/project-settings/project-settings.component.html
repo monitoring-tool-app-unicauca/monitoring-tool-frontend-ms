@@ -48,7 +48,7 @@
                 </div>
               </div>
 
-              <div class="row align-items-center mb-4">
+              <!-- <div class="row align-items-center mb-4">
                 <div class="col-md-3">
                   <label class="form-label mb-md-0">Notifications<span class="text-danger ms-1">*</span></label>
                 </div>
@@ -58,7 +58,7 @@
                     <label class="form-check-label" for="notifEmail">Enabled</label>
                   </div>
                 </div>
-              </div>
+              </div> -->
 
               <div class="row align-items-center mb-3">
                 <div class="col-md-3">
@@ -85,7 +85,7 @@
                 <div class="card-header">
                   <h4 class="heading mb-0">Notifications</h4>
                 </div>
-                <form [formGroup]="notificationForm" (ngSubmit)="onSubmitNotificationForm()" class="mt-2">
+                <form [formGroup]="notificationForm" class="mt-2">
                 <div class="card-body">
                     <div class="clearfix border-bottom border-light py-3" *ngFor="let event of endpointEvents">
                       <div class="row align-items-center">
@@ -93,23 +93,22 @@
                           <label class="form-label mb-md-0">{{ event.label }}</label>
                         </div>
                         <div class="col-sm-3 col-6">
-                          <div class="form-check custom-checkbox me-4 mb-0 d-inline-block">
+                          <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" [formControlName]="event.key + 'Email'" />
+                            <!-- <label class="form-check-label">Email</label> -->
+                          </div>
+                          <!-- <div class="form-check custom-checkbox me-4 mb-0 d-inline-block">
                             <input type="checkbox" class="form-check-input mb-0" [formControlName]="event.key + 'Email'" />
                             <label class="form-check-label mb-0">Email</label>
-                          </div>
+                          </div> -->
                         </div>
-                        <div class="col-sm-3 col-6">
-                          <div class="form-check custom-checkbox me-4 mb-0 d-inline-block">
-                            <input type="checkbox" class="form-check-input mb-0" [formControlName]="event.key + 'Phone'" />
-                            <label class="form-check-label mb-0">Phone</label>
-                          </div>
-                        </div>
+                        
                       </div>
                     </div>
 
                     <div class="card-footer text-end ">
-                      <button type="button" class="btn btn-white me-1" (click)="onReset()">Discard</button>
-                      <button type="submit" class="btn btn-primary ms-2" [disabled]="!notificationForm.valid">Save Changes</button>
+                      <!-- <button type="button" class="btn btn-white me-1" (click)="onReset()">Discard</button>
+                      <button type="submit" class="btn btn-primary ms-2" [disabled]="!notificationForm.valid">Save Changes</button> -->
                     </div>
                   </div>
                 </form>

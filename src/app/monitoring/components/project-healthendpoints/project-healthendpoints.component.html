@@ -42,9 +42,17 @@
                     </span>
                   </td>
                   <td>
-                    <span class="badge badge-sm badge-{{ endpoint.notificationsEnabled ? 'info' : 'secondary' }} light border-0">
-                      {{ endpoint.notificationsEnabled ? 'Enabled' : 'Disabled' }}
+                    <span
+                      class="badge badge-sm light border-0"
+                      [ngClass]="{
+                        'badge-danger': endpoint.status === 'DOWN',
+                        'badge-success': endpoint.status === 'UP',
+                        'badge-secondary': endpoint.status === 'UNKNOWN'
+                      }"
+                    >
+                      {{ endpoint.status }}
                     </span>
+
                   </td>
                   <td>
                     <button

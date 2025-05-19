@@ -21,9 +21,11 @@ export class ProjectOverviewComponent {
     value: ['Slow All', 'In Stock', 'Out of Stock']
   }
 
-  @Input()
-  project!: ProjectDto;
+  @Input()project!: ProjectDto;
   @Output() exit: EventEmitter<boolean> = new EventEmitter();
+
+  confirmProjectId: string = '';
+  checkboxConfirmed: boolean = false;
 
   responsibleUsers: UserDto[] = [];
   defaultImage= 'assets/images/user/default_tab.jpg'

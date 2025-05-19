@@ -172,7 +172,7 @@
 <!-- <div class="content-body" > -->
   <app-project-overview-head
     *ngIf="showDetails"
-    [project]="selectedProject"
+    [projectId]="selectedProject.projectId"
     (exit)="toggleDetails(null)"
   >
 

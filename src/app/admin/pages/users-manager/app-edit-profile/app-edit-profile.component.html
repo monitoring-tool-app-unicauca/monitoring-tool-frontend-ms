@@ -22,25 +22,28 @@
                                     </div>
                                     <div class="author-info">
                                       <h6 class="title">{{ profileForm.value.name  || 'User' }}</h6>
-                                        <span>Developer</span>
+                                        <span>{{ selectedRoles.data[0]?.name || 'No Role' }}</span>
+
+
+
                                     </div>
                                 </div>
                             </div>
-                            <div class="info-list">
+                            <!-- <div class="info-list">
                                 <ul>
                                     <li><a routerLink="/admin/app-profile">Models</a><span>36</span></li>
                                     <li><a routerLink="/admin/uc-light-gallery">Gallery</a><span>3</span></li>
                                     <li><a routerLink="/admin/app-profile">Lessons</a><span>1</span></li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="card-footer">
                             <div class="input-group mb-3">
                                 <div class="form-control rounded text-center bg-white">Portfolio</div>
                             </div>
-                            <div class="input-group">
+                            <!-- <div class="input-group">
                                 <a href="https://www.dexignzone.com/" target="_blank" class="form-control text-primary rounded text-start bg-white">https://www.dexignzone.com/</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

@@ -54,6 +54,12 @@ export class ProjectHealthendpointsComponent implements OnInit {
 
   ngOnInit(): void {
     const projectId = this.project.projectId;
+    if (this.project.healthEndpoints) {
+      this.endpoints = [...this.project.healthEndpoints]; // Copia inicial
+      this.orderData = [...this.endpoints];
+      this.allData = this.paginator(this.orderData, this.page, this.totalRows);
+      this.totalPage = this.allData.total_pages;
+    }
     if (!this.sseSubscription) {
       this.connectToSSE(projectId);
     }

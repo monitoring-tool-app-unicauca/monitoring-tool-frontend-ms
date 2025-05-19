@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
+import { ProjectService } from '../../services/project/project.service';
+import { ProjectCompleteResponseDto } from '../../interfaces/projectDTO';
 
 @Component({
   selector: 'app-project-overview-head',
@@ -14,8 +16,9 @@ export class ProjectOverviewHeadComponent {
     currentURL: 'Overview',
   }
   currentUrl: string = '';
-  @Input() project: any
+  @Input() projectId: any
   @Output() exit: EventEmitter<any> = new EventEmitter<any>()
+  project!: ProjectCompleteResponseDto
   activeTab: string = 'overview';
 
   setActiveTab(tab: string) {
@@ -24,9 +27,32 @@ export class ProjectOverviewHeadComponent {
   goBack(){
     this.exit.emit()
   }
-  constructor(private router: Router, private location: Location) {
+  constructor(
+    private router: Router, 
+    private location: Location,
+    private projectService: ProjectService
+
+  ) {
     this.currentUrl = this.router.url;
   }
+  ngOnInit(){
+    this.reloadProject()
+  }
+  reloadProject() {
+    this.projectService.getProjectById(this.projectId).subscribe({
+      next: (response) => {
+        this.project = {
+          ...response.data,
+          users: response.data.users ?? []
+        };
+        this.activeTab='endpoints';
+      },
+      error: (err) => {
+        console.error('Error al recargar el proyecto', err);
+      }
+    });
+  }
+
   chartProfileProgress = {
     series: [
       {

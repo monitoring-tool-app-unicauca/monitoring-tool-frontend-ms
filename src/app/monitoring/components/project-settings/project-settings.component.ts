@@ -19,6 +19,7 @@ export class ProjectSettingsComponent {
   }
   @Input() project: any
   @Output() exit: EventEmitter<any> = new EventEmitter();
+  @Output() endpointCreated = new EventEmitter<void>();
   healthForm!: FormGroup;
 
   notificationForm!: FormGroup;
@@ -55,7 +56,7 @@ export class ProjectSettingsComponent {
       projectId: [{ value: this.project.projectId, disabled: true }, Validators.required],
       url: ['', [Validators.required, Validators.pattern(/^(https?|ftp):\/\/[^ /$.?#].[^ ]*$/)]],
       active: [true, Validators.required],
-      notificationsEnabled: [false, Validators.required],
+      // notificationsEnabled: [false, Validators.required],
       monitoringInterval: [null, [Validators.required, Validators.min(1)]]
     });
   }
@@ -102,13 +103,26 @@ export class ProjectSettingsComponent {
       return;
     }
 
+    const endpointData = this.healthForm.value;
+
+    // Construir un array de notificaciones activas
+    const notificationValues = this.notificationForm.value;
+    const activeNotifications: string[] = [];
+
+    for (const key in notificationValues) {
+      if (notificationValues[key]) {
+        activeNotifications.push(key);
+      }
+    }
     const payload = {
       ...this.healthForm.getRawValue(),
       active: this.healthForm.value.active === 'true' || this.healthForm.value.active === true,
-      notificationsEnabled: this.healthForm.value.notificationsEnabled === 'true' || this.healthForm.value.notificationsEnabled === true
+      notificationsEnabled: true,
+      notificationTypes: activeNotifications
     };
 
 
+    console.log("Payload Endpoint ", payload)
     if (this.isEditMode && payload.id) {
       this.healthService.updateHealthEndpoint(payload.id, payload).subscribe({
         next: () => {
@@ -126,6 +140,8 @@ export class ProjectSettingsComponent {
         next: () => {
           this.cleanForm();
           this.alertService.success('HealthEndpoint created successfully', 'toast-top-left');
+          this.endpointCreated.emit()
+          
         },
         error: (err) => {
           console.error('Error creating health endpoint', err);
@@ -140,8 +156,14 @@ export class ProjectSettingsComponent {
 
   }
   cleanForm(){
+    const projectId = this.healthForm.get('projectId')?.value;
+
     this.healthForm.reset()
     this.notificationForm.reset()
+
+    this.healthForm.reset({
+      projectId: projectId || ''
+    });
 
     this.isEditMode = false;
     this.healthService.clear();

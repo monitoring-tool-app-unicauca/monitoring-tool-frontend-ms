@@ -267,18 +267,42 @@
                 </div>
                 <div class="mx-3">
                   <h6 class="mb-0 fw-semibold">You are deactivating this project</h6>
-                  <p class="mb-0">
+                  <p class="mb-0 text-danger fw-bold">
                     {{project.projectId}}
                   </p>
                 </div>
               </div>
+
+              <div class="form-group my-3">
+                <label for="confirmProjectId" class="form-label">Type the project ID to confirm:</label>
+                <input
+                  type="text"
+                  id="confirmProjectId"
+                  class="form-control"
+                  [(ngModel)]="confirmProjectId"
+                  [ngClass]="{ 'is-invalid': confirmProjectId && confirmProjectId !== project.projectId }"
+                  required
+                />
+                <div *ngIf="confirmProjectId && confirmProjectId !== project.projectId" class="invalid-feedback">
+                  The ID does not match. Please type <strong>{{project.projectId}}</strong>
+                </div>
+              </div>
+
               <div class="form-check custom-checkbox me-4 my-3 d-inline-block">
-                <input type="checkbox" class="form-check-input mb-0" id="checkboxDeactivation" required="">
-                <label class="form-check-label mb-0" for="checkboxDeactivation">Confirm Project Deactivation</label>
+                <input
+                  type="checkbox"
+                  class="form-check-input mb-0"
+                  id="checkboxDeactivation"
+                  [(ngModel)]="checkboxConfirmed"
+                  required
+                />
+                <label class="form-check-label mb-0" for="checkboxDeactivation">
+                  Confirm Project Deactivation
+                </label>
               </div>
             </div>
             <div class="card-footer text-end">
-              <button class="btn btn-danger ms-2" (click)="deleteProject()" >Deactivate</button>
+              <button class="btn btn-danger ms-2" (click)="deleteProject()" [disabled]="confirmProjectId !== project.projectId || !checkboxConfirmed">Deactivate</button>
             </div>
           </div>
         </div>

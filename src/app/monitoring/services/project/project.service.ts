@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { ProjectDto } from '../../interfaces/projectDTO';
+import { ProjectCompleteResponseDto, ProjectDto } from '../../interfaces/projectDTO';
 import { PageDTO } from '../../../shared/interfaces/PageDto';
 @Injectable({
   providedIn: 'root'
@@ -31,5 +31,9 @@ export class ProjectService {
 
   deleteProject(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/project/${id}`);
+  }
+
+  getProjectById(projectId: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/project/${projectId}`);
   }
 }
