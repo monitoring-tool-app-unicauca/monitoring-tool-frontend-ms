@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
 import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
 import { UserDto } from '../../../admin/interfaces/userDTO';
@@ -23,12 +23,18 @@ export class LoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private authService : AuthService,
-    private alertService: NgxToastrService
+    private alertService: NgxToastrService,
+    private route: ActivatedRoute
 
   ) {}
 
   ngOnInit(){
     this.initForm();
+    this.route.queryParams.subscribe(params => {
+      if (params['sessionExpired']) {
+        this.alertService.error('Your session has expired. Please Login', 'toast-top-left');
+      }
+    });
   }
 
 
