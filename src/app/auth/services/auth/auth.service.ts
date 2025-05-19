@@ -14,6 +14,7 @@ export class AuthService {
   private TOKEN_KEY = 'auth_token';
   private USER_KEY ='current_user';
   private currentUser!: UserDto ;
+  private isAdminUser: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -56,8 +57,10 @@ export class AuthService {
 
   setCurrentUser(user: any): void {
     this.currentUser = user;
+    this.isAdminUser = user?.roles?.some((role: { roleId: number }) => role.roleId === 1);
+
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
-    console.log("Set current user ",this.currentUser)
+    console.log("Set current user ",this.currentUser,"isAdmin:", this.isAdminUser)
   }
 
   getCurrentUser(): any {
@@ -65,7 +68,14 @@ export class AuthService {
       return this.currentUser;
     }
     const storedUser = localStorage.getItem(this.USER_KEY);
-    return storedUser ? JSON.parse(storedUser) : null;
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    
+    if (parsedUser && !this.currentUser) {
+      this.currentUser = parsedUser;
+      this.isAdminUser = parsedUser?.roles?.some((role: { roleId: number }) => role.roleId === 1);
+    }
+
+    return parsedUser;
   }
 
    forgotPassword(email: string): Observable<any> {
@@ -80,6 +90,10 @@ export class AuthService {
 
   getUserByEmail(email: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/user/by-email?email=${email}`);
+  }
+
+  isAdmin(): boolean {
+    return this.isAdminUser;
   }
 
 

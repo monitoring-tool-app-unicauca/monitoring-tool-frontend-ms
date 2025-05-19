@@ -2,7 +2,7 @@
 <div class="table-responsive active-projects style-1 ItemsCheckboxSec shorting dataTables_wrapper">
     <div class="tbl-caption">
         <h4 class="heading mb-0">Users</h4>
-        <div>
+        <div *ngIf="isAdmin">
           <a class="btn btn-primary btn-sm me-1" [routerLink]="'/admin/add-user'" >+ Add Employee</a>
         </div>
     </div>
@@ -24,7 +24,7 @@
                 <th >Document</th>
                 <th >Phone Number</th>
                 <!-- <th mat-sort-header="roles">Roles</th> -->
-                <th >Actions</th>
+                <th *ngIf="isAdmin">Actions</th>
 
             </tr>
         </thead>
@@ -55,7 +55,7 @@
                 <td>
                     <span>{{ item.phoneNumber }}</span>
                 </td>
-                <td>
+                <td *ngIf="isAdmin" >
 
                   <button type="button" class="btn btn-warning btn-sm" [routerLink]="['/admin/edit-user', item.userId]">
                      <span class="btn-icon">

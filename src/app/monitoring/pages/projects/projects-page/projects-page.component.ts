@@ -9,6 +9,7 @@ import { UserDto } from '../../../../admin/interfaces/userDTO';
 import { UserService } from '../../../../admin/services/user/user.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../../auth/services/auth/auth.service';
 
 export interface Dessert {
   account_title: string,
@@ -43,7 +44,7 @@ export class ProjectsPageComponent {
   userSearchCtrl = new FormControl('');
   filteredUsers!: Observable<UserDto[]>;
 
-
+  isAdmin:boolean=false;
   selectedUsers: UserDto[] =[]//new MatTableDataSource<UserDto>([]);
   userColumns: string[] = ['name', 'email', 'actions'];
   isEditMode: boolean = false;
@@ -54,6 +55,7 @@ export class ProjectsPageComponent {
     private alertService: NgxToastrService,
     private projectService: ProjectService,
     private userService: UserService,
+    private authService: AuthService,
     private router: Router
   ) {
 
@@ -72,6 +74,7 @@ export class ProjectsPageComponent {
     this.projectForm.reset()
   }
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
     this.loadProjects()
     this.initForm()
 

@@ -1,3 +1,4 @@
+import { AuthService } from './../../../../auth/services/auth/auth.service';
 import { Component, Input, TemplateRef } from '@angular/core';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -24,7 +25,7 @@ export interface Dessert {
 export class UsersListComponent {
   offcanvasExample: boolean = false;
 
-
+  isAdmin:boolean = false
 
   @Input() offset_limit: any;
   @Input() checkbox: boolean = false;
@@ -40,12 +41,13 @@ export class UsersListComponent {
 
   orderData: UserDto[] = [];
   constructor(
-
+    private authService: AuthService,
     private userService: UserService
     ) {
 
   }
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
     this.fetchUsers();
 
   }

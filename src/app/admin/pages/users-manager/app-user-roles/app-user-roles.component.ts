@@ -4,6 +4,7 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { PaginationComponent } from '../../../../elements/pagination/pagination.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from '../../../services/role/role.service';
+import { AuthService } from '../../../../auth/services/auth/auth.service';
 
 export interface Dessert {
   image: string,
@@ -30,6 +31,7 @@ export class AppUserRolesComponent {
     this.offcanvasExample = !this.offcanvasExample;
   }
 
+  isAdmin:boolean=false
   roleForm!: FormGroup;
   active = 1;
   page: any = 1;
@@ -39,11 +41,13 @@ export class AppUserRolesComponent {
 
   constructor(
     private fb: FormBuilder,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private authService: AuthService
   ) {
     this.orderData = this.desserts.slice();
   }
   ngOnInit(): void {
+    this.isAdmin = this.authService.isAdmin();
     this.allData = this.paginator(this.orderData, this.page, this.totalRows);
     this.totalPage = this.allData.total_pages;
     this.initForm();
