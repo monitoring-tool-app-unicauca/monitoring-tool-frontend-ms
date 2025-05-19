@@ -15,6 +15,8 @@ export class ForgotPasswordComponent {
 
  recoveryForm: FormGroup;
   loading = false;
+  emailSent = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -42,16 +44,17 @@ export class ForgotPasswordComponent {
         console.log(res)
         
         if (res?.status === 200) {
-          this.toastr.success('Correo de recuperación enviado con éxito', 'Éxito');
+          this.toastr.success('Recovery email was sent succesfully', 'Success');
+          this.emailSent = true;
         } else {
           
-          this.toastr.warning(res.message || 'La solicitud fue procesada, pero hubo advertencias', 'Advertencia');
+          this.toastr.warning(res.message || 'The request was sent but there were warnings', 'Warning');
         }
         this.recoveryForm.reset();
         this.loading = false;
       },
       error: (err) => {
-        const msg = err?.error?.message || 'No se pudo enviar el correo de recuperación';
+        const msg = err?.error?.message || 'It was not possible to send the recovery email';
         this.toastr.error(msg, 'Error');
         this.loading = false;
         console.error(err);

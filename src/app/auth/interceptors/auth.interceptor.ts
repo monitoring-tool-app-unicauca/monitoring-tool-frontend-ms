@@ -11,7 +11,15 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this.authService.getToken();
 
-    if (token) {
+    // Rutas públicas
+    const publicUrls = [
+      '/user/forgot-password',
+      '/auth/login',
+      '/auth/register'
+    ];
+
+    const isPublic = publicUrls.some(url => req.url.includes(url));
+    if (token && !isPublic) {
       const cloned = req.clone({
         setHeaders: {
           Authorization: `Bearer ${token}`
