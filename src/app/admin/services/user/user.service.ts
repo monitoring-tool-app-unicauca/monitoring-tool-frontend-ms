@@ -69,4 +69,8 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/by-email?email=${encodeURIComponent(email)}`);
   }
 
+  getUsersByRole(roleId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/by-role?roleId=${roleId}`);
+  }
+
 }

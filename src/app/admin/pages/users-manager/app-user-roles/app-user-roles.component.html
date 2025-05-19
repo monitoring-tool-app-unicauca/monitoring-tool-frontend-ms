@@ -5,96 +5,103 @@
     <div class="container-fluid">
         <div class="row">
             <div class="d-flex align-items-center justify-content-between">
-                <h4 class="heading mb-3">Account Setting</h4>
+                <h4 class="heading mb-3">Role Settings</h4>
                 <a *ngIf="isAdmin" class="btn btn-primary btn-sm mb-3" data-bs-toggle="offcanvas" href="javascript:vode(0);" (click)="toggleExample()">+ Add a role</a>
             </div>
             <div class="col-xl-3 col-lg-4">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="card">
-                            <div class="card-header py-3">
-                                <h4 class="heading mb-0">Personal</h4>
-                            </div>
-                            <div class="card-body px-0 py-2">
-                                <ul class="personal-info">
-                                    <li><a href="javascript:void(0);"><i class="fa-solid fa-user text-primary me-2"></i> Profile</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fa-solid fa-lock text-primary me-2"></i> Password</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fa-solid fa-calendar-days text-primary me-2"></i> Date</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="card">
+                    <div class="card-header py-3">
+                    <h4 class="heading mb-0">Roles</h4>
                     </div>
-                    <div class="col-xl-12">
-                        <div class="card">
-                            <div class="card-header py-3">
-                                <h4 class="heading mb-0">Company</h4>
-                            </div>
-                            <div class="card-body px-0 py-2">
-                                <ul class="personal-info">
-                                    <li><a href="javascript:void(0);"><i class="fa-solid fa-building text-primary me-2"></i> Commpany Details</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fa-solid fa-user-plus text-primary me-2"></i> Team Members</a></li>
-                                    <li><a href="javascript:void(0);"><i class="far fa-clock text-primary me-2"></i> Format setting</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fa-solid fa-briefcase text-primary me-2"></i> Job boards</a></li>
-                                    <li><a href="javascript:void(0);"><i class="far fa-user text-primary me-2"></i> Positions</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-times-circle text-danger me-2"></i>Rejections resions</a></li>
-                                    <li><a href="javascript:void(0);"><i class="fas fa-envelope text-primary me-2"></i>Automated message</a></li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div class="card-body px-3 py-2">
+                    
+                    <input
+                        type="text"
+                        class="form-control form-control-sm mb-2"
+                        placeholder="Buscar rol..."
+                        [(ngModel)]="searchTerm"
+                    />
+
+                    
+                    <div style="max-height: 300px; overflow-y: auto;">
+                        <ul class="personal-info mb-0">
+                        <li *ngFor="let role of filteredRoles()">
+                            <a
+                            href="javascript:void(0);"
+                            (click)="selectRole(role.roleId)"
+                            [class.fw-bold]="selectedRoleId === role.roleId"
+                            >
+                            <i class="fa-solid fa-briefcase text-primary me-2"></i>{{ role.name }}
+                            </a>
+                        </li>
+                        </ul>
+                    </div>
                     </div>
                 </div>
             </div>
+
             <div class="col-xl-9 col-lg-8">
                 <div class="row">
-                    <div class= "col-xl-12">
-                        <h4 class="heading mb-0"><i class="fa-solid fa-user-plus text-primary me-2 mb-3"></i> Job Management</h4>
-                        <div class="card h-auto">
-                            <div class="card-body p-0">
-                                <div class="table-responsive active-projects dataTables_wrapper ">
-                                    <table matSort (matSortChange)="sortData($event)" id="projects-tbl" class="table">
-                                        <thead>
-                                            <tr>
-                                                <th mat-sort-header="name">Name</th>
-                                                <th mat-sort-header="date">Date Added</th>
-                                                <th mat-sort-header="last_active">Last active</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @for(item of allData.data; track item){
-                                            <tr>
-                                                <td>
-                                                    <div class="d-flex align-items-center">
-                                                        <img src="{{ item.image }}" class="avatar avatar-md rounded-circle" alt="">
-                                                        <div class="ms-2">
-                                                            <p class="mb-0 text-start text-black font-w500">{{ item.name }}</p>
-                                                            <span>{{ item.email }}</span>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>{{ item.date }}</td>
-                                                <td>{{ item.last_active }}</td>
-                                                <td>
-                                                    <div class="action-button">
-                                                        <button type="button" class="btn btn-primary btn-icon-xxs me-1"><i class="fas fa-pencil-alt"></i></button>
-                                                        <button type="button" class="btn btn-danger btn-icon-xxs"><i class="fas fa-trash-alt"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                    <div class="dataTables_info" id="example5_info" role="status" aria-live="polite">Showing {{page}} to
-                                        {{totalRows}} of {{ allData.total }} entries</div>
-                                    <div class="dataTables_paginate paging_simple_numbers pt-2">
-                                    <app-pagination [totalPage]="totalPage" [page]="page" (newPage)="pageChange($event)"></app-pagination>
-                                    </div>
-                                </div>
+                    <div class="col-xl-12">
+                    
+                    <h4 class="heading mb-0">
+                        <i class="fa-solid fa-user-plus text-primary me-2 mb-3"></i>
+                        {{ getRoleNameById(selectedRoleId) || 'Usuarios por Rol' }} ({{ allData?.data?.totalElements || 0 }})
+                    </h4>
+                    <div class="card h-auto">
+                        <div class="card-body p-0">
+                        <div class="table-responsive active-projects dataTables_wrapper">
+                            <table
+                            matSort
+                            
+                            id="projects-tbl"
+                            class="table"
+                            >
+                            <thead>
+                                <tr>
+                                <th mat-sort-header="name">Name</th>
+                                <th mat-sort-header="lastName">LastName</th>
+                                <th mat-sort-header="email">Email</th>
+                                <th mat-sort-header="phoneNumber">Teléfono</th>
+                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (item of allData?.data?.content; track item) {
+                                <tr>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.lastName }}</td>
+                                <td>{{ item.email }}</td>
+                                <td>{{ item.phoneNumber }}</td>
+                                
+                                </tr>
+                                }
+                            </tbody>
+                            </table>
+
+                            <div
+                            class="dataTables_info"
+                            id="example5_info"
+                            role="status"
+                            aria-live="polite"
+                            >
+                            Showing {{ page }} to {{ totalRows }} of {{ allData?.data?.totalElements || 0 }} entries
+                            </div>
+
+                            <div class="dataTables_paginate paging_simple_numbers pt-2">
+                            <app-pagination
+                                [totalPage]="totalPage"
+                                [page]="page"
+                                (newPage)="pageChange($event)"
+                            ></app-pagination>
                             </div>
                         </div>
+                        </div>
+                    </div>
                     </div>
                 </div>
-            </div>
+                </div>
+
         </div>
 
     </div>

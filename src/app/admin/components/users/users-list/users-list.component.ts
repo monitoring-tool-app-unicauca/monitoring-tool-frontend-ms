@@ -75,7 +75,7 @@ export class UsersListComponent {
 
   pageChange(e: any) {
     this.page = e;
-    this.fetchUsers();  // Realizamos la llamada al servicio para cargar los usuarios de la nueva página.
+    this.fetchUsers();  
   }
 
   getUserImage(userId: number) {
