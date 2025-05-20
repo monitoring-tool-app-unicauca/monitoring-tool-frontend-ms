@@ -5,6 +5,9 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../auth/services/auth/auth.service';
 import { UserDto } from '../../../admin/interfaces/userDTO';
 import { UserService } from '../../../admin/services/user/user.service';
+import { Subscription } from 'rxjs';
+import { SocketService } from '../../services/socket/socket.service';
+import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
 
 @Component({
   selector: 'app-header',
@@ -19,12 +22,17 @@ export class HeaderComponent {
   userProfileImage: string | null = null;
   defaultImage: string = 'assets/images/user/default_tab.jpg';
 
+  notifications: any[] = [];
+  socketSub!: Subscription;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private authService: AuthService,
     private userService: UserService,
     private cdRef: ChangeDetectorRef,
+    private socketService: SocketService,
+    private alertService: NgxToastrService
     ) {
     this.route.queryParams.subscribe((params: any) => {
       if (params.theme === 'dark' || params.theme === 'light') {
@@ -42,7 +50,24 @@ export class HeaderComponent {
       }
     }
 
+    this.socketSub = this.socketService.listen().subscribe((data: any) => {
+      console.log("Notificación recibida:", data);
+      const noti = {
+        title: data.messageNotification || 'Nueva notificación',
+        timestamp: new Date(),
+        raw: data
+      };
+      this.alertService.info("New notification",'toast-top-right')
+      this.notifications.unshift(noti);
+      this.cdRef.detectChanges();
+    });
+
+
   }
+  ngOnDestroy(): void {
+    if (this.socketSub) this.socketSub.unsubscribe();
+  }
+
   logout(): void {
 
     this.authService.logout();

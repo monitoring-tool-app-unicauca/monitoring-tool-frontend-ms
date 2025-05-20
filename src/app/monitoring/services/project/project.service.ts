@@ -36,4 +36,8 @@ export class ProjectService {
   getProjectById(projectId: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/project/${projectId}`);
   }
+
+  getProjectsByUser(userId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/project/by-user?userId=${userId}`);
+  }
 }

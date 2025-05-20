@@ -1,3 +1,4 @@
+import { SocketService } from './../../../shared/services/socket/socket.service';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
@@ -18,7 +19,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+
   ) {}
 
 
