@@ -28,7 +28,13 @@
                   <!-- <td>{{ endpoint.project.projectName }}</td> -->
                   <td>
                     <span
-                      class="badge badge-sm badge-{{ endpoint.status === 'DOWN' ? 'danger' : 'success' }} light border-0">
+                      class="badge badge-sm light border-0"
+                      [ngClass]="{
+                        'badge-danger': endpoint.status === 'DOWN',
+                        'badge-success': endpoint.status === 'UP',
+                        'badge-secondary': endpoint.status === 'UNKNOWN'
+                      }"
+                    >
                       {{ endpoint.status }}
                     </span>
                   </td>
@@ -42,16 +48,9 @@
                     </span>
                   </td>
                   <td>
-                    <span
-                      class="badge badge-sm light border-0"
-                      [ngClass]="{
-                        'badge-danger': endpoint.status === 'DOWN',
-                        'badge-success': endpoint.status === 'UP',
-                        'badge-secondary': endpoint.status === 'UNKNOWN'
-                      }"
-                    >
-                      {{ endpoint.status }}
-                    </span>
+                      <span class="badge badge-sm badge-{{ endpoint.notificationsEnabled ? 'info' : 'secondary' }} light border-0">
+                      {{ endpoint.notificationsEnabled ? 'Enabled' : 'Disabled' }}
+                      </span>
 
                   </td>
                   <td>

@@ -1,11 +1,5 @@
 import { Component, Input } from '@angular/core';
-
-interface Breadcrumb {
-  title?: string;
-  subTitle?: string;
-  breadcrumb_path?: string;
-  currentURL?: string;
-}
+import { Breadcrumb } from '../../interfaces/Breadcrum.interface';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -18,18 +12,22 @@ export class BreadcrumbComponent {
   @Input() style2?: boolean = false;
 
   title: string = 'Dashboard';
-  subTitle: string = 'Your business dashboard template';
+  subTitle: string = 'Monitoring Tool dashboard';
   currentURL?: string = '';
   breadcrumb_path?: string = '';
+  offcanvasExample: boolean = false;
 
   ngOnInit() {
-    this.title = this.breadcrumb.title || this.title;
-    this.subTitle = this.breadcrumb.subTitle || this.subTitle;
-    this.breadcrumb_path = this.breadcrumb.breadcrumb_path;
-    this.currentURL = this.breadcrumb.currentURL;
+
+    // this.title = this.breadcrumb.title || this.title;
+    // this.subTitle = this.breadcrumb.subTitle || this.subTitle;
+    // this.breadcrumb_path = this.breadcrumb.breadcrumb_path;
+    // this.currentURL = this.breadcrumb.currentURL;
+    if (!this.breadcrumb || !this.breadcrumb.items || !this.breadcrumb.title) {
+      console.warn('breadcrumb no está completamente definido');
+    }
   }
 
-  offcanvasExample: boolean = false;
   toggleExample() {
     this.offcanvasExample = !this.offcanvasExample;
   }

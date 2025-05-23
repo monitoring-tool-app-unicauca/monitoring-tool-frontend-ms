@@ -19,7 +19,8 @@ export class ProjectSettingsComponent {
   }
   @Input() project: any
   @Output() exit: EventEmitter<any> = new EventEmitter();
-  @Output() endpointCreated = new EventEmitter<void>();
+  @Output() endpointCreated : EventEmitter<string> = new EventEmitter();
+  // @Output() selectTab : EventEmitter<string> = new EventEmitter();
   healthForm!: FormGroup;
 
   notificationForm!: FormGroup;
@@ -56,7 +57,7 @@ export class ProjectSettingsComponent {
       projectId: [{ value: this.project.projectId, disabled: true }, Validators.required],
       url: ['', [Validators.required, Validators.pattern(/^(https?|ftp):\/\/[^ /$.?#].[^ ]*$/)]],
       active: [true, Validators.required],
-      // notificationsEnabled: [false, Validators.required],
+      notificationsEnabled: [false, Validators.required],
       monitoringInterval: [null, [Validators.required, Validators.min(1)]]
     });
   }
@@ -117,17 +118,17 @@ export class ProjectSettingsComponent {
     const payload = {
       ...this.healthForm.getRawValue(),
       active: this.healthForm.value.active === 'true' || this.healthForm.value.active === true,
-      notificationsEnabled: true,
-      notificationTypes: activeNotifications
     };
 
 
-    console.log("Payload Endpoint ", payload)
+    
     if (this.isEditMode && payload.id) {
       this.healthService.updateHealthEndpoint(payload.id, payload).subscribe({
         next: () => {
           this.cleanForm();
           this.alertService.success('HealthEndpoint updated successfully', 'toast-top-left');
+          this.endpointCreated.emit('endpoints')
+          
         },
         error: (err) => {
           console.error('Error updating health endpoint', err);
@@ -140,8 +141,7 @@ export class ProjectSettingsComponent {
         next: () => {
           this.cleanForm();
           this.alertService.success('HealthEndpoint created successfully', 'toast-top-left');
-          this.endpointCreated.emit()
-          
+          this.endpointCreated.emit('endpoints')
         },
         error: (err) => {
           console.error('Error creating health endpoint', err);

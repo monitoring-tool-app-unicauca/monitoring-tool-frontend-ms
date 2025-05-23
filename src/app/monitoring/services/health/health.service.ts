@@ -22,7 +22,7 @@ export class HealthService {
 
 
   setEndpointToEdit(endpoint: EndpointDTO) {
-    console.log("Set endpoint ",endpoint)
+    
     this.endpointToEditSubject.next(endpoint);
   }
 

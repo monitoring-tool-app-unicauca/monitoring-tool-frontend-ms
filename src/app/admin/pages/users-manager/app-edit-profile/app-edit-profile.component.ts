@@ -8,6 +8,9 @@ import { RoleDto } from '../../../interfaces/roleDTO';
 import { RoleService } from '../../../services/role/role.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.service';
+import { Breadcrumb } from '../../../../shared/interfaces/Breadcrum.interface';
+import { ProjectDto } from '../../../../monitoring/interfaces/projectDTO';
+import { ProjectService } from '../../../../monitoring/services/project/project.service';
 
 @Component({
   selector: 'app-app-edit-profile',
@@ -16,13 +19,11 @@ import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.se
 })
 export class AppEditProfileComponent implements OnInit {
 
-  breadcrumbList = {
-    title: 'Add User',
-    breadcrumb_path: 'Home',
-    currentURL: 'Users / Add',
-  }
+ 
+  breadcrumbList!: Breadcrumb 
+
   profileForm!: FormGroup;
-  passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
+  // passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
   emailExists:boolean | any = false;
 
   allRoles: RoleDto[] = [];
@@ -31,6 +32,11 @@ export class AppEditProfileComponent implements OnInit {
   selectedRoles= new MatTableDataSource<RoleDto>([]);
 
   displayedColumns: string[] = ['name', 'description','actions'];
+
+  projects: ProjectDto[] = [];
+  projectsLoaded: boolean = false;
+  showProjects = false;
+
 
   userId: string | null= null;
   imageFile: File | null = null;
@@ -42,6 +48,7 @@ export class AppEditProfileComponent implements OnInit {
     private fb: FormBuilder,
     private service:UserService,
     private roleService: RoleService,
+    private projectService: ProjectService,
     private cdRef: ChangeDetectorRef,
     private alertService: NgxToastrService,
     private route: ActivatedRoute
@@ -55,11 +62,22 @@ export class AppEditProfileComponent implements OnInit {
         documentNumber: ['', Validators.required],
         phoneNumber: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
         email: ['', [Validators.required, Validators.email], [this.emailExistsValidator()]],
-        password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
+        // password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
       });
     }
   ngOnInit() {
     this.initForm();
+    this.userId = this.route.snapshot.paramMap.get('id');
+    this.breadcrumbList= {
+      title: 'User',
+      subTitle: this.userId ? 'Edit User': 'Add User',
+      items: [
+        { label: 'Home', url: '/admin/index' },
+        { label: 'Users', url: '/admin/users' },
+        { label: this.userId ? 'Edit User': 'Add User' }
+      ]
+    };
+
     this.roleService.getAllRoles().subscribe((data)=>{
       this.allRoles = data.data
 
@@ -75,10 +93,16 @@ export class AppEditProfileComponent implements OnInit {
       map(name => (name ? this._filterRoles(name) : this.allRoles.slice()))
     );
 
-    this.userId = this.route.snapshot.paramMap.get('id');
+    
     if (this.userId) {
+      this.loadUser(+this.userId)
+      this.loadProjects(+this.userId);
+      
+    }
 
-      this.service.getUserById(+this.userId).subscribe(response => {
+  }
+  loadUser(userId:number){
+    this.service.getUserById(userId).subscribe(response => {
         if (response?.data) {
           const userData = response.data;
 
@@ -104,10 +128,19 @@ export class AppEditProfileComponent implements OnInit {
           this.loadProfileImage(this.userId);
          }
       });
-    }
-
   }
-
+  loadProjects(userId: number) {
+    this.projectService.getProjectsByUser(userId).subscribe({
+      next: (res) => {
+        this.projects = res.data || [];
+        this.projectsLoaded = true;
+      },
+      error: (err) => {
+        console.error('Error loading projects', err);
+        this.projectsLoaded = true;
+      }
+    });
+}
   private _filterRoles(name: string): RoleDto[] {
 
     const filterValue = (name ?? '').toLowerCase();
@@ -271,9 +304,9 @@ cleanForm() {
   get email() {
     return this.profileForm.get('email');
   }
-  get password() {
-    return this.profileForm.get('password');
-  }
+  // get password() {
+  //   return this.profileForm.get('password');
+  // }
 
 }
 

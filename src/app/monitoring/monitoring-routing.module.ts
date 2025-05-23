@@ -16,7 +16,7 @@ const routes: Routes = [
       // { path:'index', component:AdminIndexComponent},
       
 
-      { path: 'employee', component: UsersComponent },
+      { path: 'users', component: UsersComponent },
       { path: 'user-roles', component: AppUserRolesComponent },
 
 

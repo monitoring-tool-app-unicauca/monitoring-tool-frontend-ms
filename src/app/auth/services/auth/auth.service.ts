@@ -15,8 +15,8 @@ export class AuthService {
   private TOKEN_KEY = 'auth_token';
   private USER_KEY ='current_user';
   private currentUser!: UserDto ;
-  private isAdminUser: boolean = false;
-
+  // private isAdminUser: boolean = false;
+  ADMIN_IDENTIFICATOR = environment.ADMIN_IDENTIFICATOR
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -58,11 +58,15 @@ export class AuthService {
   }
 
   setCurrentUser(user: any): void {
+    
+    const isAdmin = user.roles?.some((role: { name: string; }) => role.name.toUpperCase() === this.ADMIN_IDENTIFICATOR );
+    user.isAdmin = isAdmin
+    
     this.currentUser = user;
-    this.isAdminUser = user?.roles?.some((role: { roleId: number }) => role.roleId === 1);
+    
 
     localStorage.setItem(this.USER_KEY, JSON.stringify(user));
-    console.log("Set current user ",this.currentUser,"isAdmin:", this.isAdminUser)
+    console.log("Set current user ",this.currentUser)
   }
 
   getCurrentUser(): any {
@@ -74,7 +78,7 @@ export class AuthService {
     
     if (parsedUser && !this.currentUser) {
       this.currentUser = parsedUser;
-      this.isAdminUser = parsedUser?.roles?.some((role: { roleId: number }) => role.roleId === 1);
+      
     }
 
     return parsedUser;
@@ -95,7 +99,8 @@ export class AuthService {
   }
 
   isAdmin(): boolean {
-    return this.isAdminUser;
+    const isAdmin = this.getCurrentUser().isAdmin;
+    return isAdmin;
   }
 
 

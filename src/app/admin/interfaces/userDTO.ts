@@ -12,6 +12,7 @@ export interface UserDto {
   roles?: RoleDto[];
 
   userImage?:any;
+  isAdmin?:boolean;
 }
 
 

@@ -111,7 +111,7 @@
         *ngSwitchCase="'createEndpoint'"
         [project]="project"
         (exit)="goBack()"
-        (endpointCreated)="reloadProject()"
+        (endpointCreated)="reloadProject($event)"
       ></app-project-settings>
 
       <!-- componente para ver endpoints  -->

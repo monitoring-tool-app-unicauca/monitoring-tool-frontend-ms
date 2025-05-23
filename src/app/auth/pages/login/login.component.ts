@@ -6,6 +6,9 @@ import { AuthService } from '../../services/auth/auth.service';
 import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
 import { UserDto } from '../../../admin/interfaces/userDTO';
 import { APP_CONSTANTS } from '../../../../constants';
+import { DecodedToken } from '../../interfaces/decodedToken';
+import { jwtDecode } from "jwt-decode";
+import { environment } from '../../../../environment/environment';
 
 @Component({
   selector: 'app-login-login',
@@ -18,7 +21,7 @@ export class LoginComponent {
   loginForm!: FormGroup  ;
   hide_show: boolean = false;
   appName = APP_CONSTANTS.APP_NAME
-  
+  ADMIN_IDENTIFICATOR = environment.ADMIN_IDENTIFICATOR
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -66,24 +69,27 @@ export class LoginComponent {
           this.authService.saveToken(token);
           this.alertService.success('Succesfull login', 'toast-top-left');
 
-          //obtener info de persona y ver si es un admin
-          if (email) {
-            this.authService.getUserByEmail(email).subscribe(userResponse => {
-              const userData: UserDto = userResponse.data;
-              this.authService.setCurrentUser(userData);
+          const decoded: DecodedToken = jwtDecode(token);
 
-              const isAdmin = userData.roles?.some(role => role.roleId === 1);
-              console.log("Is admin ? ",isAdmin)
-              if (isAdmin) {
-                this.router.navigate(['/admin']);
-              } else {
-                this.router.navigate(['/monitoring']);
-              }
-            });
+          const userDecoded: any = {
+            email: decoded.sub,
+            roles: decoded.roles.map(r => ({ name: r.authority })),
+          };
+          
 
-          }
+          this.authService.getUserByEmail(userDecoded.email).subscribe(userResponse => {
+          const userData: UserDto = userResponse.data;
+          this.authService.setCurrentUser(userData);
+
+          // obtener info de persona y ver si es un admin
+          this.authService.setCurrentUser(userData);
+          const isAdmin = userDecoded.roles?.some((role: { name: string; }) => role.name.toUpperCase() === this.ADMIN_IDENTIFICATOR );
+
+          this.alertService.success('Successful login', 'toast-top-left');
+          this.router.navigate([isAdmin ? '/admin' : '/monitoring']);
+          })
         } else {
-          this.alertService.error('No Token', 'toast-top-left');
+            this.alertService.error('No Token', 'toast-top-left');
         }
       },
       error: (error) => {
@@ -95,3 +101,4 @@ export class LoginComponent {
   }
 
 }
+

@@ -23,6 +23,7 @@ export class ProjectOverviewHeadComponent {
 
   setActiveTab(tab: string) {
     this.activeTab = tab;
+    
   }
   goBack(){
     this.exit.emit()
@@ -36,16 +37,16 @@ export class ProjectOverviewHeadComponent {
     this.currentUrl = this.router.url;
   }
   ngOnInit(){
-    this.reloadProject()
+    this.reloadProject('overview')
   }
-  reloadProject() {
+  reloadProject(activeTab:string) {
     this.projectService.getProjectById(this.projectId).subscribe({
       next: (response) => {
         this.project = {
           ...response.data,
           users: response.data.users ?? []
         };
-        this.activeTab='endpoints';
+        this.setActiveTab(activeTab)
       },
       error: (err) => {
         console.error('Error al recargar el proyecto', err);

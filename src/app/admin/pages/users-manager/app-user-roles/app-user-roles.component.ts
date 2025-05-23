@@ -57,7 +57,7 @@ export class AppUserRolesComponent {
   }
   ngOnInit(): void {
   this.isAdmin = this.authService.isAdmin();
-  this.page = 1; // Asegúrate de inicializar la página si usas paginación
+  this.page = 1; 
   this.loadRoles();
   this.initForm();
 }
