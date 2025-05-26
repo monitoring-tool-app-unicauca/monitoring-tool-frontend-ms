@@ -25,6 +25,8 @@ import { NavHeaderComponent } from './layout/nav-header/nav-header.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SafeHtmlSvgPipe } from '../_services/svg-pipe/safe-html-svg.pipe';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { BarChartApexComponent } from './charts/chart-config/bar-chart-apex/bar-chart-apex.component';
 
 
 
@@ -48,6 +50,8 @@ import { SafeHtmlSvgPipe } from '../_services/svg-pipe/safe-html-svg.pipe';
     ChatboxComponent,
     NavHeaderComponent,
 
+    BarChartApexComponent,
+    
   ],
   imports: [
     CommonModule,
@@ -57,6 +61,9 @@ import { SafeHtmlSvgPipe } from '../_services/svg-pipe/safe-html-svg.pipe';
 
     SafeHtmlSvgPipe,
     NgbModule,
+
+    NgApexchartsModule
+
   ],
   exports: [
     DropdownComponent,
@@ -76,6 +83,8 @@ import { SafeHtmlSvgPipe } from '../_services/svg-pipe/safe-html-svg.pipe';
     SidebarComponent,
     ChatboxComponent,
     NavHeaderComponent,
+
+    BarChartApexComponent,
   ]
 })
 export class SharedModule { }

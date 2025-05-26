@@ -81,8 +81,7 @@ export class LoginComponent {
           const userData: UserDto = userResponse.data;
           this.authService.setCurrentUser(userData);
 
-          // obtener info de persona y ver si es un admin
-          this.authService.setCurrentUser(userData);
+
           const isAdmin = userDecoded.roles?.some((role: { name: string; }) => role.name.toUpperCase() === this.ADMIN_IDENTIFICATOR );
 
           this.alertService.success('Successful login', 'toast-top-left');

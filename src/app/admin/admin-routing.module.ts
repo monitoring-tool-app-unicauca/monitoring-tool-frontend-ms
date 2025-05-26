@@ -19,6 +19,7 @@ const routes: Routes = [
     canActivate: [AdminGuard],
     data: { layout: 'admin' },
     children: [
+      { path:'', component:AdminIndexComponent},
       { path:'index', component:AdminIndexComponent},
       { path: 'add-user', component: AppEditProfileComponent },
       { path: 'edit-user/:id', component: AppEditProfileComponent },

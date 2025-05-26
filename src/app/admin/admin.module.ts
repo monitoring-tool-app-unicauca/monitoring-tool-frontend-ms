@@ -39,6 +39,23 @@ import { ToastrModule } from 'ngx-toastr';
 import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
 import { UsersComponent } from './components/users/users.component';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
+import { ProjectsOverviewComponent } from './components/index/admin-index/projects-overview/projects-overview.component';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexXAxis,
+  ApexDataLabels,
+  ApexStroke,
+  ApexMarkers,
+  ApexYAxis,
+  ApexTooltip,
+  ApexLegend,
+  ApexPlotOptions,
+  ApexFill,
+  ApexGrid,
+  NgApexchartsModule,
+} from 'ng-apexcharts';
+import { TotalEarningComponent } from './components/index/admin-index/total-earning/total-earning.component';
 
 
 
@@ -58,7 +75,8 @@ import { UsersListComponent } from './components/users/users-list/users-list.com
     ProfileTabComponent,
     UsersComponent,
     UsersListComponent,
-
+    ProjectsOverviewComponent,
+    TotalEarningComponent,
   ],
   imports: [
     CommonModule,
@@ -83,6 +101,10 @@ import { UsersListComponent } from './components/users/users-list/users-list.com
     MatIconModule,
 
     LightgalleryModule,
+
+
+  NgApexchartsModule,
+
   ],
   providers:[
     importProvidersFrom(
