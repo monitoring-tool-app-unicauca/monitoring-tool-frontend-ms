@@ -11,7 +11,7 @@ export interface UserDto {
   roleIds?: number[];
   roles?: RoleDto[];
 
-  userImage:any;
+  userImage?:any;
 }
 
 

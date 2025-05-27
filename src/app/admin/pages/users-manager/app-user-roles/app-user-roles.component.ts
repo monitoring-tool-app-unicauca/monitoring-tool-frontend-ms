@@ -4,6 +4,9 @@ import { MatSortModule, Sort } from '@angular/material/sort';
 import { PaginationComponent } from '../../../../elements/pagination/pagination.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from '../../../services/role/role.service';
+import { AuthService } from '../../../../auth/services/auth/auth.service';
+import { UserService } from '../../../services/user/user.service';
+import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.service';
 
 export interface Dessert {
   image: string,
@@ -30,6 +33,7 @@ export class AppUserRolesComponent {
     this.offcanvasExample = !this.offcanvasExample;
   }
 
+  isAdmin:boolean=false
   roleForm!: FormGroup;
   active = 1;
   page: any = 1;
@@ -37,16 +41,77 @@ export class AppUserRolesComponent {
   totalPage: any = 0;
   allData: any = [];
 
+  roles: any[] = [];
+  selectedRoleId: number  = 1;
+  usersByRole: Dessert[] = [];
+  searchTerm: string = '';
+  
   constructor(
     private fb: FormBuilder,
-    private roleService: RoleService
+    private roleService: RoleService,
+    private userService: UserService,
+    private authService: AuthService,
+    private alertService: NgxToastrService
   ) {
-    this.orderData = this.desserts.slice();
+    
   }
   ngOnInit(): void {
-    this.allData = this.paginator(this.orderData, this.page, this.totalRows);
-    this.totalPage = this.allData.total_pages;
-    this.initForm();
+  this.isAdmin = this.authService.isAdmin();
+  this.page = 1; // Asegúrate de inicializar la página si usas paginación
+  this.loadRoles();
+  this.initForm();
+}
+
+loadRoles() {
+  this.roleService.getAllRoles().subscribe({
+    next: (roles) => {
+      this.roles = roles.data;
+
+      
+      if (this.roles.length > 0) {
+        const firstRoleId = this.roles[0].roleId;
+        this.selectedRoleId = firstRoleId;
+        this.loadUsersByRole(firstRoleId);
+      }
+    },
+    error: (err) => {
+      console.error('Error loading roles', err);
+    }
+  });
+}
+
+
+filteredRoles() {
+  if (!this.searchTerm?.trim()) return this.roles;
+
+  const term = this.searchTerm.toLowerCase();
+  return this.roles.filter(role => role.name.toLowerCase().includes(term));
+}
+
+selectRole(roleId: number) {
+  this.selectedRoleId = roleId;
+  this.loadUsersByRole(roleId);
+}
+getRoleNameById(roleId: number): string | undefined {
+  return this.roles.find(role => role.roleId == roleId)?.name;
+}
+
+loadUsersByRole(roleId: number) {
+  this.userService.getUsersByRole(roleId).subscribe({
+    next: (response) => {
+      this.allData = response;
+      this.totalRows = response.data?.totalElements || 0;
+      this.totalPage = response.data?.totalPages || 1;
+    },
+    error: (err) => {
+      console.error('Error fetching users by role', err);
+    }
+  });
+}
+
+  pageChange(e: any) {
+    this.page = e;
+    this.loadUsersByRole(this.selectedRoleId);  
   }
 
   initForm(){
@@ -56,11 +121,16 @@ export class AppUserRolesComponent {
 
     });
   }
+  cleanForm(){
+    this.roleForm.reset()
+  }
   submitForm() {
     if (this.roleForm.valid) {
       this.roleService.createRole(this.roleForm.value).subscribe({
         next: (response) => {
-          alert('Role created successfully');
+          this.alertService.success('Role has been created', 'toast-top-right');
+          this.cleanForm()
+          this.loadRoles()
         },
         error: (error) => {
           console.error(error);
@@ -69,127 +139,9 @@ export class AppUserRolesComponent {
       });
     }
   }
-  desserts: Dessert[] = [
-    {
-      image: 'assets/images/contacts/pic1.jpg',
-      name: 'Abdullah Risher',
-      email: 'demo@gmail.com',
-      date: '22 March 2024',
-      last_active: 'Monday'
-    },
-    {
-      image: 'assets/images/contacts/pic2.jpg',
-      name: 'Bongani Femi',
-      email: 'demo@gmail.com',
-      date: '28 February 2024',
-      last_active: 'Tuesday'
-    },
-    {
-      image: 'assets/images/contacts/pic3.jpg',
-      name: 'Hakim Joy',
-      email: 'demo@gmail.com',
-      date: '22 March 2024',
-      last_active: 'Tuesday'
-    },
-    {
-      image: 'assets/images/profile/friends/f1.jpg',
-      name: 'Lolonyo Chinyelu',
-      email: 'demo@gmail.com',
-      date: '22 March 2024',
-      last_active: 'May'
-    },
-    {
-      image: 'assets/images/contacts/pic2.jpg',
-      name: 'Malik Oba',
-      email: 'demo@gmail.com',
-      date: '28 February 2024',
-      last_active: 'Tuesday'
-    },
-    {
-      image: 'assets/images/profile/friends/f1.jpg',
-      name: 'Darius Addo',
-      email: 'demo@gmail.com',
-      date: '22 March 2024',
-      last_active: 'Tuesday'
-    },
-    {
-      image: 'assets/images/contacts/pic2.jpg',
-      name: 'Bongani Femi',
-      email: 'demo@gmail.com',
-      date: '28 February 2024',
-      last_active: 'Tuesday'
-    },
-    {
-      image: 'assets/images/contacts/pic3.jpg',
-      name: 'Hakim Joy',
-      email: 'demo@gmail.com',
-      date: '22 March 2024',
-      last_active: 'Tuesday'
-    },
-    {
-      image: 'assets/images/profile/friends/f1.jpg',
-      name: 'Lolonyo Chinyelu',
-      email: 'demo@gmail.com',
-      date: '22 March 2024',
-      last_active: 'May'
-    },
-    {
-      image: 'assets/images/profile/friends/f1.jpg',
-      name: 'Lolonyo Chinyelu',
-      email: 'demo@gmail.com',
-      date: '22 March 2024',
-      last_active: 'May'
-    }
-  ];
-
-  orderData: Dessert[];
-
-  sortData(sort: Sort) {
-    const data = this.desserts.slice();
-    if (!sort.active || sort.direction === '') {
-      this.orderData = data;
-      return;
-    }
-
-    this.orderData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name': return compare(a.name, b.name, isAsc);
-        case 'date': return compare(a.date, b.date, isAsc);
-        case 'last_active': return compare(a.last_active, b.last_active, isAsc);
-        default: return 0;
-      }
-    });
-    this.allData = this.paginator(this.orderData, this.page, this.totalRows);
-  }
-
-  pageChange(e: any) {    //  Page Change funcation   ---------
-    this.page = e;
-    this.allData = this.paginator(this.orderData, this.page, this.totalRows);
-    this.totalPage = this.allData.total_pages;
-  }
-
-  paginator(items: any, current_page: any, per_page_items: any) {
-    let page = current_page || 1,
-      per_page = per_page_items || 10,
-      offset = (page - 1) * per_page,
-
-      paginatedItems = items.slice(offset).slice(0, per_page_items),
-      total_pages = Math.ceil(items.length / per_page);
-
-    return {
-      page: page,
-      per_page: per_page,
-      pre_page: page - 1 ? page - 1 : null,
-      next_page: (total_pages > page) ? page + 1 : null,
-      total: items.length,
-      total_pages: total_pages,
-      data: paginatedItems
-    };
-  }
+  
+  
 }
 
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}
+
 

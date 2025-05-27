@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth/guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -8,14 +9,17 @@ const routes: Routes = [
   },
   {
     path: 'admin',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule)
   },
   {
     path: 'monitoring',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./monitoring/monitoring.module').then(m => m.MonitoringModule)
-  }
-  //{ path: '', redirectTo: '/admin', pathMatch: 'full' }, // Cambia la redirección
-  //{ path: '**', redirectTo: '/auth/login' } // Mantiene la redirección 404
+  },
+
+  { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/auth/login' }
 ];
 
 @NgModule({

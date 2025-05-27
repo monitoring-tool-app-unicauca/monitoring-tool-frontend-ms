@@ -16,6 +16,11 @@ import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.se
 })
 export class AppEditProfileComponent implements OnInit {
 
+  breadcrumbList = {
+    title: 'Add User',
+    breadcrumb_path: 'Home',
+    currentURL: 'Users / Add',
+  }
   profileForm!: FormGroup;
   passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
   emailExists:boolean | any = false;
@@ -53,9 +58,6 @@ export class AppEditProfileComponent implements OnInit {
         password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
       });
     }
-    cleanForm(){
-      this.profileForm.reset()
-    }
   ngOnInit() {
     this.initForm();
     this.roleService.getAllRoles().subscribe((data)=>{
@@ -75,13 +77,12 @@ export class AppEditProfileComponent implements OnInit {
 
     this.userId = this.route.snapshot.paramMap.get('id');
     if (this.userId) {
-      // Aquí puedes llamar al servicio para obtener los datos del usuario
-      console.log('Editando usuario con ID:', this.userId);
+
       this.service.getUserById(+this.userId).subscribe(response => {
         if (response?.data) {
           const userData = response.data;
 
-          // Patching the form with user data
+
           this.profileForm.patchValue({
             userId: userData.userId,
             documentNumber: userData.documentNumber,
@@ -93,14 +94,14 @@ export class AppEditProfileComponent implements OnInit {
           });
 
           if (userData.roles ) {
-            this.selectedRoles.data = [...userData.roles]; // Asigna los roles directamente
+            this.selectedRoles.data = [...userData.roles];
 
           }
-          // Agregar la validación del email después de asignar los datos
+
           this.profileForm.get('email')?.setAsyncValidators(this.emailExistsValidator());
 
           if(this.userId)
-          this.loadProfileImage(+this.userId);
+          this.loadProfileImage(this.userId);
          }
       });
     }
@@ -108,13 +109,10 @@ export class AppEditProfileComponent implements OnInit {
   }
 
   private _filterRoles(name: string): RoleDto[] {
-    console.log("Texto ingresado para filtrar:", name);
-    console.log("Lista de roles antes de filtrar:", this.allRoles);
 
     const filterValue = (name ?? '').toLowerCase();
     const filtered = this.allRoles.filter(role => role.name.toLowerCase().includes(filterValue));
 
-    console.log("Lista de roles después de filtrar:", filtered);
     return filtered;
   }
 
@@ -135,13 +133,13 @@ export class AppEditProfileComponent implements OnInit {
   emailExistsValidator(): AsyncValidatorFn {
     return (control: AbstractControl): Observable<any | null> => {
       if (!control.value || control.value === this.profileForm?.get('email')?.value) {
-        return of(null); // Si el campo está vacío, no validamos nada
+        return of(null);
       }
 
       return this.service.userExistByEmail(control.value).pipe(
         map((exists: boolean) => {
 
-          return exists ? { emailExists: true } : null; // Si existe, activamos el error
+          return exists ? { emailExists: true } : null;
         })
       );
     };
@@ -150,52 +148,61 @@ export class AppEditProfileComponent implements OnInit {
 
   submitForm() {
     if (this.profileForm.valid) {
-
       const roleIds = this.selectedRoles.data.map(role => role.roleId);
 
-    // Crear un objeto con los datos del formulario y agregar roleIds
-    const requestData = {
-      ...this.profileForm.value, // Incluye todos los datos del formulario
-      roleIds: roleIds // Agrega el array de IDs de roles
-    };
 
-    if (this.userId) {
-      this.service.updateUser(+this.userId, requestData).subscribe({
-        next: (response) => {
-          this.alertService.success('User updated successfully', 'toast-top-left');
-          this.cleanForm();
-          this.selectedRoles.data = [];
-          if(this.userId && this.imageFile)
-          this.uploadImage(+this.userId);
-        },
-        error: (error) => {
-          console.error(error);
-          this.alertService.error('Error updating user', 'toast-top-left');
-        }
-      });
-    }else {
-      this.service.createUser(requestData).subscribe({
-        next: (response) => {
-          // alert('User created successfully');
+      const requestData = {
+        ...this.profileForm.value,
+        roleIds: roleIds
+      };
 
-          this.alertService.success('User created successfully', 'toast-top-left');
-          this.cleanForm()
-          this.selectedRoles.data = []
-          const newUserId = response.data?.id;  // ID del nuevo usuario
-          if (newUserId && this.imageFile) {
-            this.uploadImage(newUserId);  // Subir imagen después de crear
+      if (this.userId) {
+
+        this.service.updateUser(+this.userId, requestData).subscribe({
+          next: (response) => {
+            this.alertService.success('User updated successfully', 'toast-top-left');
+            this.cleanForm();
+            this.selectedRoles.data = [];
+            if (this.imageFile&&this.userId) {
+              this.uploadImage(+this.userId);
+            }
+          },
+          error: (error) => {
+            console.error(error);
+            this.alertService.error('Error updating user', 'toast-top-left');
           }
-        },
-        error: (error) => {
-          console.error(error);
-          // alert('Error creating user');
-          this.alertService.error('Error creating user', 'toast-top-left');
-        }
-      });
-    }
+        });
+      } else {
+        // Crear nuevo usuario
+        this.service.createUser(requestData).subscribe({
+          next: (response) => {
+            this.alertService.success('User created successfully', 'toast-top-left');
+            this.selectedRoles.data = [];
+            const newUserId = response.data?.userId;
 
+
+            if (newUserId && this.imageFile) {
+              this.uploadImage(newUserId);
+            }
+            this.cleanForm();
+          },
+          error: (error) => {
+            console.error(error);
+            this.alertService.error('Error creating user', 'toast-top-left');
+          }
+        });
+      }
     }
   }
+
+cleanForm() {
+    this.profileForm.reset();
+    this.imagePreview = null;
+    this.imageFile = null;
+    this.userProfileImage = this.defaultImage;
+}
+
+
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -206,11 +213,17 @@ export class AppEditProfileComponent implements OnInit {
       };
       reader.readAsDataURL(file);
       this.imageFile = file;
+
+      if(this.userId)
+        this.uploadImage(+this.userId);
     }
   }
 
   uploadImage(userId: number) {
-    if (!this.imageFile) return; // Si no hay imagen, no hacemos nada
+    if (!this.imageFile) {
+      console.log("No image file to upload");
+      return;
+    }
 
     const formData = new FormData();
     formData.append('file', this.imageFile);
@@ -225,19 +238,34 @@ export class AppEditProfileComponent implements OnInit {
       }
     });
   }
-  loadProfileImage(userId: number) {
-    this.service.getUserImage(userId).subscribe({
-      next: (imageBlob) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.userProfileImage = reader.result as string; // Convertir Blob a URL base64
-        };
-        reader.readAsDataURL(imageBlob);
-      },
-      error: () => {
-        this.userProfileImage = this.defaultImage; // Usar imagen por defecto si hay error
-      }
-    });
+  loadProfileImage(userId: string) {
+
+    let userImage = this.defaultImage;
+
+    if (userId !== undefined) {
+      this.service.getUserImage(+userId).subscribe({
+        next: (blob) => {
+
+          if (blob && blob.size > 0) {
+            const reader = new FileReader();
+            reader.onload = () => {
+              userImage = reader.result as string;
+              this.userProfileImage = userImage;
+              this.cdRef.detectChanges();
+            };
+            reader.readAsDataURL(blob);
+          } else {
+            this.userProfileImage = userImage;
+          }
+        },
+        error: () => {
+
+          this.userProfileImage = userImage;
+        }
+      });
+    } else {
+      this.userProfileImage = userImage;
+    }
   }
 
   get email() {

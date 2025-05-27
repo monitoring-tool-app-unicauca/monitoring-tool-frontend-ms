@@ -1,16 +1,22 @@
 import { ChangeDetectorRef, Component, HostListener } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-admin-layout',
-  templateUrl: './admin-layout.component.html',
-  styleUrl: './admin-layout.component.css'
+  selector: 'app-shell',
+  templateUrl: './shell.component.html',
+  styleUrl: './shell.component.css'
 })
-export class AdminLayoutComponent {
+export class ShellComponent {
   toggleVal: boolean = false;
   mouseOvered: boolean = false;
   currentUrl: string = '';
-  constructor(private router: Router,private cdRef: ChangeDetectorRef) {
+  showAdminSidebar:boolean = false;
+
+  constructor(
+    private router: Router,
+    private cdRef: ChangeDetectorRef,
+    private route: ActivatedRoute,
+  ) {
     router.events.subscribe(() => {
       setTimeout(() => {
         this.handleMinHeight();
@@ -20,6 +26,13 @@ export class AdminLayoutComponent {
 
   ngOnInit(): void {
     this.currentUrl = this.router.url;
+    const layoutType = this.route.snapshot.data['layout'];
+    if (layoutType === 'admin') {
+      this.showAdminSidebar = true;
+    } else {
+      this.showAdminSidebar = false;
+    }
+
     this.cdRef.detectChanges();
   }
 

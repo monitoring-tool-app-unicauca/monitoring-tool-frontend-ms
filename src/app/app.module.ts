@@ -8,7 +8,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AdminModule } from './admin/admin.module';
 import { MonitoringModule } from './monitoring/monitoring.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from './auth/interceptors/auth.interceptor';
+import { SharedModule } from './shared/shared.module';
+import { TokenExpiredInterceptor } from './auth/interceptors/token-expired.interceptor';
 @NgModule({
   declarations: [
     AppComponent
@@ -22,9 +25,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AuthModule,
     AdminModule,
     MonitoringModule,
+    SharedModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenExpiredInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

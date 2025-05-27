@@ -1,4 +1,7 @@
-<div class="content-body">
+
+  <div class="content-body">
+    <!-- Breadcrumb  -->
+  <app-breadcrumb [breadcrumb]="breadcrumbList"> </app-breadcrumb>
     <!-- row -->
     <div class="container-fluid">
         <!-- row -->
@@ -10,7 +13,8 @@
                             <div class="p-5">
                                 <div class="author-profile">
                                     <div class="author-media">
-                                        <img [src]="imagePreview || userProfileImage || defaultImage"alt="Profile Image">
+                                      <img [src]="imagePreview || userProfileImage || defaultImage" alt="Profile Image">
+
                                         <div class="upload-link" title="update" data-toggle="tooltip" data-placement="right" data-original-title="update">
                                             <input type="file" class="update-flie" (change)="onFileSelected($event)">
                                             <i class="fa fa-camera"></i>
@@ -18,25 +22,28 @@
                                     </div>
                                     <div class="author-info">
                                       <h6 class="title">{{ profileForm.value.name  || 'User' }}</h6>
-                                        <span>Developer</span>
+                                        <span>{{ selectedRoles.data[0]?.name || 'No Role' }}</span>
+
+
+
                                     </div>
                                 </div>
                             </div>
-                            <div class="info-list">
+                            <!-- <div class="info-list">
                                 <ul>
                                     <li><a routerLink="/admin/app-profile">Models</a><span>36</span></li>
                                     <li><a routerLink="/admin/uc-light-gallery">Gallery</a><span>3</span></li>
                                     <li><a routerLink="/admin/app-profile">Lessons</a><span>1</span></li>
                                 </ul>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="card-footer">
                             <div class="input-group mb-3">
                                 <div class="form-control rounded text-center bg-white">Portfolio</div>
                             </div>
-                            <div class="input-group">
+                            <!-- <div class="input-group">
                                 <a href="https://www.dexignzone.com/" target="_blank" class="form-control text-primary rounded text-start bg-white">https://www.dexignzone.com/</a>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>

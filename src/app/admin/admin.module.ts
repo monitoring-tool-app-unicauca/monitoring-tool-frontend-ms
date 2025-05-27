@@ -2,16 +2,16 @@ import { NgModule, importProvidersFrom } from '@angular/core';
 import { CommonModule ,Location, NgClass, PlatformLocation,TitleCasePipe} from '@angular/common';
 
 import { AdminRoutingModule } from './admin-routing.module';
-import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
-import { FooterComponent } from './layout/footer/footer.component';
-import { HeaderComponent } from './layout/header/header.component';
-import { SidebarComponent } from './layout/sidebar/sidebar.component';
-import { ChatboxComponent } from './layout/chatbox/chatbox.component';
+// import { AdminLayoutComponent } from './layout/admin-layout/admin-layout.component';
+// import { FooterComponent } from './layout/footer/footer.component';
+// import { HeaderComponent } from './layout/header/header.component';
+// import { SidebarComponent } from './layout/sidebar/sidebar.component';
+// import { ChatboxComponent } from './layout/chatbox/chatbox.component';
+// import { NavHeaderComponent } from './layout/nav-header/nav-header.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SafeHtmlSvgPipe } from '../_services/svg-pipe/safe-html-svg.pipe';
 import { RouterLink } from '@angular/router';
-import { NavHeaderComponent } from './layout/nav-header/nav-header.component';
 
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,25 +30,20 @@ import { ProfileSidMenuComponent } from './components/user-manager/profile-sid-m
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatTableModule } from '@angular/material/table';
+import { MatIconModule } from '@angular/material/icon';
+import { ToastrModule } from 'ngx-toastr';
 
 
 import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
 import { UsersComponent } from './components/users/users.component';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
 
-import { ToastrModule } from 'ngx-toastr';
+
 
 @NgModule({
   declarations: [
-    AdminLayoutComponent,
-    FooterComponent,
-    HeaderComponent,
-    SidebarComponent,
-    ChatboxComponent,
-    NavHeaderComponent,
     AdminIndexComponent,
     AppAddRoleComponent,
     AppEditProfileComponent,

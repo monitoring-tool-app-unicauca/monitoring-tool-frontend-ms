@@ -6,7 +6,7 @@
         <div class="login-form">
           <div class="text-center">
             <h3 class="title">Sign In</h3>
-            <p>Sign in to your account to start using W3CRM</p>
+            <p>Sign in to your account to start using {{appName}}</p>
           </div>
           <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
             <div class="mb-4">
@@ -30,29 +30,22 @@
             </div> -->
             </div>
             <div class="form-row d-flex justify-content-between mt-4 mb-2">
+              
               <div class="mb-4">
-                <div class="form-check custom-checkbox mb-3">
-                  <input type="checkbox" class="form-check-input" id="customCheckBox1" required="">
-                  <label class="form-check-label" for="customCheckBox1">Remember my preference</label>
-                </div>
-              </div>
-              <div class="mb-4">
-                <a routerLink="/page-forgot-password" class="btn-link text-primary">Forgot Password?</a>
+                <a routerLink="/auth/forgot-password" class="btn-link text-primary">Forgot Password?</a>
               </div>
             </div>
             <div class="text-center mb-4">
               <button type="submit" class="btn btn-primary btn-block" [disabled]="!loginForm.valid">Sign In</button>
             </div>
-            <p class="text-center">Not registered?
-              <a class="btn-link text-primary" routerLink="/page-register">Register</a>
-            </p>
+            
           </form>
         </div>
       </div>
       <div class="col-xl-6 col-sm-6">
         <div class="pages-left h-100">
           <div class="login-content">
-            <a routerLink="/admin/index">
+            <!-- <a routerLink="/admin/index">
               <svg class="logo-dark mb-3" width="98" height="24" viewBox="0 0 115 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_201_33)">
                 <path d="M39.0006 26.7826H23.1871L25.2086 22.8105C25.5115 22.2155 26.1191 21.8373 26.7867 21.8284L37.8652 21.6809C40.2655 21.4866 40.9738 19.3865 41.0279 18.3608C41.0279 16.0934 39.1897 15.3105 38.2707 15.2025H28.8637L31.621 10.3439H37.0543C38.8059 10.2143 39.2438 8.56231 39.2438 7.75253C39.3736 6.00337 37.676 5.62007 36.811 5.64706H34.9336C34.409 5.64706 34.0611 5.10346 34.2807 4.62707L36.1622 0.545378C37.849 0.480594 40.0006 0.950273 40.8657 1.19321C47.0289 4.17324 45.1637 9.72302 43.4607 12.1254C46.445 14.5224 46.8666 17.443 46.7045 18.6037C46.3801 24.5638 41.4334 26.5397 39.0006 26.7826Z" fill="#0D99FF"/>
@@ -70,8 +63,9 @@
                 </clipPath>
                 </defs>
               </svg>
-            </a>
-            <a routerLink="/admin/index">
+            </a> -->
+            
+            <!-- <a routerLink="/admin/index">
               <svg class="logo-light mb-3" width="98" height="24" viewBox="0 0 115 28" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g clip-path="url(#clip0_201_33)">
                 <path d="M39.0006 26.7826H23.1871L25.2086 22.8105C25.5115 22.2155 26.1191 21.8373 26.7867 21.8284L37.8652 21.6809C40.2655 21.4866 40.9738 19.3865 41.0279 18.3608C41.0279 16.0934 39.1897 15.3105 38.2707 15.2025H28.8637L31.621 10.3439H37.0543C38.8059 10.2143 39.2438 8.56231 39.2438 7.75253C39.3736 6.00337 37.676 5.62007 36.811 5.64706H34.9336C34.409 5.64706 34.0611 5.10346 34.2807 4.62707L36.1622 0.545378C37.849 0.480594 40.0006 0.950273 40.8657 1.19321C47.0289 4.17324 45.1637 9.72302 43.4607 12.1254C46.445 14.5224 46.8666 17.443 46.7045 18.6037C46.3801 24.5638 41.4334 26.5397 39.0006 26.7826Z" fill="#0D99FF"/>
@@ -89,8 +83,17 @@
                 </clipPath>
                 </defs>
               </svg>
+            </a> -->
+
+            <a routerLink="/admin/index">
+              <img src="assets/logo/mt_dark.png" class="logo-dark mb-3" alt="Logo" width="70" height="auto" />
             </a>
-            <p>CRM dashboard uses line charts to visualize customer-related metrics and trends over time.</p>
+            <a routerLink="/admin/index">
+              <img src="assets/logo/mt_light.png" class="logo-light mb-3" alt="Logo" width="70" height="auto" />
+            </a>
+
+            <p>This monitoring platform provides real-time visibility into the status and availability of your endpoints, helping you detect incidents and analyze performance.</p>
+
           </div>
           <div class="login-media text-center">
             <img src="assets/images/login.png" alt="">

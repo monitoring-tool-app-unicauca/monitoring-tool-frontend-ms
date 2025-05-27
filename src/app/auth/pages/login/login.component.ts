@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
 
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth/auth.service';
+import { NgxToastrService } from '../../../_services/ngx-toastr/ngx-toastr.service';
+import { UserDto } from '../../../admin/interfaces/userDTO';
+import { APP_CONSTANTS } from '../../../../constants';
 
 @Component({
   selector: 'app-login-login',
@@ -11,25 +14,29 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class LoginComponent {
 
-  email: string = 'admin@email.com';
-  password: string = '!?Gz0AHrp4';
-  hide_show: boolean = false;
-  loginForm!: FormGroup  ;
 
+  loginForm!: FormGroup  ;
+  hide_show: boolean = false;
+  appName = APP_CONSTANTS.APP_NAME
+  
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService : AuthService
-  ) {}
+    private authService : AuthService,
+    private alertService: NgxToastrService,
+    private route: ActivatedRoute
 
-  passwordHide(){
-    this.hide_show = !this.hide_show;
-  }
-  url = '/admin/index'
+  ) {}
 
   ngOnInit(){
     this.initForm();
+    this.route.queryParams.subscribe(params => {
+      if (params['sessionExpired']) {
+        this.alertService.error('Your session has expired. Please Login', 'toast-top-left');
+      }
+    });
   }
+
 
   initForm(){
     this.loginForm = this.fb.group({
@@ -38,25 +45,53 @@ export class LoginComponent {
       rememberMe: [false]
     });
   }
-  onLogin() {
-    if (this.loginForm?.invalid) {
-      console.log("Formulario inválido");
+
+  passwordHide(){
+    this.hide_show = !this.hide_show;
+  }
+
+  onLogin(): void {
+    if (this.loginForm.invalid) {
+      this.alertService.error('Please complete the form', 'toast-top-left');
       return;
     }
 
-    console.log('Login Data:', this.loginForm?.value);
-    this.authService.login(this.email, this.password).subscribe({
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login(email, password).subscribe({
       next: (response) => {
-        console.log("Login exitoso", response);
-        //this.router.navigate(['/dashboard']); // Asegúrate de que esta ruta es correcta
+        const token = response.data.token;
+
+        if (token) {
+          this.authService.saveToken(token);
+          this.alertService.success('Succesfull login', 'toast-top-left');
+
+          //obtener info de persona y ver si es un admin
+          if (email) {
+            this.authService.getUserByEmail(email).subscribe(userResponse => {
+              const userData: UserDto = userResponse.data;
+              this.authService.setCurrentUser(userData);
+
+              const isAdmin = userData.roles?.some(role => role.roleId === 1);
+              console.log("Is admin ? ",isAdmin)
+              if (isAdmin) {
+                this.router.navigate(['/admin']);
+              } else {
+                this.router.navigate(['/monitoring']);
+              }
+            });
+
+          }
+        } else {
+          this.alertService.error('No Token', 'toast-top-left');
+        }
       },
       error: (error) => {
-        console.error("Error en el login", error);
-        alert("Error al iniciar sesión: " + (error?.error?.message || "Inténtelo de nuevo"));
+        console.error("Error login:", error);
+        const errorMsg = error?.error?.message || 'User or password incorrect';
+        this.alertService.error(errorMsg, 'toast-top-left');
       }
     });
-
   }
-
 
 }

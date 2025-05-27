@@ -16,6 +16,18 @@ import { Error400Component } from './pages/error/error400/error400.component';
 import { EmptyComponent } from './pages/error/empty/empty.component';
 import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
+import { ShellComponent } from './layout/shell/shell.component';
+import { FooterComponent } from './layout/footer/footer.component';
+import { HeaderComponent } from './layout/header/header.component';
+import { SidebarComponent } from './layout/sidebar/sidebar.component';
+import { ChatboxComponent } from './layout/chatbox/chatbox.component';
+import { NavHeaderComponent } from './layout/nav-header/nav-header.component';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SafeHtmlSvgPipe } from '../_services/svg-pipe/safe-html-svg.pipe';
+
+
+
 @NgModule({
   declarations: [
     DropdownComponent,
@@ -29,6 +41,12 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     Error400Component,
     EmptyComponent,
 
+    ShellComponent,
+    FooterComponent,
+    HeaderComponent,
+    SidebarComponent,
+    ChatboxComponent,
+    NavHeaderComponent,
 
   ],
   imports: [
@@ -36,6 +54,9 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     SharedRoutingModule,
     Select2Module,
     RouterLink,
+
+    SafeHtmlSvgPipe,
+    NgbModule,
   ],
   exports: [
     DropdownComponent,
@@ -47,7 +68,14 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     Error404Component,
     Error403Component,
     Error400Component,
-    EmptyComponent
+    EmptyComponent,
+
+    ShellComponent,
+    FooterComponent,
+    HeaderComponent,
+    SidebarComponent,
+    ChatboxComponent,
+    NavHeaderComponent,
   ]
 })
 export class SharedModule { }

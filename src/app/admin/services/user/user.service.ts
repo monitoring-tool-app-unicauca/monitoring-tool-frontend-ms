@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, catchError, debounceTime, map, of } from 'rxjs';
 import { RoleDto } from '../../interfaces/roleDTO';
 import { UserDto } from '../../interfaces/userDTO';
@@ -38,11 +38,12 @@ export class UserService {
     );
   }
 
-  getUsers(): Observable<UserDto[]> {
-    return this.http.get<{ data: UserDto[]; status: number; message: string }>(`${this.apiUrl}/user`).pipe(
-      map(response => response.data)
+  getUsers(page: number): Observable<any> {
+    return this.http.get<{ content: any[], totalElements: number, totalPages: number }>(`${this.apiUrl}/user?page=${page}`).pipe(
+      map(response => response)
     );
   }
+
 
   getUserById(id:number): Observable<ResponseDto<UserDto>> {
     return this.http.get<ResponseDto<UserDto>>(`${this.apiUrl}/user/${id}`)
@@ -55,5 +56,21 @@ export class UserService {
     return this.http.get(`${this.apiUrl}/user/${userId}/profile-image`, { responseType: 'blob' });
   }
 
+  getUsersByName(name: string | null): Observable<ResponseDto<UserDto[]>> {
+    return this.http.get<ResponseDto<UserDto[]>>(`${this.apiUrl}/user/by-name?name=${name}`)
+  }
+
+  getUsersByIds(ids: number[]): Observable<ResponseDto<UserDto[]>> {
+    const params = new HttpParams({ fromObject: { ids: ids.map(String) } });
+    return this.http.get<ResponseDto<UserDto[]>>(`${this.apiUrl}/user/by-ids`, { params });
+  }
+
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/by-email?email=${encodeURIComponent(email)}`);
+  }
+
+  getUsersByRole(roleId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/user/by-role?roleId=${roleId}`);
+  }
 
 }
