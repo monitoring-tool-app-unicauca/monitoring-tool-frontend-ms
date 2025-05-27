@@ -94,7 +94,30 @@
                           </div>
                       </div>
                   </div>
-                  <div class="col-xl-8">
+                  <div class="col-xl-3 col-sm-6">
+                      <div class="card same-card">
+                          <div class="card-body d-flex align-items-center  py-2">
+                              <div id="AllProject"><app-bar-chart-apex *ngIf="AllNotifications?.series?.length" [chart_item]="AllNotifications"></app-bar-chart-apex></div>
+                              <ul class="project-list">
+                                <li>
+                                    <h6>Notifications</h6>
+                                </li>
+                                  <li>
+                                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="10" height="10" rx="3" fill="#28a745" />
+                                    </svg> On
+                                    </li>
+                                    <li>
+                                    <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <rect width="10" height="10" rx="3" fill="#FF5E5E" />
+                                    </svg> Off
+                                    </li>
+                                    
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="col-xl-12">
                       <div class="card overflow-hidden">
                             <!-- Projects Overview -->
                             <app-projects-overview *ngIf="summary" [summary]="summary"></app-projects-overview>
@@ -109,7 +132,7 @@
                       <h4 class="heading mb-0">Downs % </h4>
                   </div>
                   <div class="card-body px-0 overflow-hidden">
-                     <app-total-earning></app-total-earning>
+                     <app-downs-graph *ngIf="summary"[summary]="summary"></app-downs-graph>
                   </div>
               </div>
             </div>

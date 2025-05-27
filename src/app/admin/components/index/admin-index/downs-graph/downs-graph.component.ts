@@ -1,24 +1,45 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
-  selector: 'app-total-earning',
-  templateUrl: './total-earning.component.html',
-  styleUrl: './total-earning.component.css'
+  selector: 'app-downs-graph',
+  templateUrl: './downs-graph.component.html',
+  styleUrl: './downs-graph.component.css'
 })
-export class TotalEarningComponent {
+export class DownsGraphComponent {
+  @Input() summary:any
   public chartOptions: any;
+  public avgDownPercentage: number = 0;
 
   constructor() {}
 
   ngOnInit(): void {
+    this.calculateAverage();
+    this.setupChart();
+  }
+  ngOnChanges() {
+    this.calculateAverage();  
+  }
+
+  calculateAverage(): void {
+    if (!this.summary || !Array.isArray(this.summary)) return;
+
+    const validDowns = this.summary.filter(p => typeof p.downPercentage === 'number');
+    const total = validDowns.reduce((sum, project) => sum + project.downPercentage, 0);
+    this.avgDownPercentage = validDowns.length ? +(total / validDowns.length).toFixed(2) : 0;
+  }
+
+  setupChart(): void {
     const chartWidth = document.getElementById('earningChart')?.offsetWidth || 0;
+
+    const projectNames = this.summary.map((p: any) => p.projectName);
+    const downPercentages = this.summary.map((p: any) => p.downPercentage);
 
     this.chartOptions = {
       series: [
         {
-          name: 'Net Profit',
-          data: [700, 650, 680, 600, 700, 610, 710, 620]
+          name: '%Down',
+          data: downPercentages
         }
       ],
       chart: {
@@ -29,14 +50,14 @@ export class TotalEarningComponent {
         offsetX: -45,
         zoom: { enabled: false }
       },
-      colors: ['var(--primary)'],
+      colors: ['#FF5E5E'],
       dataLabels: { enabled: false },
-      legend: { show: false },
+      legend: { show: true },
       stroke: {
         show: true,
         width: 2,
         curve: 'straight',
-        colors: ['var(--primary)']
+        colors: ['#FF5E5E']
       },
       grid: {
         show: true,
@@ -47,12 +68,16 @@ export class TotalEarningComponent {
       yaxis: {
         show: true,
         tickAmount: 4,
-        min: 0,
-        max: 800,
-        labels: { offsetX: 50 }
+        labels: {
+          offsetX: 40 ,
+          formatter: (val: number) => val + '%'
+        },
+        min:0,
+        max: 100
       },
+      
       xaxis: {
-        categories: ['', 'May ', 'June', 'July', 'Aug', 'Sep ', 'Oct'],
+        categories: projectNames,
         axisBorder: { show: false },
         axisTicks: { show: false },
         labels: {
@@ -62,16 +87,16 @@ export class TotalEarningComponent {
         }
       },
       fill: {
-        opacity: 0.5,
-        colors: 'var(--primary)',
+        opacity: 0.7,
+        colors: '#FF5E5E',
         type: 'gradient',
-        gradient: {
-          colorStops: [
-            { offset: 0.6, color: 'var(--primary)', opacity: 0.2 },
-            { offset: 0.6, color: 'var(--primary)', opacity: 0.15 },
-            { offset: 100, color: 'white', opacity: 0 }
-          ]
-        }
+        // gradient: {
+        //   colorStops: [
+        //     { offset: 0.6, color: 'var(--primary)', opacity: 0.2 },
+        //     { offset: 0.6, color: 'var(--primary)', opacity: 0.15 },
+        //     { offset: 100, color: 'white', opacity: 0 }
+        //   ]
+        // }
       },
       tooltip: {
         enabled: true,

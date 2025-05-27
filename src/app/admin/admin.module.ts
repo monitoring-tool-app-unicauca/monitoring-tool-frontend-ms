@@ -55,7 +55,7 @@ import {
   ApexGrid,
   NgApexchartsModule,
 } from 'ng-apexcharts';
-import { TotalEarningComponent } from './components/index/admin-index/total-earning/total-earning.component';
+import { DownsGraphComponent } from './components/index/admin-index/downs-graph/downs-graph.component';
 
 
 
@@ -76,7 +76,7 @@ import { TotalEarningComponent } from './components/index/admin-index/total-earn
     UsersComponent,
     UsersListComponent,
     ProjectsOverviewComponent,
-    TotalEarningComponent,
+    DownsGraphComponent,
   ],
   imports: [
     CommonModule,

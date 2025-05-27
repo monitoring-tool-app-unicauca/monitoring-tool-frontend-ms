@@ -1,6 +1,7 @@
 <div class="total-earning">
-    <h2>$6,743.00</h2>
-    <ul class="nav nav-underline mb-3 earning-tab earning-chart" id="pills-tab1" role="tablist">
+    <h2>{{ avgDownPercentage }}%</h2>
+    <h6>Avg down percentage</h6>
+    <!-- <ul class="nav nav-underline mb-3 earning-tab earning-chart" id="pills-tab1" role="tablist">
         <li class="nav-item px-2" role="presentation">
             <button class="nav-link py-2 px-0 border-3 m-0 active" (click)="updateSeries('day')" data-series="day" id="pills-day-tab1" data-bs-toggle="pill" data-bs-target="#pills-day1" type="button" role="tab" aria-selected="true">Day</button>
         </li>
@@ -13,7 +14,7 @@
         <li class="nav-item px-2" role="presentation">
             <button class="nav-link py-2 px-0 border-3 m-0" (click)="updateSeries('year')" id="pills-year-tab1" data-series="year" data-bs-toggle="pill" data-bs-target="#pills-year1" type="button" role="tab" aria-selected="false">Year</button>
         </li>
-    </ul>
+    </ul> -->
     <div id="earningChart" #chartContainer>
         <apx-chart
             [series]="chartOptions.series"

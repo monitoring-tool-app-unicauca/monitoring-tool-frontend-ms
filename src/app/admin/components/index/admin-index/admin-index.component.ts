@@ -22,8 +22,11 @@ export class AdminIndexComponent {
 
   NewCustomers:any
   AllProjects:any 
+  AllNotifications:any 
   summary: any
   maxProjects = environment.MAX_NUMBER_PROJECTS;
+  notificationsOn:any
+  notificationsOff:any
   constructor(
     private projectService: ProjectService
   ){
@@ -98,6 +101,10 @@ get progressPercent(): number {
     const dataUsuariosPorProyecto = this.summary.map((p: { users: string | any[]; }) => p.users.length);
     this.summary.totalUsers = this.summary.reduce((sum: any, p: { totalUsers: number; }) => sum + p.totalUsers, 0);
 
+    // Proyectos con notificaciones activadas
+    this.notificationsOn = this.summary.reduce((sum: any, p: { notificationsOn: any; }) => sum + p.notificationsOn, 0);
+    this.notificationsOff = this.summary.reduce((sum: any, p: { notificationsOff: any; }) => sum + p.notificationsOff, 0);
+    
     console.log("Active Inactive ",totalActive,totalInactive)
     console.log("datausuarios ",this.summary.totalUSers)
     this.NewCustomers = {
@@ -295,5 +302,54 @@ get progressPercent(): number {
     },
   };
 
+  this.AllNotifications = {
+    series: [this.notificationsOn, this.notificationsOff],
+    chart: {
+      type: 'donut',
+      width: 170,
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '80%',
+          labels: {
+            show: true,
+            name: {
+              show: true,
+              offsetY: 12,
+            },
+            value: {
+              show: true,
+              fontSize: '22px',
+              fontFamily: 'Arial',
+              fontWeight: '500',
+              offsetY: -17,
+            },
+            total: {
+              show: true,
+              fontSize: '11px',
+              fontWeight: '500',
+              fontFamily: 'Arial',
+              label: 'Total',
+
+              formatter: function (w: { globals: { seriesTotals: any[]; }; }) {
+                return w.globals.seriesTotals.reduce((a: any, b: any) => {
+                  return a + b
+                }, 0)
+              }
+            }
+          }
+        }
+      }
+    },
+    legend: {
+      show: false,
+    },
+    colors: ['#3AC977', '#FF5E5E'],
+    labels: ["On", "Off"],
+    dataLabels: {
+      enabled: false,
+    },
+  };
   }
 }
