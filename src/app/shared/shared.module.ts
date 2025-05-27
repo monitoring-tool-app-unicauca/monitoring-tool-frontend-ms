@@ -27,7 +27,26 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SafeHtmlSvgPipe } from '../_services/svg-pipe/safe-html-svg.pipe';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { BarChartApexComponent } from './charts/chart-config/bar-chart-apex/bar-chart-apex.component';
+import { IndexComponent } from './pages/index/index/index.component';
 
+
+import { ProjectsOverviewComponent } from '../shared/charts/index/projects-overview/projects-overview.component';
+// import {
+//   ApexAxisChartSeries,
+//   ApexChart,
+//   ApexXAxis,
+//   ApexDataLabels,
+//   ApexStroke,
+//   ApexMarkers,
+//   ApexYAxis,
+//   ApexTooltip,
+//   ApexLegend,
+//   ApexPlotOptions,
+//   ApexFill,
+//   ApexGrid,
+//   NgApexchartsModule,
+// } from 'ng-apexcharts';
+import { DownsGraphComponent } from './charts/index/downs-graph/downs-graph.component';
 
 
 @NgModule({
@@ -51,7 +70,10 @@ import { BarChartApexComponent } from './charts/chart-config/bar-chart-apex/bar-
     NavHeaderComponent,
 
     BarChartApexComponent,
-    
+    IndexComponent,
+
+    ProjectsOverviewComponent,
+    DownsGraphComponent,
   ],
   imports: [
     CommonModule,
@@ -62,7 +84,8 @@ import { BarChartApexComponent } from './charts/chart-config/bar-chart-apex/bar-
     SafeHtmlSvgPipe,
     NgbModule,
 
-    NgApexchartsModule
+    NgApexchartsModule,
+        
 
   ],
   exports: [
@@ -85,6 +108,7 @@ import { BarChartApexComponent } from './charts/chart-config/bar-chart-apex/bar-
     NavHeaderComponent,
 
     BarChartApexComponent,
+    IndexComponent,
   ]
 })
 export class SharedModule { }

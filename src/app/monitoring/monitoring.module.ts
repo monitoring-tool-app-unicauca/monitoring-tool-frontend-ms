@@ -17,7 +17,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSortModule, Sort } from '@angular/material/sort';
 import { MatIconModule } from '@angular/material/icon';
 import { HealthEndpointLineChartComponent } from './components/healthendpoint-line-chart/health-endpoint-line-chart/health-endpoint-line-chart.component';
-
+import { UserIndexComponent } from './components/index/user-index/user-index.component';
 @NgModule({
   declarations: [
     ProjectsPageComponent,
@@ -26,6 +26,8 @@ import { HealthEndpointLineChartComponent } from './components/healthendpoint-li
     ProjectSettingsComponent,
     ProjectHealthendpointsComponent,
     HealthEndpointLineChartComponent,
+
+    UserIndexComponent,
   ],
   imports: [
     CommonModule,

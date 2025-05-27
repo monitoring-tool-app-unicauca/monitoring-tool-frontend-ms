@@ -5,6 +5,7 @@ import { UsersComponent } from '../admin/components/users/users.component';
 import { AppUserRolesComponent } from '../admin/pages/users-manager/app-user-roles/app-user-roles.component';
 import { ProjectsPageComponent } from './pages/projects/projects-page/projects-page.component';
 import { ProjectOverviewHeadComponent } from './components/project-overview-head/project-overview-head.component';
+import { UserIndexComponent } from './components/index/user-index/user-index.component';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
 
     data: { layout: 'user' },
     children: [
-      // { path:'index', component:AdminIndexComponent},
+      { path:'', component:UserIndexComponent},
+      { path:'index', component:UserIndexComponent},
       
 
       { path: 'users', component: UsersComponent },

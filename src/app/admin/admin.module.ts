@@ -39,23 +39,23 @@ import { ToastrModule } from 'ngx-toastr';
 import { ProfileTabComponent } from './components/user-manager/profile-tab/profile-tab.component';
 import { UsersComponent } from './components/users/users.component';
 import { UsersListComponent } from './components/users/users-list/users-list.component';
-import { ProjectsOverviewComponent } from './components/index/admin-index/projects-overview/projects-overview.component';
-import {
-  ApexAxisChartSeries,
-  ApexChart,
-  ApexXAxis,
-  ApexDataLabels,
-  ApexStroke,
-  ApexMarkers,
-  ApexYAxis,
-  ApexTooltip,
-  ApexLegend,
-  ApexPlotOptions,
-  ApexFill,
-  ApexGrid,
-  NgApexchartsModule,
-} from 'ng-apexcharts';
-import { DownsGraphComponent } from './components/index/admin-index/downs-graph/downs-graph.component';
+// import { ProjectsOverviewComponent } from '../shared/charts/index/projects-overview/projects-overview.component';
+// import {
+//   ApexAxisChartSeries,
+//   ApexChart,
+//   ApexXAxis,
+//   ApexDataLabels,
+//   ApexStroke,
+//   ApexMarkers,
+//   ApexYAxis,
+//   ApexTooltip,
+//   ApexLegend,
+//   ApexPlotOptions,
+//   ApexFill,
+//   ApexGrid,
+//   NgApexchartsModule,
+// } from 'ng-apexcharts';
+// import { DownsGraphComponent } from './components/index/admin-index/downs-graph/downs-graph.component';
 
 
 
@@ -75,8 +75,7 @@ import { DownsGraphComponent } from './components/index/admin-index/downs-graph/
     ProfileTabComponent,
     UsersComponent,
     UsersListComponent,
-    ProjectsOverviewComponent,
-    DownsGraphComponent,
+
   ],
   imports: [
     CommonModule,
@@ -103,7 +102,6 @@ import { DownsGraphComponent } from './components/index/admin-index/downs-graph/
     LightgalleryModule,
 
 
-  NgApexchartsModule,
 
   ],
   providers:[
