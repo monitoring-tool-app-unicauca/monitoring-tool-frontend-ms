@@ -2,7 +2,7 @@ import { SocketService } from './../../../shared/services/socket/socket.service'
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../environment/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserDto } from '../../../admin/interfaces/userDTO';
 
@@ -15,14 +15,60 @@ export class AuthService {
   private TOKEN_KEY = 'auth_token';
   private USER_KEY ='current_user';
   private currentUser!: UserDto ;
+
+  private currentUserSubject = new BehaviorSubject<UserDto | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
   // private isAdminUser: boolean = false;
   ADMIN_IDENTIFICATOR = environment.ADMIN_IDENTIFICATOR
   constructor(
     private http: HttpClient,
     private router: Router,
 
-  ) {}
+  ) {
+    const storedUser = localStorage.getItem(this.USER_KEY);
+    
+    if (storedUser) {
+      this.currentUserSubject.next(JSON.parse(storedUser));
+    }
+  }
 
+  setCurrentUser(user: any): void {
+    
+    const isAdmin = user.roles?.some((role: { name: string; }) => role.name.toUpperCase() === this.ADMIN_IDENTIFICATOR );
+    user.isAdmin = isAdmin
+    
+    this.currentUser = user;
+    
+
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    
+    this.currentUserSubject.next(user);
+
+    console.log("Set current user ",this.currentUser)
+  }
+
+  getCurrentUser(): any {
+    if (this.currentUser) {
+      return this.currentUser;
+    }
+    const storedUser = localStorage.getItem(this.USER_KEY);
+    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+    
+    if (parsedUser && !this.currentUser) {
+      this.currentUser = parsedUser;
+      
+    }
+
+    return parsedUser;
+  }
+  
+  logout(): void {
+
+    localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.USER_KEY);
+    this.currentUserSubject.next(null);
+    this.router.navigate(['/auth/login'])
+  }
 
   validateEmail(email: string): Observable<{ available: boolean }> {
     return this.http.get<{ available: boolean }>(`${this.apiUrl}/user/by-email?email=${email}`);
@@ -44,44 +90,8 @@ export class AuthService {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
-
-  logout(): void {
-
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
-    this.router.navigate(['/auth/login'])
-  }
-
-
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
-  }
-
-  setCurrentUser(user: any): void {
-    
-    const isAdmin = user.roles?.some((role: { name: string; }) => role.name.toUpperCase() === this.ADMIN_IDENTIFICATOR );
-    user.isAdmin = isAdmin
-    
-    this.currentUser = user;
-    
-
-    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
-    console.log("Set current user ",this.currentUser)
-  }
-
-  getCurrentUser(): any {
-    if (this.currentUser) {
-      return this.currentUser;
-    }
-    const storedUser = localStorage.getItem(this.USER_KEY);
-    const parsedUser = storedUser ? JSON.parse(storedUser) : null;
-    
-    if (parsedUser && !this.currentUser) {
-      this.currentUser = parsedUser;
-      
-    }
-
-    return parsedUser;
   }
 
    forgotPassword(email: string): Observable<any> {

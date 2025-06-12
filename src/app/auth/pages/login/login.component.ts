@@ -84,6 +84,7 @@ export class LoginComponent {
 
           const isAdmin = userDecoded.roles?.some((role: { name: string; }) => role.name.toUpperCase() === this.ADMIN_IDENTIFICATOR );
 
+          
           this.alertService.success('Successful login', 'toast-top-left');
           this.router.navigate([isAdmin ? '/admin' : '/monitoring']);
           })

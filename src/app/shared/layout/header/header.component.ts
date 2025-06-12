@@ -25,6 +25,8 @@ export class HeaderComponent {
   notifications: any[] = [];
   socketSub!: Subscription;
 
+  hasUnreadNotifications = false;
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -34,6 +36,7 @@ export class HeaderComponent {
     private socketService: SocketService,
     private alertService: NgxToastrService
     ) {
+
     this.route.queryParams.subscribe((params: any) => {
       if (params.theme === 'dark' || params.theme === 'light') {
         localStorage.setItem("data-theme-version", params.theme);
@@ -42,13 +45,21 @@ export class HeaderComponent {
   }
 
   ngOnInit(): void {
-    const storedUser = localStorage.getItem('current_user');
-    if (storedUser) {
-      this.currentUser = JSON.parse(storedUser);
-      if (this.currentUser?.userId) {
-        this.loadProfileImage(this.currentUser.userId);
+    // const storedUser = localStorage.getItem('current_user');
+    // if (storedUser) {
+    //   this.currentUser = JSON.parse(storedUser);
+    //   if (this.currentUser?.userId) {
+    //     this.loadProfileImage(this.currentUser.userId);
+    //   }
+    // }
+    this.authService.currentUser$.subscribe(user => {
+      if (user) {
+        this.currentUser = user;
+        if (user.userId) {
+          this.loadProfileImage(user.userId);
+        }
       }
-    }
+    });
 
     this.socketSub = this.socketService.listen().subscribe((data: any) => {
       console.log("Notificación recibida:", data);
@@ -59,6 +70,7 @@ export class HeaderComponent {
       };
       this.alertService.info("New notification",'toast-top-right')
       this.notifications.unshift(noti);
+      this.hasUnreadNotifications = true;
       this.cdRef.detectChanges();
     });
 
@@ -68,12 +80,16 @@ export class HeaderComponent {
     if (this.socketSub) this.socketSub.unsubscribe();
   }
 
+  markNotificationsAsRead() {
+    this.hasUnreadNotifications = false;
+  }
+
   logout(): void {
 
     this.authService.logout();
 
   }
-  loadProfileImage(userId: string) {
+  loadProfileImage(userId: string|number) {
     let userImage = this.defaultImage;
 
     if (userId !== undefined) {
