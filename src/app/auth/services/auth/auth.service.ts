@@ -44,7 +44,7 @@ export class AuthService {
     
     this.currentUserSubject.next(user);
 
-    console.log("Set current user ",this.currentUser)
+    // console.log("Set current user ",this.currentUser)
   }
 
   getCurrentUser(): any {

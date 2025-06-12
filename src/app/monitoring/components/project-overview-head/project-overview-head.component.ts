@@ -3,6 +3,7 @@ import { Router, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
 import { ProjectService } from '../../services/project/project.service';
 import { ProjectCompleteResponseDto } from '../../interfaces/projectDTO';
+import { Breadcrumb } from '../../../shared/interfaces/Breadcrum.interface';
 
 @Component({
   selector: 'app-project-overview-head',
@@ -11,10 +12,7 @@ import { ProjectCompleteResponseDto } from '../../interfaces/projectDTO';
   styleUrl: './project-overview-head.component.css'
 })
 export class ProjectOverviewHeadComponent {
-  breadcrumbList = {
-    breadcrumb_path: 'Projects',
-    currentURL: 'Overview',
-  }
+  breadcrumbList!: Breadcrumb 
   currentUrl: string = '';
   @Input() projectId: any
   @Output() exit: EventEmitter<any> = new EventEmitter<any>()
@@ -38,6 +36,15 @@ export class ProjectOverviewHeadComponent {
   }
   ngOnInit(){
     this.reloadProject('overview')
+    this.breadcrumbList= {
+      title: 'Projects',
+      subTitle:'Overview ',
+      items: [
+        { label: 'Home', url: '/admin/index' },
+        { label: 'Project Overview'},
+        
+      ]
+    };
   }
   reloadProject(activeTab:string) {
     this.projectService.getProjectById(this.projectId).subscribe({

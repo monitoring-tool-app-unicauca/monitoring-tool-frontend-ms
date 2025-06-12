@@ -41,47 +41,19 @@
               </a>
             </div>
 
-            <!-- <div class="dropdown-menu dropdown-menu-end">
-              <div id="DZ_W_Notification1" class="widget-media dz-scroll p-3" style="height:380px;">
-                <ul class="timeline">
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2">
-                        <img alt="image" width="50" src="assets/images/avatar/1.jpg">
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Dr sultads Send you Photo</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2 media-info"> KG </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Resport created successfully</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="timeline-panel">
-                      <div class="media me-2 media-success">
-                        <i class="fa fa-home"></i>
-                      </div>
-                      <div class="media-body">
-                        <h6 class="mb-1">Reminder : Treatment Time!</h6>
-                        <small class="d-block">29 July 2020 - 02:26 PM</small>
-                      </div>
-                    </div>
-                  </li>
-                  
-                </ul>
-              </div>
-              <a class="all-notification" href="javascript:void(0);">See all notifications <i class="ti-arrow-end"></i>
-              </a>
-            </div> -->
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="javascript:void(0);" (click)="toggleTheme()" [attr.aria-label]="elementValue === 'dark' ? 'Modo claro' : 'Modo oscuro'">
+              <svg *ngIf="elementValue === 'light'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5"></circle>
+                <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+              </svg>
+              <svg *ngIf="elementValue === 'dark'" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+              </svg>
+            </a>
+          </li>
+
           <li class="nav-item dropdown notification_dropdown">
             <a class="nav-link bell dz-fullscreen" href="javascript:void(0);" [ngClass]="{'active': fullScreenClass, '': !fullScreenClass}" (click)="openFullscreen()">
               <svg id="icon-full" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="css-i6dzq1">

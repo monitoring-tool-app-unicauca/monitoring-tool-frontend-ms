@@ -26,6 +26,7 @@ export class HeaderComponent {
   socketSub!: Subscription;
 
   hasUnreadNotifications = false;
+  elementValue: any = '';
 
   constructor(
     private router: Router,
@@ -45,13 +46,12 @@ export class HeaderComponent {
   }
 
   ngOnInit(): void {
-    // const storedUser = localStorage.getItem('current_user');
-    // if (storedUser) {
-    //   this.currentUser = JSON.parse(storedUser);
-    //   if (this.currentUser?.userId) {
-    //     this.loadProfileImage(this.currentUser.userId);
-    //   }
-    // }
+    this.localData = localStorage.getItem('data-theme-version');
+    this.elementValue = this.localData || 'light';
+    
+
+    // Aplicar al cargar
+    document.body.setAttribute('data-theme-version', this.elementValue);
     this.authService.currentUser$.subscribe(user => {
       if (user) {
         this.currentUser = user;
@@ -78,6 +78,12 @@ export class HeaderComponent {
   }
   ngOnDestroy(): void {
     if (this.socketSub) this.socketSub.unsubscribe();
+  }
+
+  toggleTheme() {
+    this.elementValue = localStorage.getItem('data-theme-version')
+    const newTheme = this.elementValue === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('data-theme-version',newTheme);
   }
 
   markNotificationsAsRead() {

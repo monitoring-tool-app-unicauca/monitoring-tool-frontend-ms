@@ -10,6 +10,7 @@ import { UserService } from '../../../../admin/services/user/user.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../../auth/services/auth/auth.service';
+import { Breadcrumb } from '../../../../shared/interfaces/Breadcrum.interface';
 
 export interface Dessert {
   account_title: string,
@@ -25,11 +26,7 @@ export interface Dessert {
 })
 export class ProjectsPageComponent {
 
-  breadcrumbList = {
-    title: 'Projects',
-    breadcrumb_path: 'Home',
-    currentURL: 'Projects',
-  }
+  breadcrumbList!: Breadcrumb 
 
   active = 1;
   page: any = 1;
@@ -78,14 +75,21 @@ export class ProjectsPageComponent {
     this.loadProjects()
     this.initForm()
 
-
-
     this.filteredUsers = this.userSearchCtrl.valueChanges.pipe(
       debounceTime(300),
       switchMap(value => this.userService.getUsersByName(value).pipe(
         map(response => response.data || [])
       ))
     );
+    this.breadcrumbList= {
+      title: 'Projects',
+      subTitle:  'Edit User',
+      items: [
+        { label: 'Home', url: '/admin/index' },
+        { label: 'Projects', }
+        
+      ]
+    };
   }
   addUser(user: UserDto) {
 
