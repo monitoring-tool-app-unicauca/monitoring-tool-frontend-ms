@@ -1,0 +1,29 @@
+<div class="card-header border-0 pb-0 flex-wrap">
+  <h4 class="heading mb-0">Health Check Response Times</h4>
+
+  <div class="dropdown mt-2">
+    <select class="form-select w-100" style="min-width: 400px;"
+        [(ngModel)]="selectedHealthId"
+        (change)="onHealthIdChange($event)">
+    <option *ngFor="let endpoint of availableEndpoints" [value]="endpoint.id">
+        {{ endpoint.name }}
+    </option>
+    </select>
+  </div>
+</div>
+
+<div class="card-body p-0">
+  <div id="responseChart">
+    <apx-chart
+      *ngIf="chartOptions"
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [stroke]="chartOptions.stroke"
+      [legend]="chartOptions.legend"
+      [tooltip]="chartOptions.tooltip"
+      [colors]="chartOptions.colors"
+      [fill]="chartOptions.fill"
+    ></apx-chart>
+  </div>
+</div>

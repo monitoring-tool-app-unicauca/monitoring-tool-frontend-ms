@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone} from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, throwError } from 'rxjs';
 import { EndpointDTO } from '../../interfaces/EndpointDTO';
 import { environment } from '../../../../environment/environment';
+import { HealthCheckDto } from '../../../shared/interfaces/HealthCheckDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -78,4 +79,44 @@ export class HealthService {
     });
   }
 
+  getHealthCheckByEndpointId(healthId:any):Observable<HealthCheckDto[]>{
+
+    // const mockData: HealthCheckDto[] = [
+    //   {
+    //     id: 1,
+    //     responseTimeMs: 320,
+    //     status: 'UP',
+    //     checkedAt: new Date('2025-06-24T08:30:00')
+    //   },
+    //   {
+    //     id: 2,
+    //     responseTimeMs: 410,
+    //     status: 'DOWN',
+    //     checkedAt: new Date('2025-06-24T08:35:00')
+    //   },
+    //   {
+    //     id: 3,
+    //     responseTimeMs: 200,
+    //     status: 'UP',
+    //     checkedAt: new Date('2025-06-24T08:40:00')
+    //   },
+    //   {
+    //     id: 4,
+    //     responseTimeMs: 510,
+    //     status: 'UP',
+    //     checkedAt: new Date('2025-06-24T08:45:00')
+    //   }
+    // ];
+    
+    // return of(mockData);
+    return this.http.get<HealthCheckDto[]>(`${this.apiUrl}/health-check/by-health?healthId=${healthId}`).pipe(
+    catchError(error => {
+      if (error.status === 403) {
+        console.warn('Access forbidden for health check, returning empty list');
+        return of([]); 
+      }
+      return throwError(() => error); 
+    })
+  );
+  }
 }

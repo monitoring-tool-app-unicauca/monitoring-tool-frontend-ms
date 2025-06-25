@@ -133,5 +133,17 @@
                   </div>
               </div>
             </div>
+            <div class="col-xl-12 active-p">
+              <div class="card">
+                  <div class="card-body p-0">
+                      <div class="table-responsive active-projects shorting dataTables_wrapper ">
+                          <div class="tbl-caption">
+                              <h4 class="heading mb-0">Endpoints Overview</h4>
+                          </div>
+                         <app-health-check-overview *ngIf="summary" [summary]="summary"></app-health-check-overview>
+                      </div>
+                  </div>
+              </div>
+          </div>
          </div>
     </div>

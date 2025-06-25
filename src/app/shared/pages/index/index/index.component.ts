@@ -72,7 +72,15 @@ export class IndexComponent {
         : 0;
   
       const totalUsers = proyecto.users.length;
-      
+      const endpointsSet = new Set<string>();
+      const endpointsList: { id: number, name: string }[] = [];
+
+      endpoints.forEach((endpoint:any)=>{
+        if (!endpointsSet.has(endpoint.url)) {
+        endpointsSet.add(endpoint.url);
+        endpointsList.push({ id: endpoint.id, name: endpoint.url });
+      }
+      })
       return {
         projectId: proyecto.projectId,
         projectName: proyecto.projectName,
@@ -89,7 +97,8 @@ export class IndexComponent {
         users: (proyecto.users || []).map((u: { name: any; lastName: any; email: any; }) => ({
           fullName: `${u.name} ${u.lastName}`,
           email: u.email
-        }))
+        })),
+        availabeEndpoints: endpointsList
       };
     });
   }

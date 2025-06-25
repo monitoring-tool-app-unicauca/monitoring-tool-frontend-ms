@@ -31,6 +31,7 @@ import { IndexComponent } from './pages/index/index/index.component';
 
 
 import { ProjectsOverviewComponent } from '../shared/charts/index/projects-overview/projects-overview.component';
+import { HealthCheckOverviewComponent } from './charts/index/health-check-overview/health-check-overview.component';
 // import {
 //   ApexAxisChartSeries,
 //   ApexChart,
@@ -44,7 +45,6 @@ import { ProjectsOverviewComponent } from '../shared/charts/index/projects-overv
 //   ApexPlotOptions,
 //   ApexFill,
 //   ApexGrid,
-//   NgApexchartsModule,
 // } from 'ng-apexcharts';
 import { DownsGraphComponent } from './charts/index/downs-graph/downs-graph.component';
 
@@ -73,6 +73,7 @@ import { DownsGraphComponent } from './charts/index/downs-graph/downs-graph.comp
     IndexComponent,
 
     ProjectsOverviewComponent,
+    HealthCheckOverviewComponent,
     DownsGraphComponent,
   ],
   imports: [
