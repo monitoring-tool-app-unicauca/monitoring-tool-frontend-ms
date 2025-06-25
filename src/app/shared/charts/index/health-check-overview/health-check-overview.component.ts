@@ -51,27 +51,34 @@ export class HealthCheckOverviewComponent {
   constructor(
     private healthService: HealthService) {}
 
-  ngOnInit(): void {
-  console.log("Summary ", this.summary);
+ngOnInit(): void {
+    console.log("Summary ", this.summary);
 
-  const isValidArray = Array.isArray(this.summary);
+    const allEndpoints: any[] = [];
 
-  const allEndpoints = isValidArray
-    ? this.summary.flatMap((proj: any) => proj.availabeEndpoints || [])
-    : [];
+    if (Array.isArray(this.summary)) {
+      for (const project of this.summary) {
+        const endpoints = project.availabeEndpoints || [];
+        for (const endpoint of endpoints) {
+          allEndpoints.push(endpoint);
+        }
+      }
+    }
 
-  const unique = new Map<number, any>();
-  for (const ep of allEndpoints) {
-    if (!unique.has(ep.id)) unique.set(ep.id, ep);
-  }
+    // Quitar duplicados por id
+    const unique = new Map<number, any>();
+    for (const ep of allEndpoints) {
+      if (!unique.has(ep.id)) unique.set(ep.id, ep);
+    }
 
-  this.availableEndpoints = Array.from(unique.values());
+    this.availableEndpoints = Array.from(unique.values());
 
-  if (this.availableEndpoints.length > 0) {
-    this.selectedHealthId = this.availableEndpoints[0].id;
-    this.fetchChartData(this.selectedHealthId);
-  }
+    if (this.availableEndpoints.length > 0) {
+      this.selectedHealthId = this.availableEndpoints[0].id;
+      this.fetchChartData(this.selectedHealthId);
+    }
 }
+
 
 
   onHealthIdChange(event: any): void {
@@ -86,15 +93,19 @@ export class HealthCheckOverviewComponent {
         const data = response;
 
         const times = data.map(d => d.responseTimeMs);
-        const labels = data.map(d =>
-          new Date(d.checkedAt).toLocaleString('es-CO', {
+        const labels = data.map(d => {
+        try {
+          return new Date(d.checkedAt).toLocaleString('es-CO', {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
             day: '2-digit',
             month: 'short'
-          })
-        );
+          });
+        } catch (e) {
+          return 'Fecha inválida';
+        }
+      });
 
         this.chartOptions = {
           series: [
@@ -105,7 +116,7 @@ export class HealthCheckOverviewComponent {
             }],
           chart: {
             height: 300,
-            type: 'line',
+            type: 'area',
             zoom: { enabled: false }
           },
           colors: ['#1E90FF'],
