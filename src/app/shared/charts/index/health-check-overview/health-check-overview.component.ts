@@ -52,24 +52,27 @@ export class HealthCheckOverviewComponent {
     private healthService: HealthService) {}
 
   ngOnInit(): void {
-    console.log("Summary ",this.summary)
-    const allEndpoints = this.summary
-    ?.flatMap((proj: any) => proj.availabeEndpoints || []) || [];
+  console.log("Summary ", this.summary);
 
-    // Quita duplicados por ID
-    const unique = new Map();
-    for (const ep of allEndpoints) {
-      if (!unique.has(ep.id)) unique.set(ep.id, ep);
-    }
+  const isValidArray = Array.isArray(this.summary);
 
-    this.availableEndpoints = Array.from(unique.values());
+  const allEndpoints = isValidArray
+    ? this.summary.flatMap((proj: any) => proj.availabeEndpoints || [])
+    : [];
 
-    if (this.availableEndpoints.length > 0) {
-      this.selectedHealthId = this.availableEndpoints[0].id;
-      this.fetchChartData(this.selectedHealthId);
-    }
-    
+  const unique = new Map<number, any>();
+  for (const ep of allEndpoints) {
+    if (!unique.has(ep.id)) unique.set(ep.id, ep);
   }
+
+  this.availableEndpoints = Array.from(unique.values());
+
+  if (this.availableEndpoints.length > 0) {
+    this.selectedHealthId = this.availableEndpoints[0].id;
+    this.fetchChartData(this.selectedHealthId);
+  }
+}
+
 
   onHealthIdChange(event: any): void {
     this.fetchChartData(this.selectedHealthId);
