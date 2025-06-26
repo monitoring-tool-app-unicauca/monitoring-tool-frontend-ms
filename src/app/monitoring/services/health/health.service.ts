@@ -81,34 +81,6 @@ export class HealthService {
 
   getHealthCheckByEndpointId(healthId:any):Observable<any>{
 
-    // const mockData: HealthCheckDto[] = [
-    //   {
-    //     id: 1,
-    //     responseTimeMs: 320,
-    //     status: 'UP',
-    //     checkedAt: new Date('2025-06-24T08:30:00')
-    //   },
-    //   {
-    //     id: 2,
-    //     responseTimeMs: 410,
-    //     status: 'DOWN',
-    //     checkedAt: new Date('2025-06-24T08:35:00')
-    //   },
-    //   {
-    //     id: 3,
-    //     responseTimeMs: 200,
-    //     status: 'UP',
-    //     checkedAt: new Date('2025-06-24T08:40:00')
-    //   },
-    //   {
-    //     id: 4,
-    //     responseTimeMs: 510,
-    //     status: 'UP',
-    //     checkedAt: new Date('2025-06-24T08:45:00')
-    //   }
-    // ];
-    
-    // return of(mockData);
     return this.http.get<any>(`${this.apiUrl}/health-check/by-health?healthId=${healthId}`).pipe(
     catchError(error => {
       if (error.status === 403) {

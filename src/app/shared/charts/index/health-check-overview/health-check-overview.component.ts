@@ -93,8 +93,6 @@ ngOnInit(): void {
 
     const times = data.map((d: { responseTimeMs: any; }) => d.responseTimeMs);
     const labels = data.map((d: { checkedAt: string | number | Date; }) => {
-    this.chartMinWidth = Math.max(labels.length * 80, 1200); 
-
       try {
         return new Date(d.checkedAt).toLocaleString('es-CO', {
           hour: '2-digit',
@@ -108,6 +106,7 @@ ngOnInit(): void {
       }
     });
 
+    this.chartMinWidth = Math.max(labels.length * 80, 1200); 
     this.chartOptions = {
       series: [
         {
