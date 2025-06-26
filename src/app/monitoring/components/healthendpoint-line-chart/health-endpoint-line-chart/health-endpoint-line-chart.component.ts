@@ -15,19 +15,14 @@ export class HealthEndpointLineChartComponent implements AfterViewInit {
   chart: any;
 
 
-  // ngOnChanges(changes: SimpleChanges): void {
-  //   if (changes['endpoint'] && this.endpoint) {
-  //     this.initChart();
-  //   }
-  // }
 
   ngAfterViewInit() {
-    // Aquí es donde se asegura que la vista esté completamente cargada
     this.initChart();
   }
   initChart() {
     if (this.chart) {
-      this.chart.destroy(); // Si ya hay un chart previo, lo destruyo
+      // Si ya hay un chart previo, lo destruyo
+      this.chart.destroy(); 
     }
 
     const ctx = this.endpointChartRef.nativeElement.getContext('2d');
@@ -47,9 +42,10 @@ export class HealthEndpointLineChartComponent implements AfterViewInit {
       },
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         scales: {
           x: {
-            type: 'category', // importantísimo para fechas
+            type: 'category', 
             title: {
               display: true,
               text: 'Time'
@@ -66,19 +62,8 @@ export class HealthEndpointLineChartComponent implements AfterViewInit {
       }
     });
 
-    // Si quieres dibujar un punto inicial:
-    // if (this.endpoint?.responseTimeMs) {
-    //   this.addPoint(new Date(), this.endpoint.responseTimeMs);
-    // }
   }
 
-  // addPoint(time: Date, responseTime: number) {
-  //   if (this.chart) {
-  //     this.chart.data.labels.push(time.toLocaleTimeString()); // o toISOString() si quieres fecha completa
-  //     this.chart.data.datasets[0].data.push(responseTime);
-  //     this.chart.update();
-  //   }
-  // }
 
   addPoint(time: Date, responseTime: number) {
   if (this.chart) {
@@ -91,6 +76,11 @@ export class HealthEndpointLineChartComponent implements AfterViewInit {
       this.chart.data.datasets[0].data.shift();
     }
 
+    const widthPerPoint = 80; // pixeles
+    const totalPoints = this.chart.data.labels.length;
+    const minWidth = Math.max(totalPoints * widthPerPoint, 1200);
+
+    this.endpointChartRef.nativeElement.parentElement!.style.minWidth = `${minWidth}px`;
     this.chart.update();
   }
 }

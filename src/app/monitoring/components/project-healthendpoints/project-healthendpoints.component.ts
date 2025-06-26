@@ -123,10 +123,10 @@ viewEndpointChart(endpoint: any) {
     this.selectedEndpoint = endpoint;
     this.endpointChartVisible = true;
 
-    // Cargar los últimos 10 históricos
+    // Cargar todos los históricos disponibles del endpoint
     this.healthService.getHealthCheckByEndpointId(endpoint.id).subscribe({
       next: (data) => {
-        const historics = (data?.data || []).slice(-10);
+        const historics = data?.data || [];
         setTimeout(() => {
           if (this.healthEndpointChartComponent && historics.length > 0) {
             historics.forEach((entry: { checkedAt: string | number | Date; responseTimeMs: number; }) => {
@@ -136,25 +136,13 @@ viewEndpointChart(endpoint: any) {
         }, 200);
       },
       error: (err) => {
-        console.warn('No se pudieron cargar históricos del endpoint', err);
+        console.warn('Can´t load historic data from endpoint', err);
       }
     });
 
   }
 }
 
-
-  // viewEndpointChart(endpoint: any) {
-
-  //   if (this.selectedEndpoint === endpoint) {
-
-  //     this.endpointChartVisible = !this.endpointChartVisible;
-  //   } else {
-
-  //     this.selectedEndpoint = endpoint;
-  //     this.endpointChartVisible = true;
-  //   }
-  // }
   editEndpoint(endpoint: EndpointDTO) {
     this.healthService.setEndpointToEdit(endpoint);
     this.selectTab.emit('createEndpoint');
