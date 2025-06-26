@@ -67,17 +67,32 @@ export class HealthEndpointLineChartComponent implements AfterViewInit {
     });
 
     // Si quieres dibujar un punto inicial:
-    if (this.endpoint?.responseTimeMs) {
-      this.addPoint(new Date(), this.endpoint.responseTimeMs);
-    }
+    // if (this.endpoint?.responseTimeMs) {
+    //   this.addPoint(new Date(), this.endpoint.responseTimeMs);
+    // }
   }
 
+  // addPoint(time: Date, responseTime: number) {
+  //   if (this.chart) {
+  //     this.chart.data.labels.push(time.toLocaleTimeString()); // o toISOString() si quieres fecha completa
+  //     this.chart.data.datasets[0].data.push(responseTime);
+  //     this.chart.update();
+  //   }
+  // }
+
   addPoint(time: Date, responseTime: number) {
-    if (this.chart) {
-      this.chart.data.labels.push(time.toLocaleTimeString()); // o toISOString() si quieres fecha completa
-      this.chart.data.datasets[0].data.push(responseTime);
-      this.chart.update();
+  if (this.chart) {
+    this.chart.data.labels.push(time.toLocaleTimeString());
+    this.chart.data.datasets[0].data.push(responseTime);
+
+    // Limita a 20 puntos máximo
+    if (this.chart.data.labels.length > 20) {
+      this.chart.data.labels.shift();
+      this.chart.data.datasets[0].data.shift();
     }
+
+    this.chart.update();
   }
+}
 
 }

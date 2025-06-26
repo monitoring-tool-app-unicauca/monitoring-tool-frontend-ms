@@ -116,19 +116,45 @@ export class ProjectHealthendpointsComponent implements OnInit {
   }
 
 
+viewEndpointChart(endpoint: any) {
+  if (this.selectedEndpoint?.id === endpoint.id) {
+    this.endpointChartVisible = !this.endpointChartVisible;
+  } else {
+    this.selectedEndpoint = endpoint;
+    this.endpointChartVisible = true;
 
+    // Cargar los últimos 10 históricos
+    this.healthService.getHealthCheckByEndpointId(endpoint.id).subscribe({
+      next: (data) => {
+        const historics = (data?.data || []).slice(-10);
+        setTimeout(() => {
+          if (this.healthEndpointChartComponent && historics.length > 0) {
+            historics.forEach((entry: { checkedAt: string | number | Date; responseTimeMs: number; }) => {
+              this.healthEndpointChartComponent.addPoint(new Date(entry.checkedAt), entry.responseTimeMs);
+            });
+          }
+        }, 200);
+      },
+      error: (err) => {
+        console.warn('No se pudieron cargar históricos del endpoint', err);
+      }
+    });
 
-  viewEndpointChart(endpoint: any) {
-
-    if (this.selectedEndpoint === endpoint) {
-
-      this.endpointChartVisible = !this.endpointChartVisible;
-    } else {
-
-      this.selectedEndpoint = endpoint;
-      this.endpointChartVisible = true;
-    }
   }
+}
+
+
+  // viewEndpointChart(endpoint: any) {
+
+  //   if (this.selectedEndpoint === endpoint) {
+
+  //     this.endpointChartVisible = !this.endpointChartVisible;
+  //   } else {
+
+  //     this.selectedEndpoint = endpoint;
+  //     this.endpointChartVisible = true;
+  //   }
+  // }
   editEndpoint(endpoint: EndpointDTO) {
     this.healthService.setEndpointToEdit(endpoint);
     this.selectTab.emit('createEndpoint');
