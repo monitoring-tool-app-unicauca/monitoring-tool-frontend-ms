@@ -46,7 +46,7 @@ export class HealthCheckOverviewComponent {
   selectedHealthId: number | null = null;
 
   availableEndpoints:any[]=[]
-  
+  chartMinWidth: number = 1200;
 
   constructor(
     private healthService: HealthService) {}
@@ -93,6 +93,8 @@ ngOnInit(): void {
 
     const times = data.map((d: { responseTimeMs: any; }) => d.responseTimeMs);
     const labels = data.map((d: { checkedAt: string | number | Date; }) => {
+    this.chartMinWidth = Math.max(labels.length * 80, 1200); 
+
       try {
         return new Date(d.checkedAt).toLocaleString('es-CO', {
           hour: '2-digit',

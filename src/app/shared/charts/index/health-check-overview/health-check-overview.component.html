@@ -13,17 +13,20 @@
 </div>
 
 <div class="card-body p-0">
-  <div id="responseChart">
-    <apx-chart
-      *ngIf="chartOptions"
-      [series]="chartOptions.series"
-      [chart]="chartOptions.chart"
-      [xaxis]="chartOptions.xaxis"
-      [stroke]="chartOptions.stroke"
-      [legend]="chartOptions.legend"
-      [tooltip]="chartOptions.tooltip"
-      [colors]="chartOptions.colors"
-      [fill]="chartOptions.fill"
-    ></apx-chart>
+  <div id="responseChart" style="overflow-x: auto; width: 100%;">
+    <div [ngStyle]="{'min-width.px': chartMinWidth}">
+      <apx-chart
+        *ngIf="chartOptions"
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [xaxis]="chartOptions.xaxis"
+        [stroke]="chartOptions.stroke"
+        [legend]="chartOptions.legend"
+        [tooltip]="chartOptions.tooltip"
+        [colors]="chartOptions.colors"
+        [fill]="chartOptions.fill"
+      ></apx-chart>
+    </div>
   </div>
 </div>
+
