@@ -79,7 +79,7 @@ export class HealthService {
     });
   }
 
-  getHealthCheckByEndpointId(healthId:any):Observable<HealthCheckDto[]>{
+  getHealthCheckByEndpointId(healthId:any):Observable<any>{
 
     // const mockData: HealthCheckDto[] = [
     //   {
@@ -109,7 +109,7 @@ export class HealthService {
     // ];
     
     // return of(mockData);
-    return this.http.get<HealthCheckDto[]>(`${this.apiUrl}/health-check/by-health?healthId=${healthId}`).pipe(
+    return this.http.get<any>(`${this.apiUrl}/health-check/by-health?healthId=${healthId}`).pipe(
     catchError(error => {
       if (error.status === 403) {
         console.warn('Access forbidden for health check, returning empty list');

@@ -88,69 +88,70 @@ ngOnInit(): void {
   fetchChartData(healthId: number | null): void {
     if (!healthId) return;
 
-    this.healthService.getHealthCheckByEndpointId(healthId)
-      .subscribe((response) => {
-        const data = response;
+    this.healthService.getHealthCheckByEndpointId(healthId).subscribe((response) => {
+    const data = response.data || []; 
 
-        const times = data.map(d => d.responseTimeMs);
-        const labels = data.map(d => {
-        try {
-          return new Date(d.checkedAt).toLocaleString('es-CO', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            day: '2-digit',
-            month: 'short'
-          });
-        } catch (e) {
-          return 'Fecha inválida';
+    const times = data.map((d: { responseTimeMs: any; }) => d.responseTimeMs);
+    const labels = data.map((d: { checkedAt: string | number | Date; }) => {
+      try {
+        return new Date(d.checkedAt).toLocaleString('es-CO', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          day: '2-digit',
+          month: 'short'
+        });
+      } catch (e) {
+        return 'Fecha inválida';
+      }
+    });
+
+    this.chartOptions = {
+      series: [
+        {
+          name: 'Response Times (ms)',
+          data: times,
+          type: 'area'
         }
-      });
-
-        this.chartOptions = {
-          series: [
-            { name: 'Response Times (ms)', 
-              data: times, 
-              type: 'area' 
-
-            }],
-          chart: {
-            height: 300,
-            type: 'area',
-            zoom: { enabled: false }
-          },
-          colors: ['#1E90FF'],
-          stroke: {
-            curve: 'smooth',
-            width: 3
-          },
-          legend: {
-            show: true,
-            fontSize: '13px'
-          },
-          xaxis: {
-            categories: labels,
-            labels: {
-              style: {
-                fontSize: '12px'
-              }
-            }
-          },
-          tooltip: {
-            y: {
-              formatter: (val: number) => `${val} ms`
-            }
-          },
-          fill: {
-            type: 'gradient',
-            gradient: {
-              shade: 'light',
-              type: 'vertical',
-              opacityFrom: 0.9,
-              opacityTo: 0.6,
-            }
+      ],
+      chart: {
+        height: 300,
+        type: 'area',
+        zoom: { enabled: false }
+      },
+      colors: ['#1E90FF'],
+      stroke: {
+        curve: 'smooth',
+        width: 3
+      },
+      legend: {
+        show: true,
+        fontSize: '13px'
+      },
+      xaxis: {
+        categories: labels,
+        labels: {
+          style: {
+            fontSize: '12px'
           }
-        };
-      });
+        }
+      },
+      tooltip: {
+        y: {
+          formatter: (val: number) => `${val} ms`
+        }
+      },
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'light',
+          type: 'vertical',
+          opacityFrom: 0.9,
+          opacityTo: 0.6
+        }
+      }
+    };
+  });
+
   }
 }
