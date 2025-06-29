@@ -1,0 +1,25 @@
+
+
+.brand-logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  padding-left: 0.7rem;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 1px; 
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+}
+
+.brand-title {
+  height: 20px;
+  fill: white; 
+  margin-left: 0;
+}

@@ -1,0 +1,110 @@
+<div class="tab-content" id="tabContentMyProfileBottom">
+  <div class="row">
+    <div class="col-xl-12">
+      <div class="card">
+        <div class="card-header border-0 py-3 d-flex justify-content-between align-items-center">
+          <h4 class="heading mb-0">Health Endpoints</h4>
+          <div id="tableLogsExcelBTN"></div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive active-projects dataTables_wrapper">
+            <table class="table table-striped-thead table-wide table-sm">
+              <thead>
+                <tr>
+                  <!-- <th>Project</th> -->
+                  <th>Status</th>
+                  <th>URL</th>
+                  <th>Last Checked</th>
+                  <th>Next Check</th>
+                  <th>Response Time (ms)</th>
+                  <th>Active</th>
+                  <th>Notifications</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (endpoint of allData.data; track endpoint.id) {
+                <tr>
+                  <!-- <td>{{ endpoint.project.projectName }}</td> -->
+                  <td>
+                    <span
+                      class="badge badge-sm light border-0"
+                      [ngClass]="{
+                        'badge-danger': endpoint.status === 'DOWN',
+                        'badge-success': endpoint.status === 'UP',
+                        'badge-secondary': endpoint.status === 'UNKNOWN'
+                      }"
+                    >
+                      {{ endpoint.status }}
+                    </span>
+                  </td>
+                  <td class="text-break">{{ endpoint.url }}</td>
+                  <td class="text-nowrap">{{ endpoint.lastCheckedAt | date: 'short' }}</td>
+                  <td class="text-nowrap">{{ endpoint.nextCheckedAt | date: 'short' }}</td>
+                  <td>{{ endpoint.responseTimeMs }}</td>
+                  <td>
+                    <span class="badge badge-sm badge-{{ endpoint.active ? 'success' : 'secondary' }} light border-0">
+                      {{ endpoint.active ? 'Yes' : 'No' }}
+                    </span>
+                  </td>
+                  <td>
+                      <span class="badge badge-sm badge-{{ endpoint.notificationsEnabled ? 'info' : 'secondary' }} light border-0">
+                      {{ endpoint.notificationsEnabled ? 'Enabled' : 'Disabled' }}
+                      </span>
+
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-warning btn-sm me-2"
+                      (click)="editEndpoint(endpoint)">
+                      <span class="btn-icon">
+                        <i class="fas fa-pencil"></i>
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      (click)="viewEndpointChart(endpoint)">
+                      <span class="btn-icon">
+                        <i class="fas" [ngClass]="selectedEndpoint?.id === endpoint.id && endpointChartVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+                      </span>
+                    </button>
+
+                  </td>
+                </tr>
+                }
+              </tbody>
+            </table>
+
+            <div class="d-flex justify-content-between align-items-center px-3 pb-3">
+              <div>
+                Mostrando página {{ page }} de {{ totalPage }} - Total: {{ allData.total }} registros
+              </div>
+              <div>
+                <app-pagination
+                  [totalPage]="totalPage"
+                  [page]="page"
+                  (newPage)="pageChange($event)">
+                </app-pagination>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-12 col-lg-12 col-sm-12" *ngIf="selectedEndpoint && endpointChartVisible">
+    <div class="card mt-4">
+      <div class="card-header d-block">
+        <h4 class="card-title">Response Time Chart for {{ selectedEndpoint.url }}</h4>
+      </div>
+      <div class="card-body">
+        <app-health-endpoint-line-chart [endpoint]="selectedEndpoint"></app-health-endpoint-line-chart>
+      </div>
+    </div>
+  </div>
+
+</div>

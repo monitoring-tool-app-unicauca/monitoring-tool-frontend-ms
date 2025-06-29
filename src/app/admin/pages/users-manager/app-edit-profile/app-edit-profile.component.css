@@ -1,0 +1,9 @@
+.custom-delete-button {
+  background: none !important;  /* Elimina cualquier fondo */
+  border: none !important;      /* Elimina cualquier borde */
+  outline: none !important;     /* Elimina el borde al hacer clic */
+  box-shadow: none !important;  /* Evita sombras al hacer clic */
+}
+.custom-delete-icon {
+  color: red !important; /* 👈 Esto fuerza el color rojo */
+}

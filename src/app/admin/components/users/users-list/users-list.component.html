@@ -1,0 +1,76 @@
+
+<div class="table-responsive active-projects style-1 ItemsCheckboxSec shorting dataTables_wrapper">
+    <div class="tbl-caption">
+        <h4 class="heading mb-0">Users</h4>
+        <div *ngIf="isAdmin">
+          <a class="btn btn-primary btn-sm me-1" [routerLink]="'/admin/add-user'" >+ Add User</a>
+        </div>
+    </div>
+    <table id="empoloyees-tbl" class="table mb-0">
+        <thead>
+            <tr>
+                @if(checkbox){
+                <th>
+                    <div class="form-check custom-checkbox ms-0">
+                        <input type="checkbox" class="form-check-input checkAllInput" id="checkAll2"
+                            (click)="checkUncheckAll()">
+                        <label class="form-check-label" for="checkAll2"></label>
+                    </div>
+                </th>
+                }
+                <th >User ID</th>
+                <th >Name</th>
+                <th >Email Address</th>
+                <th >Document</th>
+                <th >Phone Number</th>
+                <!-- <th mat-sort-header="roles">Roles</th> -->
+                <th *ngIf="isAdmin">Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of users">
+                @if(checkbox){
+                <td>
+                    <div class="form-check custom-checkbox">
+                        <input type="checkbox" class="form-check-input" id="customCheckBox0100" [checked]="boxActive">
+                        <label class="form-check-label" for="customCheckBox0100"></label>
+                    </div>
+                </td>
+                }
+                <td><span>{{ item.userId}}</span></td>
+                <td>
+                    <div class="products">
+                        <!-- <img [src]="getUserImage(item.userId)"  class="avatar avatar-md" alt=""> -->
+                        <div>
+                            <h6><a href="javascript:void(0)">{{ item.name }} {{ item.lastName }}</a></h6>
+                            <!-- <span>{{ item.userPosition }}</span> -->
+                        </div>
+                    </div>
+                </td>
+                <td><a href="javascript:void(0)" class="text-primary">{{ item.email }}</a></td>
+                <td>
+                    <span>{{ item.documentNumber }}</span>
+                </td>
+                <td>
+                    <span>{{ item.phoneNumber }}</span>
+                </td>
+                <td *ngIf="isAdmin" >
+
+                  <button type="button" class="btn btn-warning btn-sm" [routerLink]="['/admin/edit-user', item.userId]">
+                     <span class="btn-icon">
+                      <i class="fas fa-pencil"></i>
+                    </span>
+                  </button>
+              </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <div class="dataTables_info" id="example5_info" role="status" aria-live="polite">Showing {{page}} to
+        {{totalRows}} of {{ allData.total }} entries</div>
+    <div class="dataTables_paginate paging_simple_numbers pt-2">
+        <app-pagination [totalPage]="totalPage" [page]="page" (newPage)="pageChange($event)"></app-pagination>
+    </div>
+</div>
+
