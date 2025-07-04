@@ -186,8 +186,11 @@ deleteRole(roleId: number) {
           this.loadRoles();
         },
         error: (err: any) => {
+          
           console.error(err);
-          this.alertService.error('Error updating role', 'toast-top-right');
+          const errorMsg = err?.error?.message || 'Error updating role';
+          this.alertService.error(errorMsg, 'toast-top-right');
+          
         }
       });
     } else {
