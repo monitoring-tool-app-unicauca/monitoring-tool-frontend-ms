@@ -52,7 +52,6 @@ export class HealthCheckOverviewComponent {
     private healthService: HealthService) {}
 
 ngOnInit(): void {
-    console.log("Summary ", this.summary);
 
     const allEndpoints: any[] = [];
 

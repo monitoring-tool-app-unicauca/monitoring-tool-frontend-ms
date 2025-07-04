@@ -8,6 +8,7 @@ import { RoleDto } from '../../interfaces/roleDTO';
   providedIn: 'root'
 })
 export class RoleService {
+  
 
   private apiUrl = environment.API_USERS_URL;
 
@@ -23,5 +24,12 @@ export class RoleService {
     return this.http.get<RoleDto>(`${this.apiUrl}/role` );
   }
 
+  updateRole(id: number, data: any) {
+    return this.http.patch(`${this.apiUrl}/role/${id}`, data);
+  }
+
+  deleteRole(id: number) {
+    return this.http.delete(`${this.apiUrl}/role/${id}`);
+  }
   
 }
