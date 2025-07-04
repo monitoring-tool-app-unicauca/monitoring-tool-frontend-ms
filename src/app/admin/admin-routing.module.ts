@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AdminLayoutComponent } from '../elements/admin-layout/admin-layout.component';
+
 import { AdminGuard } from './guards/admin.guard';
 import { AdminIndexComponent } from './components/index/admin-index/admin-index.component';
 import { AppEditProfileComponent } from './pages/users-manager/app-edit-profile/app-edit-profile.component';

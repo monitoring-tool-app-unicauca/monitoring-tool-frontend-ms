@@ -1,13 +1,11 @@
 import { Component } from '@angular/core';
-import { BreadcrumbComponent } from '../../../../elements/breadcrumb/breadcrumb.component';
-import { MatSortModule, Sort } from '@angular/material/sort';
-import { PaginationComponent } from '../../../../elements/pagination/pagination.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from '../../../services/role/role.service';
 import { AuthService } from '../../../../auth/services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
 import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.service';
 import Swal from 'sweetalert2';
+import { Breadcrumb } from '../../../../shared/interfaces/Breadcrum.interface';
 
 export interface Dessert {
   image: string,
@@ -24,11 +22,8 @@ export interface Dessert {
   styleUrl: './app-user-roles.component.css'
 })
 export class AppUserRolesComponent {
-  breadcrumbList = {
-    title: 'Dashboard',
-    breadcrumb_path: 'Apps',
-    currentURL: 'Roles Listing',
-  }
+  breadcrumbList!: Breadcrumb 
+ 
   offcanvasExample: boolean = false;
   editingRoleId: number | null = null;
 
@@ -68,6 +63,14 @@ export class AppUserRolesComponent {
   this.page = 1; 
   this.loadRoles();
   this.initForm();
+  this.breadcrumbList= {
+    title: 'Role',
+    subTitle: '',
+    items: [
+      { label: 'Home', url: '/admin/index' },
+      { label:  'Role Listing' }
+    ]
+  };
 }
 
 loadRoles() {

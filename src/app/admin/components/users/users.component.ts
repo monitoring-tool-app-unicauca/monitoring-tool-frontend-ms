@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Breadcrumb } from '../../../shared/interfaces/Breadcrum.interface';
 
 
 @Component({
@@ -7,12 +8,19 @@ import { Component } from '@angular/core';
   styleUrl: './users.component.css'
 })
 export class UsersComponent {
-  breadcrumbList = {
-    title: 'Users',
-    breadcrumb_path: 'Home',
-    currentURL: 'users',
-  }
+  
+  breadcrumbList!: Breadcrumb 
 
+  ngOnInit(){
+    this.breadcrumbList= {
+      title: 'User',
+      subTitle: '',
+      items: [
+        { label: 'Home', url: '/admin/index' },
+        { label:  'User Listing' }
+      ]
+    };
+  }
 
 
 }

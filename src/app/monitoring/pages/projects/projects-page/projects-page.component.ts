@@ -83,7 +83,7 @@ export class ProjectsPageComponent {
     );
     this.breadcrumbList= {
       title: 'Projects',
-      subTitle:  'Edit User',
+      subTitle:  'List Projects',
       items: [
         { label: 'Home', url: '/admin/index' },
         { label: 'Projects', }
