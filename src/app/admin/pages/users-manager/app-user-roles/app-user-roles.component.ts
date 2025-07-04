@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { BreadcrumbComponent } from '../../../../elements/breadcrumb/breadcrumb.component';
-import { MatSortModule, Sort } from '@angular/material/sort';
-import { PaginationComponent } from '../../../../elements/pagination/pagination.component';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoleService } from '../../../services/role/role.service';
 import { AuthService } from '../../../../auth/services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
 import { NgxToastrService } from '../../../../_services/ngx-toastr/ngx-toastr.service';
+import Swal from 'sweetalert2';
+import { Breadcrumb } from '../../../../shared/interfaces/Breadcrum.interface';
 
 export interface Dessert {
   image: string,
@@ -23,15 +22,19 @@ export interface Dessert {
   styleUrl: './app-user-roles.component.css'
 })
 export class AppUserRolesComponent {
-  breadcrumbList = {
-    title: 'Dashboard',
-    breadcrumb_path: 'Apps',
-    currentURL: 'Roles Listing',
-  }
+  breadcrumbList!: Breadcrumb 
+ 
   offcanvasExample: boolean = false;
-  toggleExample() {
-    this.offcanvasExample = !this.offcanvasExample;
+  editingRoleId: number | null = null;
+
+  toggleExample(editing: boolean = false) {
+  this.offcanvasExample = !this.offcanvasExample;
+  if (!this.offcanvasExample) {
+    this.cleanForm();
+    this.editingRoleId = null;
   }
+}
+
 
   isAdmin:boolean=false
   roleForm!: FormGroup;
@@ -60,6 +63,14 @@ export class AppUserRolesComponent {
   this.page = 1; 
   this.loadRoles();
   this.initForm();
+  this.breadcrumbList= {
+    title: 'Role',
+    subTitle: '',
+    items: [
+      { label: 'Home', url: '/admin/index' },
+      { label:  'Role Listing' }
+    ]
+  };
 }
 
 loadRoles() {
@@ -108,6 +119,43 @@ loadUsersByRole(roleId: number) {
     }
   });
 }
+editRole(role: any) {
+  this.editingRoleId = role.roleId;
+  this.roleForm.patchValue({
+    name: role.name,
+    description: role.description
+  });
+  this.offcanvasExample = true;
+}
+
+deleteRole(roleId: number) {
+  Swal.fire({
+    title: 'Are you sure you want to delete this role?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel'
+  }).then((result: { isConfirmed: any; }) => {
+    if (result.isConfirmed) {
+      this.roleService.deleteRole(roleId).subscribe({
+        next: () => {
+          this.alertService.success('Role deleted successfully', 'toast-top-right');
+          if (this.selectedRoleId === roleId) {
+            this.selectedRoleId = this.roles[0]?.roleId || null;
+          }
+          this.loadRoles();
+        },
+        error: (err: any) => {
+          console.error(err);
+          this.alertService.error('Error deleting role', 'toast-top-right');
+        }
+      });
+    }
+  });
+}
 
   pageChange(e: any) {
     this.page = e;
@@ -124,21 +172,39 @@ loadUsersByRole(roleId: number) {
   cleanForm(){
     this.roleForm.reset()
   }
+  
   submitForm() {
-    if (this.roleForm.valid) {
-      this.roleService.createRole(this.roleForm.value).subscribe({
-        next: (response) => {
-          this.alertService.success('Role has been created', 'toast-top-right');
-          this.cleanForm()
-          this.loadRoles()
+    if (this.roleForm.invalid) return;
+
+    const payload = this.roleForm.value;
+
+    if (this.editingRoleId) {
+      this.roleService.updateRole(this.editingRoleId, payload).subscribe({
+        next: () => {
+          this.alertService.success('Role updated successfully', 'toast-top-right');
+          this.toggleExample();
+          this.loadRoles();
         },
-        error: (error) => {
-          console.error(error);
-          alert('Error creating Role');
+        error: (err: any) => {
+          console.error(err);
+          this.alertService.error('Error updating role', 'toast-top-right');
+        }
+      });
+    } else {
+      this.roleService.createRole(payload).subscribe({
+        next: () => {
+          this.alertService.success('Role created successfully', 'toast-top-right');
+          this.toggleExample();
+          this.loadRoles();
+        },
+        error: (err) => {
+          console.error(err);
+          this.alertService.error('Error creating role', 'toast-top-right');
         }
       });
     }
   }
+
   
   
 }
